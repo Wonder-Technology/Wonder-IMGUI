@@ -1,0 +1,23 @@
+{
+  "name": "wonder-imgui",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "bs-dev-dependencies": [],
+  "refmt": 3,
+  "bs-dependencies": [
+    "wonder-log",
+    "wonder-commonlib"
+  ],
+  "package-specs": [
+    "es6-global"
+  ],
+  "namespace": true,
+  "warnings": {
+    "number": "-10-26-27-K-44-45",
+    "error": "+5+6"
+  }
+}
