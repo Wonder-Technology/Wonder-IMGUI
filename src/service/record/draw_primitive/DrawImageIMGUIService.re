@@ -37,7 +37,7 @@ let draw =
              x +. width,
              y +. height,
            |],
-           colorArr: [|1., 1., 1.|],
+           colorArr: [|1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.|],
            texCoordArr: [|s0, t0, s0, t1, s1, t0, s1, t1|],
            indexArr: [|
              baseIndex,

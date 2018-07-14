@@ -4,9 +4,17 @@
     {
       "dir": "src",
       "subdirs": true
+    },
+    {
+      "dir": "test",
+      "subdirs": true,
+      "type": "dev"
     }
   ],
-  "bs-dev-dependencies": [],
+  "bs-dev-dependencies": [
+    "wonder-bs-jest",
+    "wonder-bs-sinon"
+  ],
   "refmt": 3,
   "bs-dependencies": [
     "wonder-log",

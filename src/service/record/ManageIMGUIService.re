@@ -24,7 +24,7 @@ let _createArrayBuffer = gl => {
 let _createElementArrayBuffer = gl => {
   let buffer = gl |> createBuffer;
 
-  bindBuffer(getArrayBuffer(gl), buffer, gl);
+  bindBuffer(getElementArrayBuffer(gl), buffer, gl);
 
   bufferUint16Data(
     getElementArrayBuffer(gl),
@@ -112,8 +112,8 @@ let _prepare = record =>
   record;
 
 let _unbindVAO = gl =>
-  switch (getExtension("OES_vertex_array_object") |> Obj.magic |> Js.toOption) {
-  | Some(ext) => ext |> unbindVertexArrayOES(Js.Nullable.null)
+  switch (getExtension("OES_vertex_array_object", gl) |> Js.toOption) {
+  | Some(ext) => ext |> Obj.magic |> unbindVertexArrayOES(Js.Nullable.null)
   | None => ()
   };
 
@@ -171,7 +171,7 @@ let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
 let _bufferElementArrayBufferData = (buffer, pointArr, gl) => {
   bindBuffer(getElementArrayBuffer(gl), buffer, gl);
   bufferUint16Data(
-    getArrayBuffer(gl),
+    getElementArrayBuffer(gl),
     Uint16Array.make(pointArr),
     getDynamicDraw(gl),
     gl,
@@ -258,7 +258,6 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
   (record, drawElementsDataArr);
 };
 
-/* TODO test */
 let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
   drawDataArr |> Js.Array.length === 0 ?
     [||] :
@@ -278,8 +277,11 @@ let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
              }
            );
 
-      let (totalResultArr, _) =
+      /* WonderLog.Log.print(sortedDrawDataArr) |> ignore; */
+
+      let (totalResultArr, oneGroupDrawData) =
         sortedDrawDataArr
+        |> Js.Array.sliceFrom(1)
         |> WonderCommonlib.ArrayService.reduceOneParam(
              (.
                (totalResultArr, oneGroupDrawData: drawData),
@@ -348,7 +350,7 @@ let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
              ([||], sortedDrawDataArr[0]),
            );
 
-      totalResultArr;
+      totalResultArr |> ArrayService.push(oneGroupDrawData);
     };
 
 let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeigt)) =>
@@ -396,7 +398,13 @@ let _draw = (gl, drawElementsDataArr, record) => {
        bindTexture(getTexture2D(gl), texture, gl);
        uniform1i(uSampler2DLocation, 0, gl);
 
-       drawElements(getTriangles(gl), count, getUnsignedShort(gl), offset);
+       drawElements(
+         getTriangles(gl),
+         count,
+         getUnsignedShort(gl),
+         offset,
+         gl,
+       );
      });
 
   record;
@@ -465,6 +473,7 @@ let _finish = (gl, canvasSize, record) => {
     uProjectionMatLocation,
     false,
     _buildOrthoProjectionMat4TypeArr(canvasSize),
+    gl,
   );
 
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
@@ -472,7 +481,7 @@ let _finish = (gl, canvasSize, record) => {
 
 let _getIMGUIFunc = ({imguiFunc}) => imguiFunc |> OptionService.unsafeGet;
 
-let setIMGUIFunc = (func, record) => {...record, imguiFunc: func};
+let setIMGUIFunc = (func, record) => {...record, imguiFunc: Some(func)};
 
 let _exec = record => (_getIMGUIFunc(record))(. record);
 
@@ -488,7 +497,7 @@ let createRecord = () => {
     textScale: 1.0,
     textColorArr: [|1., 1., 1.|],
   },
-  fftData: FontFFTData.hashMapData,
+  fftData: FontFFTData.hashMapData(),
   webglData: None,
   drawDataArr: [||],
   /* ioData: {

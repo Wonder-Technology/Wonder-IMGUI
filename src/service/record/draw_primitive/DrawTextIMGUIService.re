@@ -67,7 +67,11 @@ let draw = ((x, y, _width, _height), str, {drawDataArr, fftData} as record) => {
                   x1,
                   y1,
                 |]),
-             colorArr |> DrawDataArrayService.addPoints(textColorArr),
+             colorArr
+             |> DrawDataArrayService.addPoints(textColorArr)
+             |> DrawDataArrayService.addPoints(textColorArr)
+             |> DrawDataArrayService.addPoints(textColorArr)
+             |> DrawDataArrayService.addPoints(textColorArr),
              texCoordArr
              |> DrawDataArrayService.addPoints([|
                   s0,
