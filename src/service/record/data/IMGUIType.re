@@ -4,25 +4,25 @@ type rect = (int, int, int, int);
 
 type uv = (float, float);
 
-type color = (float, float, float);
+type colorArr = array(float);
 
 type setting = {
   textScale: float,
-  textColor: color,
+  textColorArr: colorArr,
 };
 
 /* type ioData = {
-  mouseLeftDownCur: bool,
-  mouseLeftDownPrev: bool,
-  mousePositionCur: (int, int),
-  mousePositionPrev: (int, int),
-}; */
+     mouseLeftDownCur: bool,
+     mouseLeftDownPrev: bool,
+     mousePositionCur: (int, int),
+     mousePositionPrev: (int, int),
+   }; */
 
 type lastWebglData = {
-  lastProgram: program,
+  lastProgram: option(program),
   lastElementArrayBuffer: buffer,
   lastArrayBuffer: buffer,
-  lastTexture: texture,
+  lastTexture: option(texture),
   lastIsEnableDepthTest: bool,
   lastIsEnableBlend: bool,
 };
@@ -55,7 +55,7 @@ type fftCharData = {
   "xadvance": float,
 };
 
-type fftData = WonderCommonlib.HashMap.t(array(fftCharData));
+type fftData = WonderCommonlib.HashMapService.t(array(fftCharData));
 
 type imguiFunc = (. imguiRecord) => imguiRecord
 and imguiRecord = {

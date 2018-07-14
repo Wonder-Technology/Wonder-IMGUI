@@ -1,3 +1,5 @@
+open DrawDataArrType;
+
 open IMGUIType;
 
 open Gl;
@@ -5,10 +7,12 @@ open Gl;
 open Js.Typed_array;
 
 let _createArrayBuffer = gl => {
-  let buffer = gl |> createBuffer |> bindBuffer(getArrayBuffer(gl), _, gl);
+  let buffer = gl |> createBuffer;
+
+  bindBuffer(getArrayBuffer(gl), buffer, gl);
 
   bufferFloat32Data(
-    getArrayBufferBuffer(gl),
+    getArrayBuffer(gl),
     Float32Array.make([||]),
     getDynamicDraw(gl),
     gl,
@@ -18,10 +22,12 @@ let _createArrayBuffer = gl => {
 };
 
 let _createElementArrayBuffer = gl => {
-  let buffer = gl |> createBuffer |> bindBuffer(getArrayBuffer(gl), _, gl);
+  let buffer = gl |> createBuffer;
 
-  bufferFloat32Data(
-    getElementArrayBufferBuffer(gl),
+  bindBuffer(getArrayBuffer(gl), buffer, gl);
+
+  bufferUint16Data(
+    getElementArrayBuffer(gl),
     Uint16Array.make([||]),
     getDynamicDraw(gl),
     gl,
@@ -34,29 +40,29 @@ let _createFontTexture = gl => {
   let texture = createTexture(gl);
   let target = getTexture2D(gl);
 
-  let gl =
-    gl
-    |> bindTexture(target, texture)
-    |> texParameteri(target, getTextureMinFilter(gl), getLinear(gl))
-    |> texParameteri(target, getTextureMagFilter(gl), getLinear(gl))
-    |> texParameteri(target, getTextureWrapS(gl), getClampToEdge(gl))
-    |> texParameteri(target, getTextureWrapT(gl), getClampToEdge(gl));
+  bindTexture(target, texture, gl);
+
+  texParameteri(target, getTextureMinFilter(gl), getLinear(gl), gl);
+  texParameteri(target, getTextureMagFilter(gl), getLinear(gl), gl);
+  texParameteri(target, getTextureWrapS(gl), getClampToEdge(gl), gl);
+  texParameteri(target, getTextureWrapT(gl), getClampToEdge(gl), gl);
 
   let (uint8Array, width, height) = FontBitmapData.uint8ArrayData;
 
   let format = getRgba(gl);
 
-  gl
-  |> texImage2DWithArrayBufferView(
-       target,
-       0,
-       format,
-       width,
-       height,
-       format,
-       getUnsignedByte(gl),
-       uint8Array,
-     );
+  texImage2DWithArrayBufferView(
+    target,
+    0,
+    format,
+    width,
+    height,
+    0,
+    format,
+    getUnsignedByte(gl),
+    uint8Array,
+    gl,
+  );
 
   texture;
 };
@@ -111,26 +117,38 @@ let _unbindVAO = gl =>
   | None => ()
   };
 
+let _getWebglData = record => record.webglData |> OptionService.unsafeGet;
+
 let _backupGlState = (gl, record) => {
   ...record,
   webglData:
     Some({
-      ...record.webglData,
+      ..._getWebglData(record),
       lastWebglData:
         Some({
-          lastProgram: gl |> getParameter(getCurrentProgram(gl)),
+          lastProgram:
+            gl
+            |> getParameter(getCurrentProgram(gl))
+            |> GlType.parameterIntToNullableProgram
+            |> Js.Nullable.toOption,
           lastElementArrayBuffer:
-            gl |> getParameter(getBindingElementArrayBuffer(gl)),
-          lastArrayBuffer: gl |> getParameter(getBindingArrayBuffer(gl)),
-          lastTexture: gl |> getParameter(getBindingTexture2D(gl)),
-          lastIsEnableDepthTest:
-            gl |> getParameter(getIsEnabled(getDepthTest(gl))),
-          lastIsEnableBlend: gl |> getParameter(getIsEnabled(getBlend(gl))),
+            gl
+            |> getParameter(getBindingElementArrayBuffer(gl))
+            |> GlType.parameterIntToBuffer,
+          lastArrayBuffer:
+            gl
+            |> getParameter(getBindingArrayBuffer(gl))
+            |> GlType.parameterIntToBuffer,
+          lastTexture:
+            gl
+            |> getParameter(getBindingTexture2D(gl))
+            |> GlType.parameterIntToNullableTexture
+            |> Js.Nullable.toOption,
+          lastIsEnableDepthTest: gl |> isEnabled(getDepthTest(gl)),
+          lastIsEnableBlend: gl |> isEnabled(getBlend(gl)),
         }),
     }),
 };
-
-let _getWebglData = record => record.webglData |> OptionService.unsafeGet;
 
 let _getLastWebglData = record =>
   _getWebglData(record).lastWebglData |> OptionService.unsafeGet;
@@ -194,14 +212,21 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
              totalTexCoordArr,
              totalIndexArr,
            ),
-           {drawType, verticeArr, colorArr, texCoordArr, indexArr}: DrawDataArrType.drawData,
+           {
+             drawType,
+             customTexture,
+             verticeArr,
+             colorArr,
+             texCoordArr,
+             indexArr,
+           }: drawData,
          ) => {
            let count = indexArr |> Js.Array.length;
 
            (
              drawElementsDataArr
              |> ArrayService.push(
-                  {drawType, count, offset}: DrawDataArrType.drawElementsData,
+                  {drawType, customTexture, count, offset}: drawElementsData,
                 ),
              offset + count,
              totalVerticeArr |> Js.Array.concat(verticeArr),
@@ -234,77 +259,97 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
 };
 
 /* TODO test */
-let _groupByDrawTypeAndCustomTexture = (getDrawTypeFunc, drawDataArr) => {
-  let (totalResultArr, _) =
-    drawDataArr
-    |> Js.Array.copy
-    |> Js.Array.sortInPlaceWith((valueA, valueB) =>
-         getDrawTypeFunc(valueA) - getDrawTypeFunc(valueB)
-       )
-    |> Js.Array.sortInPlaceWith((valueA, valueB) =>
-         switch (valueA.customTexture, valueB.customTexture) {
-         | (Some(customTextureA), Some(customTextureB)) =>
-           customTextureA === customTextureB ? 0 : 1
-         | _ => 0
-         }
-       )
-    |> WonderCommonlib.ArrayService.reduceOneParam(
-         (.
-           (totalResultArr, oneGroupDrawData),
-           {verticeArr, colorArr, texCoordArr, indexArr} as drawData,
-         ) => {
-           let lastDrawType = oneGroupDrawData |> getDrawTypeFunc;
+let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
+  drawDataArr |> Js.Array.length === 0 ?
+    [||] :
+    {
+      let sortedDrawDataArr =
+        drawDataArr
+        |> Js.Array.copy
+        |> Js.Array.sortInPlaceWith((valueA: drawData, valueB: drawData) =>
+             (valueA.drawType |> drawTypeToInt)
+             - (valueB.drawType |> drawTypeToInt)
+           )
+        |> Js.Array.sortInPlaceWith((valueA: drawData, valueB: drawData) =>
+             switch (valueA.customTexture, valueB.customTexture) {
+             | (Some(customTextureA), Some(customTextureB)) =>
+               customTextureA === customTextureB ? 0 : 1
+             | _ => 0
+             }
+           );
 
-           getDrawTypeFunc(drawData) === lastDrawType ?
-             switch (lastDrawType) {
-             | FontTexture => (
-                 totalResultArr,
-                 {
-                   ...oneGroupDrawData,
-                   verticeArr:
-                     oneGroupDrawData.verticeArr
-                     |> Js.Array.concat(verticeArr),
-                   colorArr:
-                     oneGroupDrawData.colorArr |> Js.Array.concat(colorArr),
-                   texCoordArr:
-                     oneGroupDrawData.texCoordArr
-                     |> Js.Array.concat(texCoordArr),
-                   indexArr:
-                     oneGroupDrawData.indexArr |> Js.Array.concat(indexArr),
-                 },
-               )
-             | CustomTexture =>
-               let currentCustomTexture =
-                 drawData.customTexture |> OptionService.unsafeGet;
-               let lastCustomTexture =
-                 oneGroupDrawData.customTexture |> OptionService.unsafeGet;
+      let (totalResultArr, _) =
+        sortedDrawDataArr
+        |> WonderCommonlib.ArrayService.reduceOneParam(
+             (.
+               (totalResultArr, oneGroupDrawData: drawData),
+               ({verticeArr, colorArr, texCoordArr, indexArr}: drawData) as drawData,
+             ) => {
+               let lastDrawType = oneGroupDrawData.drawType;
 
-               currentCustomTexture === lastCustomTexture ?
+               drawData.drawType
+               |> drawTypeToInt === (lastDrawType |> drawTypeToInt) ?
+                 switch (lastDrawType) {
+                 | FontTexture => (
+                     totalResultArr,
+                     /* TODO duplicate */
+                     {
+                       ...oneGroupDrawData,
+                       verticeArr:
+                         oneGroupDrawData.verticeArr
+                         |> Js.Array.concat(verticeArr),
+                       colorArr:
+                         oneGroupDrawData.colorArr
+                         |> Js.Array.concat(colorArr),
+                       texCoordArr:
+                         oneGroupDrawData.texCoordArr
+                         |> Js.Array.concat(texCoordArr),
+                       indexArr:
+                         oneGroupDrawData.indexArr
+                         |> Js.Array.concat(indexArr),
+                     }: drawData,
+                   )
+                 | CustomTexture =>
+                   let currentCustomTexture =
+                     drawData.customTexture |> OptionService.unsafeGet;
+                   let lastCustomTexture =
+                     oneGroupDrawData.customTexture |> OptionService.unsafeGet;
+
+                   currentCustomTexture === lastCustomTexture ?
+                     (
+                       totalResultArr,
+                       {
+                         ...oneGroupDrawData,
+                         verticeArr:
+                           oneGroupDrawData.verticeArr
+                           |> Js.Array.concat(verticeArr),
+                         colorArr:
+                           oneGroupDrawData.colorArr
+                           |> Js.Array.concat(colorArr),
+                         texCoordArr:
+                           oneGroupDrawData.texCoordArr
+                           |> Js.Array.concat(texCoordArr),
+                         indexArr:
+                           oneGroupDrawData.indexArr
+                           |> Js.Array.concat(indexArr),
+                       },
+                     ) :
+                     /* TODO duplicate */
+                     (
+                       totalResultArr |> ArrayService.push(oneGroupDrawData),
+                       drawData,
+                     );
+                 } :
                  (
-                   totalResultArr,
-                   {
-                     ...oneGroupDrawData,
-                     verticeArr:
-                       oneGroupDrawData.verticeArr
-                       |> Js.Array.concat(verticeArr),
-                     colorArr:
-                       oneGroupDrawData.colorArr |> Js.Array.concat(colorArr),
-                     texCoordArr:
-                       oneGroupDrawData.texCoordArr
-                       |> Js.Array.concat(texCoordArr),
-                     indexArr:
-                       oneGroupDrawData.indexArr |> Js.Array.concat(indexArr),
-                   },
-                 ) :
-                 (totalResultArr |> push(oneGroupResultArr), [|drawData|]);
-             } :
-             (totalResultArr |> push(oneGroupResultArr), [|drawData|]);
-         },
-         ([||], [||]),
-       );
+                   totalResultArr |> ArrayService.push(oneGroupDrawData),
+                   drawData,
+                 );
+             },
+             ([||], sortedDrawDataArr[0]),
+           );
 
-  totalResultArr;
-};
+      totalResultArr;
+    };
 
 let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeigt)) =>
   Matrix4Service.ortho(
@@ -314,6 +359,7 @@ let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeigt)) =>
     0.,
     -1.,
     1.,
+    Matrix4Service.createIdentityMatrix4(),
   );
 
 let _setGlState = gl => {
@@ -330,14 +376,11 @@ let _draw = (gl, drawElementsDataArr, record) => {
 
   drawElementsDataArr
   |> WonderCommonlib.ArrayService.forEach(
-       (.
-         {drawType, customTexture, count, offset}: DrawDataArrType.drawElementsData,
-       ) => {
+       (. {drawType, customTexture, count, offset}: drawElementsData) => {
        let texture =
          switch (drawType) {
-         | DrawDataArrType.FontTexture => fontTexture
-         | DrawDataArrType.CustomTexture =>
-           customTexture |> OptionService.unsafeGet
+         | FontTexture => fontTexture
+         | CustomTexture => customTexture |> OptionService.unsafeGet
          | type_ =>
            WonderLog.Log.fatal(
              WonderLog.Log.buildFatalMessage(
@@ -374,14 +417,20 @@ let _restoreGlState = (gl, record) => {
 
   bindBuffer(getArrayBuffer(gl), lastArrayBuffer, gl);
 
-  useProgram(lastProgram, gl);
+  switch (lastProgram) {
+  | Some(lastProgram) => useProgram(lastProgram, gl)
+  | None => ()
+  };
 
-  bindTexture(getTexture2D(gl), lastTexture);
+  switch (lastTexture) {
+  | Some(lastTexture) => bindTexture(getTexture2D(gl), lastTexture, gl)
+  | None => ()
+  };
 
   lastIsEnableDepthTest ?
     enable(getDepthTest(gl), gl) : disable(getDepthTest(gl), gl);
 
-  lastIsEnableblend ? enable(getBlend(gl), gl) : disable(getBlend(gl), gl);
+  lastIsEnableBlend ? enable(getBlend(gl), gl) : disable(getBlend(gl), gl);
 
   record;
 };
@@ -400,11 +449,7 @@ let _finish = (gl, canvasSize, record) => {
    */
   let {drawDataArr} as record = _backupGlState(gl, record);
 
-  let groupedDrawDataArr =
-    drawDataArr
-    |> _groupByDrawTypeAndCustomTexture(drawData =>
-         drawData.drawType |> DrawDataArrType.drawTypeToInt
-       );
+  let groupedDrawDataArr = drawDataArr |> _groupByDrawTypeAndCustomTexture;
 
   let (record, drawElementsDataArr) =
     _bufferAllData(gl, groupedDrawDataArr, record);
@@ -419,19 +464,19 @@ let _finish = (gl, canvasSize, record) => {
   uniformMatrix4fv(
     uProjectionMatLocation,
     false,
-    _buildOrthoProjectionMat4TypeArr((canvasWidth, canvasHeigt)),
+    _buildOrthoProjectionMat4TypeArr(canvasSize),
   );
 
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
 };
 
-let _getIMGUIFunc = ({imguiFunc}) => imguiFunc;
+let _getIMGUIFunc = ({imguiFunc}) => imguiFunc |> OptionService.unsafeGet;
 
 let setIMGUIFunc = (func, record) => {...record, imguiFunc: func};
 
 let _exec = record => (_getIMGUIFunc(record))(. record);
 
-let unsafeGetSetting = record => record.setting |> OptionService.unsafeGet;
+let getSetting = record => record.setting;
 
 let setSetting = (setting, record) => {...record, setting};
 
@@ -441,7 +486,7 @@ let render = (gl, canvasSize, record) =>
 let createRecord = () => {
   setting: {
     textScale: 1.0,
-    textColor: [|1., 1., 1.|],
+    textColorArr: [|1., 1., 1.|],
   },
   fftData: FontFFTData.hashMapData,
   webglData: None,

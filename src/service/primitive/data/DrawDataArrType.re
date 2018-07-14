@@ -15,6 +15,7 @@ type drawDataArr = array(drawData);
 
 type drawElementsData = {
   drawType,
+  customTexture: option(GlType.texture),
   count: int,
   offset: int,
 };

@@ -185,13 +185,10 @@ external getBindingArrayBuffer : webgl1Context => int = "ARRAY_BUFFER_BINDING";
 [@bs.get]
 external getBindingTexture2D : webgl1Context => int = "TEXTURE_BINDING_2D";
 
-
-[@bs.get]
-external getSrcAlpha : webgl1Context => int = "SRC_ALPHA";
+[@bs.get] external getSrcAlpha : webgl1Context => int = "SRC_ALPHA";
 
 [@bs.get]
 external getOneMinusSrcAlpha : webgl1Context => int = "ONE_MINUS_SRC_ALPHA";
-
 
 [@bs.send.pipe: webgl1Context] external isEnabled : int => bool = "isEnabled";
 
@@ -201,8 +198,7 @@ external getOneMinusSrcAlpha : webgl1Context => int = "ONE_MINUS_SRC_ALPHA";
 
 [@bs.send.pipe: webgl1Context] external cullFace : int => unit = "";
 
-
-[@bs.send.pipe: webgl1Context] external blendFunc : int => unit = "";
+[@bs.send.pipe: webgl1Context] external blendFunc : (int, int) => unit = "";
 
 [@bs.send.pipe: webgl1Context] external pixelStorei : (int, bool) => unit = "";
 

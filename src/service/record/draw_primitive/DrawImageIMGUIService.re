@@ -15,6 +15,11 @@ let draw =
     ) => {
   let baseIndex = 0;
 
+  let x = x |> NumberType.intToFloat;
+  let y = y |> NumberType.intToFloat;
+  let width = width |> NumberType.intToFloat;
+  let height = height |> NumberType.intToFloat;
+
   {
     ...record,
     drawDataArr:
@@ -26,11 +31,11 @@ let draw =
              x,
              y,
              x,
-             y + height,
-             x + width,
+             y +. height,
+             x +. width,
              y,
-             x + width,
-             y + height,
+             x +. width,
+             y +. height,
            |],
            colorArr: [|1., 1., 1.|],
            texCoordArr: [|s0, t0, s0, t1, s1, t0, s1, t1|],
