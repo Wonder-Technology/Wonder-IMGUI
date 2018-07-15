@@ -101,15 +101,8 @@ let init = (gl, record) => {
   };
 };
 
-let _prepare = record =>
-  /* {
-             ...record,
-     webglData: {
-       ...record.webglData,
-
-     }
-         } */
-  record;
+let _prepare = record => {...record, drawDataArr: [||]};
+/* record; */
 
 let _unbindVAO = gl =>
   switch (getExtension("OES_vertex_array_object", gl) |> Js.toOption) {
@@ -223,6 +216,8 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
          ) => {
            let count = indexArr |> Js.Array.length;
 
+           let baseIndex = DrawDataArrayService.getBaseIndex(totalVerticeArr);
+
            (
              drawElementsDataArr
              |> ArrayService.push(
@@ -232,7 +227,10 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
              totalVerticeArr |> Js.Array.concat(verticeArr),
              totalColorArr |> Js.Array.concat(colorArr),
              totalTexCoordArr |> Js.Array.concat(texCoordArr),
-             totalIndexArr |> Js.Array.concat(indexArr),
+             totalIndexArr
+             |> Js.Array.concat(
+                  indexArr |> Js.Array.map(index => index + baseIndex),
+                ),
            );
          },
          ([||], 0, [||], [||], [||], [||]),
@@ -245,7 +243,7 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
        aPositonLocation,
        2,
      ))
-  |> _bufferArrayBufferData((colorBuffer, totalColorArr, aColorLocation, 4))
+  |> _bufferArrayBufferData((colorBuffer, totalColorArr, aColorLocation, 3))
   |> _bufferArrayBufferData((
        texCoordBuffer,
        totalTexCoordArr,
@@ -353,11 +351,11 @@ let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
       totalResultArr |> ArrayService.push(oneGroupDrawData);
     };
 
-let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeigt)) =>
+let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeight)) =>
   Matrix4Service.ortho(
     0.,
     canvasWidth |> NumberType.intToFloat,
-    canvasHeigt |> NumberType.intToFloat,
+    canvasHeight |> NumberType.intToFloat,
     0.,
     -1.,
     1.,
@@ -402,7 +400,7 @@ let _draw = (gl, drawElementsDataArr, record) => {
          getTriangles(gl),
          count,
          getUnsignedShort(gl),
-         offset,
+         offset * 2,
          gl,
        );
      });

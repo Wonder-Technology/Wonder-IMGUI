@@ -7,7 +7,7 @@ attribute vec2 a_texCoord;
 
 uniform mat4 u_projectionMat;
 
-varying vec4 v_color;
+varying vec3 v_color;
 varying vec2 v_texCoord;
 
 void main() {
@@ -26,9 +26,9 @@ varying vec2 v_texCoord;
 uniform sampler2D u_sampler2D;
 
 void main() {
-  vec4 sample = texture2D(u_sampler2D, vUv);
+  vec4 sample = texture2D(u_sampler2D, v_texCoord);
 
-  //gl_FragColor = vec4(vColor.xyz * sample.xyz, sample.x * vColor.a );
-  gl_FragColor = vec4(vColor * sample.xyz, sample.w);
+  //gl_FragColor = vec4(v_color.xyz * sample.xyz, sample.x * vColor.a );
+  gl_FragColor = vec4(v_color * sample.xyz, sample.w);
 }
     |};

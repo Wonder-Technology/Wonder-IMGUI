@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>benchmark</title>
+</head>
+
+<body>
+
+    <canvas id="aaa" width=900 height=500></canvas>
+    <!-- <canvas id="aaa" width=500 height=500></canvas> -->
+
+    <script src="../../dist/wdimgui.js"></script>
+
+
+
+    <script>
+        window.onload = function () {
+
+            var canvas = document.querySelector("#aaa");
+
+            var gl = canvas.getContext("webgl");
+
+
+
+            var image = new Image();
+
+            image.src = "./1.png";
+            image.onload = () => {
+
+                var texture = gl.createTexture();
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+
+
+
+                var record = wdimgui.createRecord();
+
+                var record = wdimgui.init(gl, record);
+
+
+                // gl.viewport(0, 0, canvas.width, canvas.height);
+
+                // gl.clearColor(38 / 255, 41 / 255, 48 / 255, 1);
+                gl.clearColor(0, 1, 1, 1);
+
+                function step(timestamp) {
+                    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+                    record = wdimgui.setIMGUIFunc((record) => {
+                        var record = wdimgui.label(
+                            [20, 20, 100, 100], "abxxxx", record
+                            // [20, 20, 100, 100], "a", record
+                        );
+
+
+                        var record = wdimgui.image(
+                            // [200, 200, image.width, image.height], [0, 0, 1, 1], texture, record
+                            // [0, 50, image.width, image.height], [0, 0, 1, 1], texture, record
+                            [200, 50, 100, 100], [0, 0, 1, 1], texture, record
+                        );
+
+
+
+                        return record
+                    }, record);
+
+                    record = wdimgui.render(gl, [canvas.width, canvas.height], record);
+
+
+                    window.requestAnimationFrame(step);
+                }
+
+                window.requestAnimationFrame(step);
+            };
+        };
+    </script>
+</body>
+
+</html>
