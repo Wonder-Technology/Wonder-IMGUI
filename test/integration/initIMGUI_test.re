@@ -1,4 +1,4 @@
-open Wonder_jest;
+/* open Wonder_jest;
 
 open Js.Typed_array;
 
@@ -68,7 +68,7 @@ let _ =
         });
       });
 
-      describe("create and init vao buffers", () => {
+      /* describe("create and init vao buffers", () => {
         describe("create and init position buffer", () =>
           test("test", () => {
             let buffer = Obj.magic(1);
@@ -156,10 +156,10 @@ let _ =
                       );
           })
         );
-      });
+      }); */
       /* TODO test more */
 
-      describe("create and init font texture", () => {
+      /* describe("create and init font texture", () => {
         test("test create, bind, texParameteri texture", () => {
           let texture = Obj.magic(1);
           let createTexture =
@@ -338,6 +338,6 @@ let _ =
             )
           );
         });
-      });
+      }); */
     });
-  });
+  }); */

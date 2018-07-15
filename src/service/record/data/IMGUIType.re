@@ -1,5 +1,10 @@
 open GlType;
 
+type align =
+  | Left
+  | Center
+  | Right;
+
 type rect = (int, int, int, int);
 
 type uv = (float, float, float, float);
@@ -7,7 +12,7 @@ type uv = (float, float, float, float);
 type colorArr = array(float);
 
 type setting = {
-  textScale: float,
+  /* textScale: float, */
   textColorArr: colorArr,
 };
 
@@ -55,12 +60,56 @@ type fftCharData = {
   "xadvance": float,
 };
 
-type fftData = WonderCommonlib.HashMapService.t(array(fftCharData));
+type fontData = {
+  fntFilePath: string,
+  bitmapFilePath: string,
+  fntId: string,
+  bitmapId: string,
+};
+
+type fntCharData = {
+  id: int,
+  rect,
+  xOffset: int,
+  yOffset: int,
+  xAdvance: int,
+  /* page:number; */
+};
+
+type kerningData = {
+  first: int,
+  second: int,
+  amount: int,
+};
+
+type fntData = {
+  commonHeight: int,
+  commonBase: int,
+  scaleW: int,
+  scaleH: int,
+  /* atlasName: string, */
+  fontDefDictionary: WonderCommonlib.SparseMapService.t(fntCharData),
+  kerningArray: array(kerningData),
+  /* isMultiPages: bool, */
+};
+
+type layoutData = {
+  position: (int, int),
+  data: fntCharData,
+  index: int,
+  line: int,
+};
+
+type assetData = {
+  fntDataMap: WonderCommonlib.HashMapService.t(fntData),
+  bitmapMap: WonderCommonlib.HashMapService.t(DomExtendType.imageElement),
+};
 
 type imguiFunc = (. imguiRecord) => imguiRecord
 and imguiRecord = {
   setting,
-  fftData,
+  assetData,
+  fontData: option(fontData),
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
   /* ioData, */

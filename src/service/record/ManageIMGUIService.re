@@ -36,7 +36,7 @@ let _createElementArrayBuffer = gl => {
   buffer;
 };
 
-let _createFontTexture = gl => {
+let _createFontTexture = (gl, source) => {
   let texture = createTexture(gl);
   let target = getTexture2D(gl);
 
@@ -47,59 +47,55 @@ let _createFontTexture = gl => {
   texParameteri(target, getTextureWrapS(gl), getClampToEdge(gl), gl);
   texParameteri(target, getTextureWrapT(gl), getClampToEdge(gl), gl);
 
-  let (uint8Array, width, height) = FontBitmapData.uint8ArrayData;
-
   let format = getRgba(gl);
 
-  texImage2DWithArrayBufferView(
-    target,
-    0,
-    format,
-    width,
-    height,
-    0,
-    format,
-    getUnsignedByte(gl),
-    uint8Array,
-    gl,
-  );
+  texImage2D(target, 0, format, format, getUnsignedByte(gl), source, gl);
 
   texture;
 };
 
-let init = (gl, record) => {
-  let program =
-    gl
-    |> createProgram
-    |> ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
+let init = (gl, record) =>
+  FontIMGUIService.load(record)
+  |> WonderBsMost.Most.map(record => {
+       let program =
+         gl
+         |> createProgram
+         |> ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
 
-  let positionBuffer = _createArrayBuffer(gl);
-  let colorBuffer = _createArrayBuffer(gl);
-  let texCoordBuffer = _createArrayBuffer(gl);
-  let indexBuffer = _createElementArrayBuffer(gl);
+       let positionBuffer = _createArrayBuffer(gl);
+       let colorBuffer = _createArrayBuffer(gl);
+       let texCoordBuffer = _createArrayBuffer(gl);
+       let indexBuffer = _createElementArrayBuffer(gl);
 
-  let fontTexture = _createFontTexture(gl);
+       let fontTexture =
+         _createFontTexture(
+           gl,
+           AssetIMGUIService.unsafeGetBitmap(record)
+           |> GlType.imageElementToTextureSource,
+         );
 
-  {
-    ...record,
-    webglData:
-      Some({
-        program,
-        positionBuffer,
-        colorBuffer,
-        texCoordBuffer,
-        indexBuffer,
-        fontTexture,
-        aPositonLocation: gl |> getAttribLocation(program, "a_position"),
-        aColorLocation: gl |> getAttribLocation(program, "a_color"),
-        aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
-        uProjectionMatLocation:
-          gl |> getUniformLocation(program, "u_projectionMat"),
-        uSampler2DLocation: gl |> getUniformLocation(program, "u_sampler2D"),
-        lastWebglData: None,
-      }),
-  };
-};
+       {
+         ...record,
+         webglData:
+           Some({
+             program,
+             positionBuffer,
+             colorBuffer,
+             texCoordBuffer,
+             indexBuffer,
+             fontTexture,
+             aPositonLocation: gl |> getAttribLocation(program, "a_position"),
+             aColorLocation: gl |> getAttribLocation(program, "a_color"),
+             aTexCoordLocation:
+               gl |> getAttribLocation(program, "a_texCoord"),
+             uProjectionMatLocation:
+               gl |> getUniformLocation(program, "u_projectionMat"),
+             uSampler2DLocation:
+               gl |> getUniformLocation(program, "u_sampler2D"),
+             lastWebglData: None,
+           }),
+       };
+     });
 
 let _prepare = record => {...record, drawDataArr: [||]};
 /* record; */
@@ -491,11 +487,16 @@ let render = (gl, canvasSize, record) =>
   record |> _prepare |> _exec |> _finish(gl, canvasSize);
 
 let createRecord = () => {
-  setting: {
-    textScale: 1.0,
-    textColorArr: [|1., 1., 1.|],
+  setting:
+    /* textScale: 1.0, */
+    {
+      textColorArr: [|1., 1., 1.|],
+    },
+  assetData: {
+    fntDataMap: WonderCommonlib.HashMapService.createEmpty(),
+    bitmapMap: WonderCommonlib.HashMapService.createEmpty(),
   },
-  fftData: FontFFTData.hashMapData(),
+  fontData: None,
   webglData: None,
   drawDataArr: [||],
   /* ioData: {

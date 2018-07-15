@@ -17,6 +17,8 @@
   ],
   "refmt": 3,
   "bs-dependencies": [
+    "bs-fetch",
+    "wonder-bs-most",
     "wonder-log",
     "wonder-commonlib"
   ],
