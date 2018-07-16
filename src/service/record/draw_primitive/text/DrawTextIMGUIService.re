@@ -98,11 +98,16 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
         record,
       );
 
+    let {currentFontTextureDrawDataBaseIndex} as webglData =
+      RecordIMGUIService.getWebglData(record);
+
     let (verticeArr, colorArr, texCoordArr, indexArr) =
       layoutDataArr
       |> WonderCommonlib.ArrayService.reduceOneParam(
            (. (verticeArr, colorArr, texCoordArr, indexArr), layoutData) => {
-             let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
+             let baseIndex =
+               DrawDataArrayService.getBaseIndex(verticeArr)
+               + currentFontTextureDrawDataBaseIndex;
 
              (
                verticeArr |> _generateVertices(x, y, layoutData),
@@ -121,6 +126,12 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
 
     {
       ...record,
+      webglData:
+        Some({
+          ...webglData,
+          currentFontTextureDrawDataBaseIndex:
+            DrawDataArrayService.getBaseIndex(verticeArr),
+        }),
       drawDataArr:
         drawDataArr
         |> ArrayService.push({

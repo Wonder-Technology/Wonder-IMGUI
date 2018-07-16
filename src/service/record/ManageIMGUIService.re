@@ -89,6 +89,7 @@ let init = (gl, record) => {
           gl |> getUniformLocation(program, "u_projectionMat"),
         uSampler2DLocation: gl |> getUniformLocation(program, "u_sampler2D"),
         lastWebglData: None,
+        currentFontTextureDrawDataBaseIndex: 0,
       }),
   };
 };
@@ -102,13 +103,11 @@ let _unbindVAO = gl =>
   | None => ()
   };
 
-let _getWebglData = record => record.webglData |> OptionService.unsafeGet;
-
 let _backupGlState = (gl, record) => {
   ...record,
   webglData:
     Some({
-      ..._getWebglData(record),
+      ...RecordIMGUIService.getWebglData(record),
       lastWebglData:
         Some({
           lastProgram:
@@ -136,7 +135,8 @@ let _backupGlState = (gl, record) => {
 };
 
 let _getLastWebglData = record =>
-  _getWebglData(record).lastWebglData |> OptionService.unsafeGet;
+  RecordIMGUIService.getWebglData(record).lastWebglData
+  |> OptionService.unsafeGet;
 
 let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
   bindBuffer(getArrayBuffer(gl), buffer, gl);
@@ -165,6 +165,29 @@ let _bufferElementArrayBufferData = (buffer, pointArr, gl) => {
   gl;
 };
 
+let _addCustomTextureDrawDataBaseIndex = ({verticeArr, indexArr} as drawData) => {
+  let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
+
+  {
+    ...drawData,
+    indexArr:
+      indexArr
+      |> ArrayService.chunk(6)
+      |> WonderCommonlib.ArrayService.reduceOneParam(
+           (. resultArr, singleDrawDataIndexArr) => {
+             let totalIndexCount = (resultArr |> Js.Array.length) / 6 * 4;
+
+             resultArr
+             |> Js.Array.concat(
+                  singleDrawDataIndexArr
+                  |> Js.Array.map(index => index + totalIndexCount),
+                );
+           },
+           [||],
+         ),
+  };
+};
+
 let _bufferAllData = (gl, groupedDrawDataArr, record) => {
   let {
     program,
@@ -176,7 +199,7 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
     aColorLocation,
     aTexCoordLocation,
   } =
-    _getWebglData(record);
+    RecordIMGUIService.getWebglData(record);
 
   let (
     drawElementsDataArr,
@@ -187,6 +210,12 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
     totalIndexArr,
   ) =
     groupedDrawDataArr
+    |> Js.Array.map((({drawType}: drawData) as drawData) =>
+         switch (drawType) {
+         | CustomTexture => _addCustomTextureDrawDataBaseIndex(drawData)
+         | _ => drawData
+         }
+       )
     |> WonderCommonlib.ArrayService.reduceOneParam(
          (.
            (
@@ -215,7 +244,7 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
              |> ArrayService.push(
                   {drawType, customTexture, count, countOffset}: drawElementsData,
                 ),
-             countOffset + count,
+             countOffset + count * 2,
              totalVerticeArr |> Js.Array.concat(verticeArr),
              totalColorArr |> Js.Array.concat(colorArr),
              totalTexCoordArr |> Js.Array.concat(texCoordArr),
@@ -266,8 +295,6 @@ let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
              | _ => 0
              }
            );
-
-      /* WonderLog.Log.print(sortedDrawDataArr) |> ignore; */
 
       let (totalResultArr, oneGroupDrawData) =
         sortedDrawDataArr
@@ -364,7 +391,8 @@ let _setGlState = gl => {
 };
 
 let _draw = (gl, drawElementsDataArr, record) => {
-  let {fontTexture, uSampler2DLocation} = _getWebglData(record);
+  let {fontTexture, uSampler2DLocation} =
+    RecordIMGUIService.getWebglData(record);
 
   drawElementsDataArr
   |> WonderCommonlib.ArrayService.forEach(
@@ -392,7 +420,7 @@ let _draw = (gl, drawElementsDataArr, record) => {
          getTriangles(gl),
          count,
          getUnsignedShort(gl),
-         countOffset * 2,
+         countOffset,
          gl,
        );
      });
@@ -453,7 +481,7 @@ let _finish = (gl, canvasSize, record) => {
     _bufferAllData(gl, groupedDrawDataArr, record);
 
   let {program, fontTexture, uProjectionMatLocation, uSampler2DLocation} =
-    _getWebglData(record);
+    RecordIMGUIService.getWebglData(record);
 
   useProgram(program, gl);
 

@@ -4,6 +4,15 @@ open IMGUIType;
 
 open DrawDataArrType;
 
+let _getBaseIndex = drawDataArr =>
+  drawDataArr
+  |> Js.Array.filter(({drawType}: drawData) => drawType === CustomTexture)
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. baseIndex, {verticeArr}: drawData) =>
+         baseIndex + DrawDataArrayService.getBaseIndex(verticeArr),
+       0,
+     );
+
 let draw =
     (
       (x, y, width, height),
@@ -13,6 +22,7 @@ let draw =
       texture,
       {drawDataArr} as record,
     ) => {
+  /* let baseIndex = _getBaseIndex(drawDataArr); */
   let baseIndex = 0;
 
   let x = x |> NumberType.intToFloat;

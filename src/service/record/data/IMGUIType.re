@@ -38,6 +38,7 @@ type webglData = {
   uProjectionMatLocation: uniformLocation,
   uSampler2DLocation: uniformLocation,
   lastWebglData: option(lastWebglData),
+  currentFontTextureDrawDataBaseIndex: int
 };
 
 type fftCharData = {

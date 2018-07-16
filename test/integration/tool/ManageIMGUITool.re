@@ -1,1 +1,0 @@
-let getWebglData = ManageIMGUIService._getWebglData;

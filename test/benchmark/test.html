@@ -9,7 +9,6 @@
 <body>
 
     <canvas id="aaa" width=900 height=500></canvas>
-    <!-- <canvas id="aaa" width=500 height=500></canvas> -->
 
     <script src="../../dist/wdimgui.js"></script>
 
@@ -22,110 +21,117 @@
 
             var gl = canvas.getContext("webgl");
 
+            var image1 = new Image();
+
+            image1.src = "./1.jpg";
+            image1.onload = () => {
+                var image2 = new Image();
+
+                image2.src = "./1.png";
+                image2.onload = () => {
+
+                    var texture1 = gl.createTexture();
+                    gl.bindTexture(gl.TEXTURE_2D, texture1);
+
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image1);
 
 
-            var image = new Image();
-
-            image.src = "./1.png";
-            image.onload = () => {
-
-                var texture = gl.createTexture();
-                gl.bindTexture(gl.TEXTURE_2D, texture);
-
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                    var texture2 = gl.createTexture();
+                    gl.bindTexture(gl.TEXTURE_2D, texture2);
+
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image2);
 
 
-
-
-                var record = wdimgui.createRecord();
-
-
-
-
-                var record =
-                    wdimgui.addFont(
-                        "../res/font/myFont.fnt",
-                        "../res/font/myFont.png",
-                        record
-                    );
-
-
-
-                // var recordForLoadComplete = null;
-                var recordForLoop = null;
-
-                function step(timestamp) {
-                    var record = recordForLoop;
-
-                    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-
-                    record = wdimgui.render(gl, [canvas.width, canvas.height], record);
-
-
-                    window.requestAnimationFrame(step);
-                }
-
-                wdimgui.load(record)
-                    // .forEach((record) => {
-                    //     recordForLoadComplete = record
-                    // })
-                    .then((record) => {
-                        // var record = recordForLoadComplete;
-
-
-                        var record = wdimgui.setIMGUIFunc((record) => {
-                            var record = wdimgui.label(
-                                [20, 20, 300, 100], "ab", 1, record
-                                // [20, 20, 100, 100], "a  ", 0, record
-                                // [20, 20, 100, 100], "a", record
-                            );
-
-
-                            // var record = wdimgui.image(
-                            //     // [200, 200, image.width, image.height], [0, 0, 1, 1], texture, record
-                            //     // [0, 50, image.width, image.height], [0, 0, 1, 1], texture, record
-                            //     [200, 300, 100, 100], [0, 0, 1, 1], texture, record
-                            // );
-
-
-
-                            var record = wdimgui.image(
-                                // [200, 200, image.width, image.height], [0, 0, 1, 1], texture, record
-                                // [0, 50, image.width, image.height], [0, 0, 1, 1], texture, record
-                                [500, 300, 100, 100], [0, 0, 1, 1], texture, record
-                            );
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 
 
 
-                            return record
-                        }, record);
+                    var record = wdimgui.createRecord();
 
 
-                        var record = wdimgui.init(gl, record);
 
 
-                        // gl.viewport(0, 0, canvas.width, canvas.height);
+                    var record =
+                        wdimgui.addFont(
+                            "../res/font/myFont.fnt",
+                            "../res/font/myFont.png",
+                            record
+                        );
 
-                        // gl.clearColor(38 / 255, 41 / 255, 48 / 255, 1);
-                        gl.clearColor(0, 1, 1, 1);
 
-                        recordForLoop = record;
+
+                    var recordForLoop = null;
+
+                    function step(timestamp) {
+                        var record = recordForLoop;
+
+                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+                        record = wdimgui.render(gl, [canvas.width, canvas.height], record);
 
 
                         window.requestAnimationFrame(step);
-                    })
+                    }
+
+                    wdimgui.load(record)
+                        .then((record) => {
+                            var record = wdimgui.setIMGUIFunc((record) => {
+                                var record = wdimgui.label(
+                                    [20, 20, 300, 100], "ab", 1, record
+                                );
+
+
+
+                                var record = wdimgui.image(
+                                    [50, 150, 50, 100], [0, 0, 1, 1], texture1, record
+                                );
+
+
+                                var record = wdimgui.image(
+                                    [200, 300, 100, 100], [0, 0, 1, 1], texture2, record
+                                );
+
+
+                                var record = wdimgui.label(
+                                    [20, 150, 300, 100], "c", 1, record
+                                );
+
+                                var record = wdimgui.image(
+                                    [500, 300, 100, 100], [0, 0, 1, 1], texture2, record
+                                );
+
+
+
+
+                                return record
+                            }, record);
+
+
+                            var record = wdimgui.init(gl, record);
+
+
+                            gl.clearColor(0, 1, 1, 1);
+
+                            recordForLoop = record;
+
+
+                            window.requestAnimationFrame(step);
+                        })
 
 
 
 
 
 
-            };
+                };
+            }
+
+
         };
     </script>
 </body>

@@ -16,10 +16,9 @@ let _ =
 
     let record = ref(Obj.magic(0));
 
-
     beforeEach(() => {
       sandbox := createSandbox();
-      record := ManageIMGUIAPI.createRecord() |> AssetTool. prepareFontAsset;
+      record := ManageIMGUIAPI.createRecord() |> AssetTool.prepareFontAsset;
     });
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
@@ -69,7 +68,7 @@ let _ =
               record^,
             );
 
-          ManageIMGUITool.getWebglData(record).program |> expect == program;
+          RecordIMGUITool.getWebglData(record).program |> expect == program;
         });
       })
     );
@@ -246,7 +245,7 @@ let _ =
              rgba,
              rgba,
              unsignedByte,
-             AssetTool.unsafeGetBitmap(record) |> Obj.magic
+             AssetTool.unsafeGetBitmap(record) |> Obj.magic,
            |]);
       });
     });
@@ -283,17 +282,17 @@ let _ =
 
         test("test get a_position location", () =>
           _test("a_position", record =>
-            ManageIMGUITool.getWebglData(record).aPositonLocation
+            RecordIMGUITool.getWebglData(record).aPositonLocation
           )
         );
         test("test get a_color location", () =>
           _test("a_color", record =>
-            ManageIMGUITool.getWebglData(record).aColorLocation
+            RecordIMGUITool.getWebglData(record).aColorLocation
           )
         );
         test("test get a_texCoord location", () =>
           _test("a_texCoord", record =>
-            ManageIMGUITool.getWebglData(record).aTexCoordLocation
+            RecordIMGUITool.getWebglData(record).aTexCoordLocation
           )
         );
       });
@@ -329,12 +328,12 @@ let _ =
 
         test("test get u_projectionMat location", () =>
           _test("u_projectionMat", record =>
-            ManageIMGUITool.getWebglData(record).uProjectionMatLocation
+            RecordIMGUITool.getWebglData(record).uProjectionMatLocation
           )
         );
         test("test get u_sampler2D location", () =>
           _test("u_sampler2D", record =>
-            ManageIMGUITool.getWebglData(record).uSampler2DLocation
+            RecordIMGUITool.getWebglData(record).uSampler2DLocation
           )
         );
       });
