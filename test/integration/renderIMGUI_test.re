@@ -133,6 +133,45 @@ let _ =
         (record, canvasWidth, canvasHeight);
       };
 
+      test("clear drawDataArr", () => {
+        let (
+          (
+            (imageX1, imageY1, imageWidth1, imageHeight1),
+            (imageS01, imageT01, imageS11, imageT11),
+            texture1,
+          ),
+          _,
+          _,
+        ) =
+          RenderIMGUITool.buildImageData();
+        let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
+        let gl =
+          FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ()) |> Obj.magic;
+        let canvasWidth = 1000;
+        let canvasHeight = 500;
+        let record =
+          record^
+          |> ManageIMGUIAPI.setIMGUIFunc((. record) => {
+               let record =
+                 record
+                 |> FixedLayoutControlIMGUIAPI.image(
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      texture1,
+                    );
+
+               record;
+             });
+        let record = ManageIMGUIAPI.init(gl, record);
+
+        let record =
+          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+        let record =
+          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+
+        record.drawDataArr |> Js.Array.length |> expect == 1;
+      });
+
       test("unbind vao", () => {
         let getExtension = createEmptyStubWithJsObjSandbox(sandbox);
 
