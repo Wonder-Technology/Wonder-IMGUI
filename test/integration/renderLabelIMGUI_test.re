@@ -24,35 +24,6 @@ let _ =
     describe("test render", () =>
       describe("buffer all data", () =>
         describe("test draw label", () => {
-          let _prepareFntData = record => {
-            let fontData = RecordIMGUIService.getFontData(record);
-
-            let fntFilePath =
-              Node.Path.join([|
-                Node.Process.cwd(),
-                "./test/res/font/myFont.fnt",
-              |]);
-
-            let fntData =
-              IOIMGUITool.parseFnt(
-                Node.Fs.readFileAsUtf8Sync(fntFilePath),
-                fntFilePath,
-              );
-
-            {
-              ...record,
-              assetData: {
-                ...record.assetData,
-                fntDataMap:
-                  record.assetData.fntDataMap
-                  |> WonderCommonlib.HashMapService.set(
-                       fontData.fntId,
-                       fntData,
-                     ),
-              },
-            };
-          };
-
           describe("test draw single line", () => {
             let _test = (bufferData, testBufferDataFunc, record) => {
               let labelX = 10;
@@ -62,7 +33,7 @@ let _ =
               let labelStr = "aaa";
               let labelAlign = Left;
 
-              let record = _prepareFntData(record);
+              let record = RenderIMGUITool.prepareFntData(record);
 
               testBufferDataFunc(
                 sandbox,
@@ -208,7 +179,7 @@ let _ =
               let labelStr = "a";
               let labelAlign = Left;
 
-              let record = _prepareFntData(record^);
+              let record = RenderIMGUITool.prepareFntData(record^);
 
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
@@ -235,7 +206,7 @@ let _ =
               let labelStr = "a\nc";
               let labelAlign = Left;
 
-              let record = _prepareFntData(record^);
+              let record = RenderIMGUITool.prepareFntData(record^);
 
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
@@ -283,7 +254,7 @@ let _ =
                 let labelStr = "a  b";
                 let labelAlign = Left;
 
-                let record = _prepareFntData(record^);
+                let record = RenderIMGUITool.prepareFntData(record^);
 
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
@@ -343,7 +314,7 @@ let _ =
                 let labelStr = "a\n  b";
                 let labelAlign = Left;
 
-                let record = _prepareFntData(record^);
+                let record = RenderIMGUITool.prepareFntData(record^);
 
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
@@ -392,7 +363,7 @@ let _ =
                   let labelStr = "a\tb";
                   let labelAlign = Left;
 
-                  let record = _prepareFntData(record^);
+                  let record = RenderIMGUITool.prepareFntData(record^);
 
                   RenderIMGUITool.testPositionBufferData(
                     sandbox,
@@ -448,7 +419,7 @@ let _ =
                 let labelStr = "ab";
                 let labelAlign = Center;
 
-                let record = _prepareFntData(record^);
+                let record = RenderIMGUITool.prepareFntData(record^);
 
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
@@ -492,7 +463,7 @@ let _ =
                 let labelStr = "ab";
                 let labelAlign = Right;
 
-                let record = _prepareFntData(record^);
+                let record = RenderIMGUITool.prepareFntData(record^);
 
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
@@ -546,7 +517,7 @@ let _ =
                   let labelStr = "ab  ";
                   let labelAlign = Center;
 
-                  let record = _prepareFntData(record^);
+                  let record = RenderIMGUITool. prepareFntData(record^);
 
                   RenderIMGUITool.testPositionBufferData(sandbox, record,
                     (. record) => {

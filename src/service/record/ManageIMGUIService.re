@@ -191,7 +191,7 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
          (.
            (
              drawElementsDataArr,
-             offset,
+             countOffset,
              totalVerticeArr,
              totalColorArr,
              totalTexCoordArr,
@@ -213,9 +213,9 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
            (
              drawElementsDataArr
              |> ArrayService.push(
-                  {drawType, customTexture, count, offset}: drawElementsData,
+                  {drawType, customTexture, count, countOffset}: drawElementsData,
                 ),
-             offset + count,
+             countOffset + count,
              totalVerticeArr |> Js.Array.concat(verticeArr),
              totalColorArr |> Js.Array.concat(colorArr),
              totalTexCoordArr |> Js.Array.concat(texCoordArr),
@@ -368,7 +368,7 @@ let _draw = (gl, drawElementsDataArr, record) => {
 
   drawElementsDataArr
   |> WonderCommonlib.ArrayService.forEach(
-       (. {drawType, customTexture, count, offset}: drawElementsData) => {
+       (. {drawType, customTexture, count, countOffset}: drawElementsData) => {
        let texture =
          switch (drawType) {
          | FontTexture => fontTexture
@@ -392,7 +392,7 @@ let _draw = (gl, drawElementsDataArr, record) => {
          getTriangles(gl),
          count,
          getUnsignedShort(gl),
-         offset * 2,
+         countOffset * 2,
          gl,
        );
      });

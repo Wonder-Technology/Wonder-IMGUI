@@ -1,21 +1,25 @@
 open Js.Typed_array;
 
+open FontType;
+
 let buildLabelData = () => {
   let labelX1 = 10;
   let labelY1 = 20;
   let labelWidth1 = 100;
   let labelHeight1 = 200;
-  let labelStr1 = "ab";
+  let labelStr1 = "a";
+  let labelAlign1 = Left;
 
   let labelX2 = 20;
   let labelY2 = 20;
   let labelWidth2 = 200;
   let labelHeight2 = 200;
-  let labelStr2 = "cc";
+  let labelStr2 = "c";
+  let labelAlign2 = Left;
 
   (
-    ((labelX1, labelY1, labelWidth1, labelHeight1), labelStr1),
-    ((labelX2, labelY2, labelWidth2, labelHeight2), labelStr2),
+    ((labelX1, labelY1, labelWidth1, labelHeight1), labelStr1, labelAlign1),
+    ((labelX2, labelY2, labelWidth2, labelHeight2), labelStr2, labelAlign2),
   );
 };
 
@@ -187,11 +191,6 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
       (),
     )
     |> Obj.magic;
-  let (
-    ((labelX1, labelY1, labelWidth1, labelHeight1), labelStr1),
-    ((labelX2, labelY2, labelWidth2, labelHeight2), labelStr2),
-  ) =
-    buildLabelData();
   let canvasWidth = 1000;
   let canvasHeight = 500;
   let record = record |> ManageIMGUIAPI.setIMGUIFunc(imguiFunc);
@@ -209,4 +208,27 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
        Uint16Array.make(targetBufferDataArr) |> Obj.magic,
        dynamic_draw,
      |]);
+};
+
+let prepareFntData = record => {
+  let fontData = RecordIMGUIService.getFontData(record);
+
+  let fntFilePath =
+    Node.Path.join([|Node.Process.cwd(), "./test/res/font/myFont.fnt"|]);
+
+  let fntData =
+    IOIMGUITool.parseFnt(
+      Node.Fs.readFileAsUtf8Sync(fntFilePath),
+      fntFilePath,
+    );
+
+  {
+    ...record,
+    assetData: {
+      ...record.assetData,
+      fntDataMap:
+        record.assetData.fntDataMap
+        |> WonderCommonlib.HashMapService.set(fontData.fntId, fntData),
+    },
+  };
 };
