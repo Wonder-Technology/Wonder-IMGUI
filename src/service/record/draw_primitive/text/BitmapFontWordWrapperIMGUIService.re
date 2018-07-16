@@ -14,6 +14,7 @@ let _computeMetrics = [%raw
     start,
     end_,
     width,
+    hasFontDefDictionaryDataFunc,
     getGlyphFunc,
     getKerningFunc,
   ) => {|
@@ -22,13 +23,9 @@ let _computeMetrics = [%raw
                 count = 0,
                 lastGlyph = null;
 
-            /* if (!fntData.fontDefDictionary) {
-                return {
-                    start: start,
-                    end_: start,
-                    width: 0
-                }
-            } */
+            if (!hasFontDefDictionaryDataFunc(fntData)) {
+                return [start, start, 0];
+            }
 
             var end_ = Math.min(text.length, end_);
 
@@ -95,6 +92,7 @@ let _greedy = [%raw
     start,
     end_,
     width,
+    hasFontDefDictionaryDataFunc,
     getGlyphFunc,
     getKerningFunc,
   ) => {|
@@ -119,7 +117,7 @@ let _greedy = [%raw
                 }
 
                 /* determine visible # of glyphs for the available width */
-                let measured = _computeMetrics(fntData, text, letterSpacing, start, newLine, testWidth, getGlyphFunc, getKerningFunc),
+                let measured = _computeMetrics(fntData, text, letterSpacing, start, newLine, testWidth, hasFontDefDictionaryDataFunc, getGlyphFunc, getKerningFunc),
                     lineEnd = start + (measured[1]-measured[0]),
                     nextStart = lineEnd + NEWLINE_CHAR.length;
 
@@ -157,7 +155,7 @@ let _greedy = [%raw
                 }
 
                 if (lineEnd >= start) {
-                    lines.push(_computeMetrics(fntData, text, letterSpacing, start, lineEnd, testWidth, getGlyphFunc, getKerningFunc));
+                    lines.push(_computeMetrics(fntData, text, letterSpacing, start, lineEnd, testWidth, hasFontDefDictionaryDataFunc, getGlyphFunc, getKerningFunc));
                 }
 
                 start = nextStart
@@ -176,6 +174,7 @@ let getLines = (fntData, text, (letterSpacing, width, start, end_)) =>
     start,
     end_,
     width,
+    FontService.hasFontDefDictionaryData,
     BitmapFontSearchGlyphIMGUIService.getGlyph,
     BitmapFontParserIMGUIService.getKerning,
   );

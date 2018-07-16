@@ -9,40 +9,78 @@ let addFont = ((fntFilePath, bitmapFilePath), (fntId, bitmapId), record) => {
   fontData: Some({fntFilePath, bitmapFilePath, fntId, bitmapId}),
 };
 
-let _fetch = filePath => Fetch.fetch(filePath);
+/* let _loadImageByBlobPromise:
+     Fetch.blob => Js.Promise.t(DomExtendType.imageElement) = [%raw
+     blob => {|
+       return new Promise((resolve, reject) => {
+       var image = new Image();
 
-let _loadImageByBlobPromise:
-  Fetch.blob => Js.Promise.t(DomExtendType.imageElement) = [%raw
-  blob => {|
-    return new Promise((resolve, reject) => {
-    var image = new Image();
 
-    image.src = URL.createObjectURL(blob);
+       image.src = URL.createObjectURL(blob);
 
-    URL.revokeObjectURL( blob );
 
-    image.onload = (function () {
-        return resolve(image);
-      });
+       image.onload = (function (image) {
+         throw new Error("aaa")
+           return resolve(image);
+         });
 
-    image.onerror = (function (e) {
-      console.trace();
-              return reject(new Error(e));
-            });
-    })
+       image.onerror = (function (e) {
+         throw new Error("bbb")
+         console.trace();
+                 return reject(new Error(e));
+               });
+       });
+
+       URL.revokeObjectURL( blob );
+       |}
+   ];
+
+
+
+
+
+
+
+   let _loadImageByBlobStream = blob =>
+     fromPromise(_loadImageByBlobPromise(blob)); */
+
+let _loadBlobImage = [%raw
+  (objectUrl, resolve, reject) => {|
+          if (typeof window.loadImageBlob_wonder === "undefined") {
+  window.loadImageBlob_wonder = function(objectUrl, resolve, reject){
+                      var image = new Image();
+
+                      image.src = objectUrl;
+
+                      image.onload = (function () {
+                          return resolve(image);
+                        });
+
+                      image.onerror = (function (e) {
+                        console.trace();
+                                return reject(new Error(e));
+                              });
+  };
+          }
+
+  window.loadImageBlob_wonder(objectUrl, resolve, reject)
     |}
 ];
 
-let _loadImageByBlobStream = blob =>
-  fromPromise(_loadImageByBlobPromise(blob));
+let _loadImageByBlobPromise = objectUrl =>
+  make((~resolve, ~reject) => _loadBlobImage(objectUrl, resolve, reject))
+  |> fromPromise;
 
-let load = ({assetData} as record) => {
+let load = (fetchFunc, {assetData} as record) => {
   let {fntFilePath, bitmapFilePath, fntId, bitmapId} =
     RecordIMGUIService.getFontData(record);
   let {fntDataMap, bitmapMap} = assetData;
 
-  FetchService.createFetchBlobStream(bitmapFilePath, _fetch)
-  |> flatMap(blob => _loadImageByBlobStream(blob))
+  FetchService.createFetchBlobStream(bitmapFilePath, fetchFunc)
+  |> flatMap(blob =>
+       _loadImageByBlobPromise(blob |> Blob.createObjectURL)
+       |> tap(image => Blob.revokeObjectURL(blob))
+     )
   |> map(image => {
        bitmapMap
        |> WonderCommonlib.HashMapService.set(bitmapId, image)
@@ -50,7 +88,7 @@ let load = ({assetData} as record) => {
        ();
      })
   |> merge(
-       FetchService.createFetchTextStream(fntFilePath, _fetch)
+       FetchService.createFetchTextStream(fntFilePath, fetchFunc)
        |> map(fntStr => ParseFntIMGUIService.parse(fntStr, fntFilePath))
        |> map(fntData => {
             fntDataMap

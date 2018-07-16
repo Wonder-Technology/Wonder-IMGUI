@@ -1,5 +1,7 @@
 open IMGUIType;
 
+open FontType;
+
 open DrawDataArrType;
 
 let _generateVertices = ({position, data, index, line}, verticeArr) => {

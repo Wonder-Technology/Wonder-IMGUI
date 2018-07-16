@@ -1,0 +1,1 @@
+let load = (fetchFunc, record) => FontIMGUIService.load(fetchFunc, record);

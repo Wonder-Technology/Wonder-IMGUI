@@ -54,48 +54,44 @@ let _createFontTexture = (gl, source) => {
   texture;
 };
 
-let init = (gl, record) =>
-  FontIMGUIService.load(record)
-  |> WonderBsMost.Most.map(record => {
-       let program =
-         gl
-         |> createProgram
-         |> ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
+let init = (gl, record) => {
+  let program =
+    gl
+    |> createProgram
+    |> ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
 
-       let positionBuffer = _createArrayBuffer(gl);
-       let colorBuffer = _createArrayBuffer(gl);
-       let texCoordBuffer = _createArrayBuffer(gl);
-       let indexBuffer = _createElementArrayBuffer(gl);
+  let positionBuffer = _createArrayBuffer(gl);
+  let colorBuffer = _createArrayBuffer(gl);
+  let texCoordBuffer = _createArrayBuffer(gl);
+  let indexBuffer = _createElementArrayBuffer(gl);
 
-       let fontTexture =
-         _createFontTexture(
-           gl,
-           AssetIMGUIService.unsafeGetBitmap(record)
-           |> GlType.imageElementToTextureSource,
-         );
+  let fontTexture =
+    _createFontTexture(
+      gl,
+      AssetIMGUIService.unsafeGetBitmap(record)
+      |> GlType.imageElementToTextureSource,
+    );
 
-       {
-         ...record,
-         webglData:
-           Some({
-             program,
-             positionBuffer,
-             colorBuffer,
-             texCoordBuffer,
-             indexBuffer,
-             fontTexture,
-             aPositonLocation: gl |> getAttribLocation(program, "a_position"),
-             aColorLocation: gl |> getAttribLocation(program, "a_color"),
-             aTexCoordLocation:
-               gl |> getAttribLocation(program, "a_texCoord"),
-             uProjectionMatLocation:
-               gl |> getUniformLocation(program, "u_projectionMat"),
-             uSampler2DLocation:
-               gl |> getUniformLocation(program, "u_sampler2D"),
-             lastWebglData: None,
-           }),
-       };
-     });
+  {
+    ...record,
+    webglData:
+      Some({
+        program,
+        positionBuffer,
+        colorBuffer,
+        texCoordBuffer,
+        indexBuffer,
+        fontTexture,
+        aPositonLocation: gl |> getAttribLocation(program, "a_position"),
+        aColorLocation: gl |> getAttribLocation(program, "a_color"),
+        aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
+        uProjectionMatLocation:
+          gl |> getUniformLocation(program, "u_projectionMat"),
+        uSampler2DLocation: gl |> getUniformLocation(program, "u_sampler2D"),
+        lastWebglData: None,
+      }),
+  };
+};
 
 let _prepare = record => {...record, drawDataArr: [||]};
 /* record; */

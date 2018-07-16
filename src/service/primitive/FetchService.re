@@ -7,3 +7,5 @@ let createFetchBlobStream = (filePath, fetchFunc) =>
 
 let createFetchTextStream = (filePath, fetchFunc) =>
   fromPromise(fetchFunc(filePath) |> then_(Fetch.Response.text));
+
+let fetch = filePath => Fetch.fetch(filePath);

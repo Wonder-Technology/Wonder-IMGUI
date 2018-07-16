@@ -1,5 +1,7 @@
 open IMGUIType;
 
+open FontType;
+
 let _parseStrToObj = str => {
   let item_exp = [%re {|/\w+=[^ \r\n]+/gi|}];
   let int_exp = [%re {|/^[\-]?\d+$/|}];
@@ -33,7 +35,7 @@ let _parseStrToObj = str => {
           obj
           |> WonderCommonlib.HashMapService.set(
                key,
-               value |> NumberType.stringToInt,
+               value |> StringService.toInt,
              )
           |> ignore;
         },

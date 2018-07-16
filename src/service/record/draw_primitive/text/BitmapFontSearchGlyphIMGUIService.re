@@ -1,5 +1,7 @@
 open IMGUIType;
 
+open FontType;
+
 let _getTabId = () =>
   "\t" |> Js.String.charCodeAt(0) |> NumberType.floatToInt;
 

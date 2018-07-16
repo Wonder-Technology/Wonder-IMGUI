@@ -1,5 +1,7 @@
 open IMGUIType;
 
+open FontType;
+
 /* TODO add tabSize, letterSpacing to setting */
 
 let getLayoutData =

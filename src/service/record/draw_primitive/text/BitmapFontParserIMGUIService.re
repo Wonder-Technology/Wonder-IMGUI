@@ -1,5 +1,7 @@
 open IMGUIType;
 
+open FontType;
+
 let getKerning = (fntData, left, right) =>
   fntData.kerningArray |> Js.Array.length === 0 ?
     0 :
