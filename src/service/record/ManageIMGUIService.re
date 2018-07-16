@@ -54,45 +54,53 @@ let _createFontTexture = (gl, source) => {
   texture;
 };
 
-let init = (gl, record) => {
-  let program =
-    gl
-    |> createProgram
-    |> WonderWebgl.ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
+let init = (gl, record) =>
+  ! AssetIMGUIService.isLoadAsset(record) ?
+    record :
+    {
+      let program =
+        gl
+        |> createProgram
+        |> WonderWebgl.ProgramService.initShader(
+             ShaderData.vs,
+             ShaderData.fs,
+             gl,
+           );
 
-  let positionBuffer = _createArrayBuffer(gl);
-  let colorBuffer = _createArrayBuffer(gl);
-  let texCoordBuffer = _createArrayBuffer(gl);
-  let indexBuffer = _createElementArrayBuffer(gl);
+      let positionBuffer = _createArrayBuffer(gl);
+      let colorBuffer = _createArrayBuffer(gl);
+      let texCoordBuffer = _createArrayBuffer(gl);
+      let indexBuffer = _createElementArrayBuffer(gl);
 
-  let fontTexture =
-    _createFontTexture(
-      gl,
-      AssetIMGUIService.unsafeGetBitmap(record)
-      |> WonderWebgl.GlType.imageElementToTextureSource,
-    );
+      let fontTexture =
+        _createFontTexture(
+          gl,
+          AssetIMGUIService.unsafeGetBitmap(record)
+          |> WonderWebgl.GlType.imageElementToTextureSource,
+        );
 
-  {
-    ...record,
-    webglData:
-      Some({
-        program,
-        positionBuffer,
-        colorBuffer,
-        texCoordBuffer,
-        indexBuffer,
-        fontTexture,
-        aPositonLocation: gl |> getAttribLocation(program, "a_position"),
-        aColorLocation: gl |> getAttribLocation(program, "a_color"),
-        aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
-        uProjectionMatLocation:
-          gl |> getUniformLocation(program, "u_projectionMat"),
-        uSampler2DLocation: gl |> getUniformLocation(program, "u_sampler2D"),
-        lastWebglData: None,
-        currentFontTextureDrawDataBaseIndex: 0,
-      }),
-  };
-};
+      {
+        ...record,
+        webglData:
+          Some({
+            program,
+            positionBuffer,
+            colorBuffer,
+            texCoordBuffer,
+            indexBuffer,
+            fontTexture,
+            aPositonLocation: gl |> getAttribLocation(program, "a_position"),
+            aColorLocation: gl |> getAttribLocation(program, "a_color"),
+            aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
+            uProjectionMatLocation:
+              gl |> getUniformLocation(program, "u_projectionMat"),
+            uSampler2DLocation:
+              gl |> getUniformLocation(program, "u_sampler2D"),
+            lastWebglData: None,
+            currentFontTextureDrawDataBaseIndex: 0,
+          }),
+      };
+    };
 
 let _prepare = record => {...record, drawDataArr: [||]};
 /* record; */
@@ -107,7 +115,7 @@ let _backupGlState = (gl, record) => {
   ...record,
   webglData:
     Some({
-      ...RecordIMGUIService.getWebglData(record),
+      ...RecordIMGUIService.unsafeGetWebglData(record),
       lastWebglData:
         Some({
           lastProgram:
@@ -135,7 +143,7 @@ let _backupGlState = (gl, record) => {
 };
 
 let _getLastWebglData = record =>
-  RecordIMGUIService.getWebglData(record).lastWebglData
+  RecordIMGUIService.unsafeGetWebglData(record).lastWebglData
   |> OptionService.unsafeGet;
 
 let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
@@ -199,7 +207,7 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
     aColorLocation,
     aTexCoordLocation,
   } =
-    RecordIMGUIService.getWebglData(record);
+    RecordIMGUIService.unsafeGetWebglData(record);
 
   let (
     drawElementsDataArr,
@@ -392,7 +400,7 @@ let _setGlState = gl => {
 
 let _draw = (gl, drawElementsDataArr, record) => {
   let {fontTexture, uSampler2DLocation} =
-    RecordIMGUIService.getWebglData(record);
+    RecordIMGUIService.unsafeGetWebglData(record);
 
   drawElementsDataArr
   |> WonderCommonlib.ArrayService.forEach(
@@ -481,7 +489,7 @@ let _finish = (gl, canvasSize, record) => {
     _bufferAllData(gl, groupedDrawDataArr, record);
 
   let {program, fontTexture, uProjectionMatLocation, uSampler2DLocation} =
-    RecordIMGUIService.getWebglData(record);
+    RecordIMGUIService.unsafeGetWebglData(record);
 
   useProgram(program, gl);
 
@@ -508,7 +516,8 @@ let getSetting = record => record.setting;
 let setSetting = (setting, record) => {...record, setting};
 
 let render = (gl, canvasSize, record) =>
-  record |> _prepare |> _exec |> _finish(gl, canvasSize);
+  ! AssetIMGUIService.isLoadAsset(record) ?
+    record : record |> _prepare |> _exec |> _finish(gl, canvasSize);
 
 let createRecord = () => {
   setting:

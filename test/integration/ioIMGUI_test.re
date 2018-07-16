@@ -26,49 +26,7 @@ let _ =
     });
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
-    describe("load", () => {
-      let _buildFakeFetchTextResponse = text =>
-        {"text": () => text} |> Js.Promise.resolve;
-
-      let _buildFakeFetchBlobResponse = blob =>
-        {"blob": () => blob} |> Js.Promise.resolve;
-
-      let _buildFakeFetch = (sandbox, fntFilePath, bitmapFilePath) => {
-        let fetch = createEmptyStubWithJsObjSandbox(sandbox);
-
-        fetch
-        |> onCall(1)
-        |> returns(_buildFakeFetchBlobResponse(bitmapFilePath))
-        |> onCall(0)
-        |> returns(
-             _buildFakeFetchTextResponse(
-               Node.Fs.readFileAsUtf8Sync(fntFilePath),
-             ),
-           );
-
-        fetch;
-      };
-
-      let _buildFakeURL = [%raw
-        sandbox => {|
-            var URL = {
-              createObjectURL: (blob) => blob,
-              revokeObjectURL: sandbox.stub()
-            };
-
-            window.URL = URL;
-        |}
-      ];
-
-      let _buildFakeLoadImage = [%bs.raw
-        () => {|
-            window.loadImageBlob_wonder = function(objectUrl, resolve, reject){
-                resolve(objectUrl)
-            }
-
-        |}
-      ];
-
+    describe("load", () =>
       describe("load font asset", () => {
         let _test = testFunc => {
           let fntFilePath =
@@ -82,18 +40,15 @@ let _ =
               "./test/res/font/myFont.png",
             |]);
           let bitmap = bitmapFilePath;
-          _buildFakeURL(sandbox^);
-          _buildFakeLoadImage(.);
-          let fetch = _buildFakeFetch(sandbox, fntFilePath, bitmapFilePath);
+          IOIMGUITool.buildFakeURL(sandbox^);
+          IOIMGUITool.buildFakeLoadImage(.);
+          let fetch =
+            IOIMGUITool.buildFakeFetch(sandbox, fntFilePath, bitmapFilePath);
 
           record^
           |> IOIMGUIAPI.addFont(fntFilePath, bitmapFilePath)
           |> IOIMGUITool.load(fetch)
-          /* |> Most.forEach(result => {
-               record := result;
-               ();
-             }) */
-          |> then_((record) => testFunc(bitmap, record));
+          |> then_(record => testFunc(bitmap, record));
         };
 
         testPromise("load bitmap image", () =>
@@ -151,6 +106,6 @@ let _ =
             )
           )
         );
-      });
-    });
+      })
+    );
   });

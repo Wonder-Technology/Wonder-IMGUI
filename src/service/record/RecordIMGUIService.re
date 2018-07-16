@@ -1,5 +1,8 @@
 open IMGUIType;
 
-let getFontData = record => record.fontData |> OptionService.unsafeGet;
+let getFontData = record => record.fontData;
 
-let getWebglData = record => record.webglData |> OptionService.unsafeGet;
+let unsafeGetFontData = record =>
+  getFontData(record) |> OptionService.unsafeGet;
+
+let unsafeGetWebglData = record => record.webglData |> OptionService.unsafeGet;

@@ -5,7 +5,7 @@ let unsafeGetBitmap = AssetIMGUIService.unsafeGetBitmap;
 let prepareFontAsset = record => {
   let record = IOIMGUIAPI.addFont("", "", record);
 
-  let fontData = RecordIMGUIService.getFontData(record);
+  let fontData = RecordIMGUIService.unsafeGetFontData(record);
   let bitmap = Obj.magic(101);
 
   {

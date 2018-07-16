@@ -211,7 +211,7 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
 };
 
 let prepareFntData = record => {
-  let fontData = RecordIMGUIService.getFontData(record);
+  let fontData = RecordIMGUIService.unsafeGetFontData(record);
 
   let fntFilePath =
     Node.Path.join([|Node.Process.cwd(), "./test/res/font/myFont.fnt"|]);

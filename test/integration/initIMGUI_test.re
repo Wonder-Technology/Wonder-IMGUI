@@ -68,7 +68,7 @@ let _ =
               record^,
             );
 
-          RecordIMGUITool.getWebglData(record).program |> expect == program;
+          RecordIMGUITool.unsafeGetWebglData(record).program |> expect == program;
         });
       })
     );
@@ -282,17 +282,17 @@ let _ =
 
         test("test get a_position location", () =>
           _test("a_position", record =>
-            RecordIMGUITool.getWebglData(record).aPositonLocation
+            RecordIMGUITool.unsafeGetWebglData(record).aPositonLocation
           )
         );
         test("test get a_color location", () =>
           _test("a_color", record =>
-            RecordIMGUITool.getWebglData(record).aColorLocation
+            RecordIMGUITool.unsafeGetWebglData(record).aColorLocation
           )
         );
         test("test get a_texCoord location", () =>
           _test("a_texCoord", record =>
-            RecordIMGUITool.getWebglData(record).aTexCoordLocation
+            RecordIMGUITool.unsafeGetWebglData(record).aTexCoordLocation
           )
         );
       });
@@ -328,12 +328,12 @@ let _ =
 
         test("test get u_projectionMat location", () =>
           _test("u_projectionMat", record =>
-            RecordIMGUITool.getWebglData(record).uProjectionMatLocation
+            RecordIMGUITool.unsafeGetWebglData(record).uProjectionMatLocation
           )
         );
         test("test get u_sampler2D location", () =>
           _test("u_sampler2D", record =>
-            RecordIMGUITool.getWebglData(record).uSampler2DLocation
+            RecordIMGUITool.unsafeGetWebglData(record).uSampler2DLocation
           )
         );
       });

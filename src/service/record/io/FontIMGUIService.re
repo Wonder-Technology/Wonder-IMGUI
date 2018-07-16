@@ -73,7 +73,7 @@ let _loadImageByBlobPromise = objectUrl =>
 
 let load = (fetchFunc, {assetData} as record) => {
   let {fntFilePath, bitmapFilePath, fntId, bitmapId} =
-    RecordIMGUIService.getFontData(record);
+    RecordIMGUIService.unsafeGetFontData(record);
   let {fntDataMap, bitmapMap} = assetData;
 
   FetchService.createFetchBlobStream(bitmapFilePath, fetchFunc)

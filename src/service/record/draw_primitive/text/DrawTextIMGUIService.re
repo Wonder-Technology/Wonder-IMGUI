@@ -99,7 +99,7 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
       );
 
     let {currentFontTextureDrawDataBaseIndex} as webglData =
-      RecordIMGUIService.getWebglData(record);
+      RecordIMGUIService.unsafeGetWebglData(record);
 
     let (verticeArr, colorArr, texCoordArr, indexArr) =
       layoutDataArr

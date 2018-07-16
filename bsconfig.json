@@ -7,16 +7,15 @@
     },
     {
       "dir": "test",
-      "subdirs": true,
-      "type": "dev"
+      "subdirs": true
     }
   ],
   "bs-dev-dependencies": [
-    "wonder-bs-jest",
-    "wonder-bs-sinon"
   ],
   "refmt": 3,
   "bs-dependencies": [
+    "wonder-bs-jest",
+    "wonder-bs-sinon",
     "wonder-webgl",
     "bs-fetch",
     "wonder-bs-most",

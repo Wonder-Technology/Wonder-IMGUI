@@ -1,1 +1,1 @@
-let getWebglData = RecordIMGUIService.getWebglData;
+let unsafeGetWebglData = RecordIMGUIService.unsafeGetWebglData;
