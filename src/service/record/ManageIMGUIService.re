@@ -2,7 +2,7 @@ open DrawDataArrType;
 
 open IMGUIType;
 
-open Gl;
+open WonderWebgl.Gl;
 
 open Js.Typed_array;
 
@@ -58,7 +58,7 @@ let init = (gl, record) => {
   let program =
     gl
     |> createProgram
-    |> ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
+    |> WonderWebgl.ProgramService.initShader(ShaderData.vs, ShaderData.fs, gl);
 
   let positionBuffer = _createArrayBuffer(gl);
   let colorBuffer = _createArrayBuffer(gl);
@@ -69,7 +69,7 @@ let init = (gl, record) => {
     _createFontTexture(
       gl,
       AssetIMGUIService.unsafeGetBitmap(record)
-      |> GlType.imageElementToTextureSource,
+      |> WonderWebgl.GlType.imageElementToTextureSource,
     );
 
   {
@@ -113,20 +113,20 @@ let _backupGlState = (gl, record) => {
           lastProgram:
             gl
             |> getParameter(getCurrentProgram(gl))
-            |> GlType.parameterIntToNullableProgram
+            |> WonderWebgl.GlType.parameterIntToNullableProgram
             |> Js.Nullable.toOption,
           lastElementArrayBuffer:
             gl
             |> getParameter(getBindingElementArrayBuffer(gl))
-            |> GlType.parameterIntToBuffer,
+            |> WonderWebgl.GlType.parameterIntToBuffer,
           lastArrayBuffer:
             gl
             |> getParameter(getBindingArrayBuffer(gl))
-            |> GlType.parameterIntToBuffer,
+            |> WonderWebgl.GlType.parameterIntToBuffer,
           lastTexture:
             gl
             |> getParameter(getBindingTexture2D(gl))
-            |> GlType.parameterIntToNullableTexture
+            |> WonderWebgl.GlType.parameterIntToNullableTexture
             |> Js.Nullable.toOption,
           lastIsEnableDepthTest: gl |> isEnabled(getDepthTest(gl)),
           lastIsEnableBlend: gl |> isEnabled(getBlend(gl)),
@@ -371,14 +371,14 @@ let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
     };
 
 let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeight)) =>
-  Matrix4Service.ortho(
+  WonderWebgl.Matrix4Service.ortho(
     0.,
     canvasWidth |> NumberType.intToFloat,
     canvasHeight |> NumberType.intToFloat,
     0.,
     -1.,
     1.,
-    Matrix4Service.createIdentityMatrix4(),
+    WonderWebgl.Matrix4Service.createIdentityMatrix4(),
   );
 
 let _setGlState = gl => {

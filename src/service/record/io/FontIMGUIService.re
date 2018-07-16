@@ -10,7 +10,7 @@ let addFont = ((fntFilePath, bitmapFilePath), (fntId, bitmapId), record) => {
 };
 
 /* let _loadImageByBlobPromise:
-     Fetch.blob => Js.Promise.t(DomExtendType.imageElement) = [%raw
+     Fetch.blob => Js.Promise.t(WonderWebgl.DomExtendType.imageElement) = [%raw
      blob => {|
        return new Promise((resolve, reject) => {
        var image = new Image();

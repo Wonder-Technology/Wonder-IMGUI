@@ -1,4 +1,4 @@
-open GlType;
+open WonderWebgl.GlType;
 
 open StructureType;
 
@@ -63,7 +63,7 @@ type fontData = {
 
 type assetData = {
   fntDataMap: WonderCommonlib.HashMapService.t(fntData),
-  bitmapMap: WonderCommonlib.HashMapService.t(DomExtendType.imageElement),
+  bitmapMap: WonderCommonlib.HashMapService.t(WonderWebgl.DomExtendType.imageElement),
 };
 
 type imguiFunc = (. imguiRecord) => imguiRecord

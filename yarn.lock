@@ -4578,6 +4578,12 @@ wonder-log@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/wonder-log/-/wonder-log-0.2.2.tgz#3f890fc67f77bd7675d0707c041a90b19bbd6705"
 
+wonder-webgl@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/wonder-webgl/-/wonder-webgl-0.0.2.tgz#9f0669667ab40f4a8d5c1466562ce6b6f7c899dc"
+  dependencies:
+    wonder-log "^0.2.2"
+
 wordwrap@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.2.tgz#b79669bb42ecb409f83d583cad52ca17eaa1643f"

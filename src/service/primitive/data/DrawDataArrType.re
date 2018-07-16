@@ -4,7 +4,7 @@ type drawType =
 
 type drawData = {
   drawType,
-  customTexture: option(GlType.texture),
+  customTexture: option(WonderWebgl.GlType.texture),
   verticeArr: array(float),
   colorArr: array(float),
   texCoordArr: array(float),
@@ -15,7 +15,7 @@ type drawDataArr = array(drawData);
 
 type drawElementsData = {
   drawType,
-  customTexture: option(GlType.texture),
+  customTexture: option(WonderWebgl.GlType.texture),
   count: int,
   countOffset: int,
 };

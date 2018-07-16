@@ -17,6 +17,7 @@
   ],
   "refmt": 3,
   "bs-dependencies": [
+    "wonder-webgl",
     "bs-fetch",
     "wonder-bs-most",
     "wonder-log",
