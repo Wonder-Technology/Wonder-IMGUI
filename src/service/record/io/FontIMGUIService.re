@@ -97,5 +97,6 @@ let load = (fetchFunc, {assetData} as record) => {
             ();
           }),
      )
-  |> map(() => record);
+  |> drain
+  |> then_(() => record |> resolve);
 };

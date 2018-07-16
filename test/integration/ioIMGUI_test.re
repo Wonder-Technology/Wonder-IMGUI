@@ -89,11 +89,11 @@ let _ =
           record^
           |> IOIMGUIAPI.addFont(fntFilePath, bitmapFilePath)
           |> IOIMGUITool.load(fetch)
-          |> Most.forEach(result => {
+          /* |> Most.forEach(result => {
                record := result;
                ();
-             })
-          |> then_(() => testFunc(bitmap, record^));
+             }) */
+          |> then_((record) => testFunc(bitmap, record));
         };
 
         testPromise("load bitmap image", () =>
