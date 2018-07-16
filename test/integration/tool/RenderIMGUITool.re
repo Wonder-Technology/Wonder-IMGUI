@@ -1,3 +1,5 @@
+open Js.Typed_array;
+
 let buildLabelData = () => {
   let labelX1 = 10;
   let labelY1 = 20;
@@ -48,7 +50,6 @@ let buildImageData = () => {
   let imageT13 = 0.5;
   let texture3 = Obj.magic(104);
 
-
   (
     (
       (imageX1, imageY1, imageWidth1, imageHeight1),
@@ -58,13 +59,13 @@ let buildImageData = () => {
     (
       (imageX2, imageY2, imageWidth2, imageHeight2),
       (imageS02, imageT02, imageS12, imageT12),
-      texture2
+      texture2,
     ),
-(
+    (
       (imageX3, imageY3, imageWidth3, imageHeight3),
       (imageS03, imageT03, imageS13, imageT13),
-      texture3
-    )
+      texture3,
+    ),
   );
 };
 
@@ -86,25 +87,126 @@ let buildImageData = () => {
    }; */
 
 /* let drawOneImage = record => {
-  let imageX = 50;
-  let imageY = 60;
-  let imageWidth = 150;
-  let imageHeight = 250;
-  let imageS0 = 0.1;
-  let imageT0 = 0.5;
-  let imageS1 = 1.;
-  let imageT1 = 0.8;
+     let imageX = 50;
+     let imageY = 60;
+     let imageWidth = 150;
+     let imageHeight = 250;
+     let imageS0 = 0.1;
+     let imageT0 = 0.5;
+     let imageS1 = 1.;
+     let imageT1 = 0.8;
 
+     let record =
+       record
+       |> FixedLayoutControlIMGUIAPI.image(
+            (imageX, imageY, imageWidth, imageHeight),
+            (imageS0, imageT0, imageS1, imageT1),
+          );
+
+     (
+       record,
+       (imageX, imageY, imageWidth, imageHeight),
+       (imageS0, imageT0, imageS1, imageT1),
+     );
+   }; */
+
+let buildNoVAOExtension = sandbox => {
+  let getExtension = Sinon.createEmptyStubWithJsObjSandbox(sandbox);
+  getExtension |> Sinon.returns(Js.Nullable.null);
+  getExtension;
+};
+
+let testBufferData =
+    (sandbox, bufferDataIndex, record, imguiFunc, targetBufferDataArr) => {
+  open Wonder_jest;
+  open Expect;
+  open Expect.Operators;
+  open Sinon;
+
+  let getExtension = buildNoVAOExtension(sandbox);
+
+  let array_buffer = 1;
+  let dynamic_draw = 2;
+  let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+  let gl =
+    FakeGlTool.buildFakeGl(
+      ~sandbox,
+      ~getExtension,
+      ~array_buffer,
+      ~bufferData,
+      ~dynamic_draw,
+      (),
+    )
+    |> Obj.magic;
+  let canvasWidth = 1000;
+  let canvasHeight = 500;
+  let record = record |> ManageIMGUIAPI.setIMGUIFunc(imguiFunc);
+
+  let record = ManageIMGUIAPI.init(gl, record);
+  let bufferDataCallCountAfterInit = bufferData |> getCallCount;
   let record =
-    record
-    |> FixedLayoutControlIMGUIAPI.image(
-         (imageX, imageY, imageWidth, imageHeight),
-         (imageS0, imageT0, imageS1, imageT1),
-       );
+    ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
 
-  (
-    record,
-    (imageX, imageY, imageWidth, imageHeight),
-    (imageS0, imageT0, imageS1, imageT1),
-  );
-}; */
+  bufferData
+  |> getCall(bufferDataCallCountAfterInit + bufferDataIndex)
+  |> expect
+  |> toCalledWith([|
+       array_buffer,
+       Float32Array.make(targetBufferDataArr) |> Obj.magic,
+       dynamic_draw,
+     |]);
+};
+
+let testPositionBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
+  testBufferData(sandbox, 0, record, imguiFunc, targetBufferDataArr);
+
+let testColorBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
+  testBufferData(sandbox, 1, record, imguiFunc, targetBufferDataArr);
+
+let testTexCoordBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
+  testBufferData(sandbox, 2, record, imguiFunc, targetBufferDataArr);
+
+let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
+  open Wonder_jest;
+  open Expect;
+  open Expect.Operators;
+  open Sinon;
+
+  let getExtension = buildNoVAOExtension(sandbox);
+
+  let element_array_buffer = 1;
+  let dynamic_draw = 2;
+  let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+  let gl =
+    FakeGlTool.buildFakeGl(
+      ~sandbox,
+      ~getExtension,
+      ~element_array_buffer,
+      ~bufferData,
+      ~dynamic_draw,
+      (),
+    )
+    |> Obj.magic;
+  let (
+    ((labelX1, labelY1, labelWidth1, labelHeight1), labelStr1),
+    ((labelX2, labelY2, labelWidth2, labelHeight2), labelStr2),
+  ) =
+    buildLabelData();
+  let canvasWidth = 1000;
+  let canvasHeight = 500;
+  let record = record |> ManageIMGUIAPI.setIMGUIFunc(imguiFunc);
+
+  let record = ManageIMGUIAPI.init(gl, record);
+  let bufferDataCallCountAfterInit = bufferData |> getCallCount;
+  let record =
+    ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+
+  bufferData
+  |> getCall(bufferDataCallCountAfterInit + 3)
+  |> expect
+  |> toCalledWith([|
+       element_array_buffer,
+       Uint16Array.make(targetBufferDataArr) |> Obj.magic,
+       dynamic_draw,
+     |]);
+};

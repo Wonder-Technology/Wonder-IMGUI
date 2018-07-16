@@ -16,7 +16,7 @@ let _getGlyphById = (fntData, id) => {
   dict |> WonderCommonlib.SparseMapService.get(id);
 };
 
-let getGlyph = (fntData, id, fallbackSpaceGlyph, fallbackTabGlyph) => {
+let getGlyph = ((fallbackSpaceGlyph, fallbackTabGlyph), fntData, id) => {
   let glyph = _getGlyphById(fntData, id);
 
   switch (_getGlyphById(fntData, id)) {
@@ -35,7 +35,7 @@ let _getMGlyph = fntData => {
   |> WonderCommonlib.ArrayService.reduceOneParam(
        (. glyph, m_width) =>
          switch (glyph) {
-         | Some(glyph) => Some(glyph)
+         | Some(_) => glyph
          | None =>
            _getGlyphById(
              fntData,

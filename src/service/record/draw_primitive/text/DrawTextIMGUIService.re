@@ -4,27 +4,28 @@ open FontType;
 
 open DrawDataArrType;
 
-let _generateVertices = ({position, data, index, line}, verticeArr) => {
-  let (charX, charY, charWidth, charHeight) = data.rect;
-  /*
-   TODO need convert?
-   position = CoordinateUtils.convertLeftCornerPositionToCenterPositionInWebGL(Vector2.create(layoutCharData.position[0], layoutCharData.position[1]), bitmapFontWidth, bitmapFontHeight), */
+let _generateVertices =
+    (posX, posY, {position, data, index, line}, verticeArr) => {
+  let (charXInImage, charYInImage, charWidthInImage, charHeightInImage) =
+    data.rect;
   let (x, y) = position;
-  let w = charWidth |> NumberType.intToFloat;
-  let h = charHeight |> NumberType.intToFloat;
-  let x = x |> NumberType.intToFloat;
-  let y = y |> NumberType.intToFloat;
+  let w = charWidthInImage |> NumberType.intToFloat;
+  let h = charHeightInImage |> NumberType.intToFloat;
+  let leftUpX =
+    (x |> NumberType.intToFloat) +. (posX |> NumberType.intToFloat);
+  let leftUpY =
+    (y |> NumberType.intToFloat) +. (posY |> NumberType.intToFloat);
 
   verticeArr
   |> DrawDataArrayService.addPoints([|
-       x,
-       -. y,
-       x,
-       -. (y +. h),
-       x +. w,
-       -. (y +. h),
-       x +. w,
-       -. y,
+       leftUpX,
+       leftUpY,
+       leftUpX,
+       leftUpY +. h,
+       leftUpX +. w,
+       leftUpY,
+       leftUpX +. w,
+       leftUpY +. h,
      |]);
 };
 
@@ -39,26 +40,28 @@ let _generateTexCoords =
     ({position, data, index, line}, textureWidth, textureHeight, texCoordArr) => {
   /* TODO flipY? */
   let flipY = false;
-  let (charX, charY, charWidth, charHeight) = data.rect;
-  let bw = charX + charWidth;
-  let bh = charY + charHeight;
-  let u0 =
-    (charX |> NumberType.intToFloat) /. (textureWidth |> NumberType.intToFloat);
-  let v0 =
-    (charY |> NumberType.intToFloat)
+  let (charXInImage, charYInImage, charWidthInImage, charHeightInImage) =
+    data.rect;
+  let s0 =
+    (charXInImage |> NumberType.intToFloat)
+    /. (textureWidth |> NumberType.intToFloat);
+  let t0 =
+    (charYInImage |> NumberType.intToFloat)
     /. (textureHeight |> NumberType.intToFloat);
-  let u1 =
-    (bw |> NumberType.intToFloat) /. (textureWidth |> NumberType.intToFloat);
-  let v1 =
-    (bh |> NumberType.intToFloat) /. (textureHeight |> NumberType.intToFloat);
+  let s1 =
+    (charXInImage + charWidthInImage |> NumberType.intToFloat)
+    /. (textureWidth |> NumberType.intToFloat);
+  let t1 =
+    (charYInImage + charHeightInImage |> NumberType.intToFloat)
+    /. (textureHeight |> NumberType.intToFloat);
 
   /* if (flipY) {
-         v0= (textureHeight - rect.y) / textureHeight;
-         v1 = (textureHeight - bh) / textureHeight;
+         t0= (textureHeight - rect.y) / textureHeight;
+         t1 = (textureHeight - bh) / textureHeight;
      } */
 
   texCoordArr
-  |> DrawDataArrayService.addPoints([|u0, v0, u0, v1, u1, v1, u1, v0|]);
+  |> DrawDataArrayService.addPoints([|s0, t0, s0, t1, s1, t0, s1, t1|]);
 };
 
 let _generateIndices = (baseIndex, indexArr) =>
@@ -74,43 +77,60 @@ let _generateIndices = (baseIndex, indexArr) =>
 
 let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
   let {textColorArr} = ManageIMGUIService.getSetting(record);
-  let fntData = AssetIMGUIService.unsafeGetFntData(record);
 
-  let layoutDataArr =
-    BitmapFontLayoutIMGUIService.getLayoutData(
-      str,
-      (width, 4, 0, align),
-      record,
-    );
+  switch (AssetIMGUIService.getFntData(record)) {
+  | None =>
+    WonderLog.Log.fatal(
+      WonderLog.Log.buildFatalMessage(
+        ~title="getLayoutData",
+        ~description={j|impossible to create font: not find fnt file|j},
+        ~reason="",
+        ~solution={j||j},
+        ~params={j||j},
+      ),
+    )
+  | Some(fntData) =>
+    let layoutDataArr =
+      BitmapFontLayoutIMGUIService.getLayoutData(
+        str,
+        (width, 4, 0, align),
+        fntData,
+        record,
+      );
 
-  let (verticeArr, colorArr, texCoordArr, indexArr) =
-    layoutDataArr
-    |> WonderCommonlib.ArrayService.reduceOneParam(
-         (. (verticeArr, colorArr, texCoordArr, indexArr), layoutData) => {
-           let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
+    let (verticeArr, colorArr, texCoordArr, indexArr) =
+      layoutDataArr
+      |> WonderCommonlib.ArrayService.reduceOneParam(
+           (. (verticeArr, colorArr, texCoordArr, indexArr), layoutData) => {
+             let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
 
-           (
-             verticeArr |> _generateVertices(layoutData),
-             colorArr |> _generateColor(textColorArr),
-             texCoordArr
-             |> _generateTexCoords(layoutData, fntData.scaleW, fntData.scaleH),
-             indexArr |> _generateIndices(baseIndex),
-           );
-         },
-         ([||], [||], [||], [||]),
-       );
+             (
+               verticeArr |> _generateVertices(x, y, layoutData),
+               colorArr |> _generateColor(textColorArr),
+               texCoordArr
+               |> _generateTexCoords(
+                    layoutData,
+                    fntData.scaleW,
+                    fntData.scaleH,
+                  ),
+               indexArr |> _generateIndices(baseIndex),
+             );
+           },
+           ([||], [||], [||], [||]),
+         );
 
-  {
-    ...record,
-    drawDataArr:
-      drawDataArr
-      |> ArrayService.push({
-           drawType: FontTexture,
-           customTexture: None,
-           verticeArr,
-           colorArr,
-           texCoordArr,
-           indexArr,
-         }),
+    {
+      ...record,
+      drawDataArr:
+        drawDataArr
+        |> ArrayService.push({
+             drawType: FontTexture,
+             customTexture: None,
+             verticeArr,
+             colorArr,
+             texCoordArr,
+             indexArr,
+           }),
+    };
   };
 };
