@@ -111,6 +111,7 @@ let _prepare = record => {
       currentFontTextureDrawDataBaseIndex: 0,
     }),
 };
+/* record; */
 
 let _unbindVAO = gl =>
   switch (getExtension("OES_vertex_array_object", gl) |> Js.toOption) {
@@ -512,12 +513,12 @@ let _finish = (gl, canvasSize, record) => {
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
 };
 
-let _getIMGUIFunc = ({imguiFunc}) => imguiFunc;
+let getIMGUIFunc = ({imguiFunc}) => imguiFunc;
 
 let setIMGUIFunc = (func, record) => {...record, imguiFunc: Some(func)};
 
 let _exec = record =>
-  switch (_getIMGUIFunc(record)) {
+  switch (getIMGUIFunc(record)) {
   | None => record
   | Some(func) => func(. record)
   };
@@ -537,6 +538,8 @@ let createRecord = () => {
       textColorArr: [|1., 1., 1.|],
     },
   assetData: {
+    fntId: "fnt",
+    bitmapId: "bitmap",
     fntDataMap: WonderCommonlib.HashMapService.createEmpty(),
     bitmapMap: WonderCommonlib.HashMapService.createEmpty(),
   },

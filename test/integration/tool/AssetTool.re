@@ -5,7 +5,6 @@ let unsafeGetBitmap = AssetIMGUIService.unsafeGetBitmap;
 let prepareFontAsset = record => {
   let record = IOIMGUIAPI.addFont("", "", record);
 
-  let fontData = RecordIMGUIService.unsafeGetFontData(record);
   let bitmap = Obj.magic(101);
 
   {
@@ -14,7 +13,10 @@ let prepareFontAsset = record => {
       ...record.assetData,
       bitmapMap:
         record.assetData.bitmapMap
-        |> WonderCommonlib.HashMapService.set(fontData.bitmapId, bitmap),
+        |> WonderCommonlib.HashMapService.set(
+             record.assetData.bitmapId,
+             bitmap,
+           ),
     },
   };
 };

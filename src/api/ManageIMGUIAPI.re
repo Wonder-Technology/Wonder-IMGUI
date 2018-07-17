@@ -8,4 +8,6 @@ let getSetting = ManageIMGUIService.getSetting;
 
 let setSetting = ManageIMGUIService.setSetting;
 
+let getIMGUIFunc = ManageIMGUIService.getIMGUIFunc;
+
 let setIMGUIFunc = ManageIMGUIService.setIMGUIFunc;

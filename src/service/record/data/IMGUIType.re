@@ -57,11 +57,11 @@ type fftCharData = {
 type fontData = {
   fntFilePath: string,
   bitmapFilePath: string,
-  fntId: string,
-  bitmapId: string,
 };
 
 type assetData = {
+  fntId: string,
+  bitmapId: string,
   fntDataMap: WonderCommonlib.HashMapService.t(fntData),
   bitmapMap: WonderCommonlib.HashMapService.t(WonderWebgl.DomExtendType.imageElement),
 };

@@ -211,7 +211,7 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
 };
 
 let prepareFntData = record => {
-  let fontData = RecordIMGUIService.unsafeGetFontData(record);
+  open IMGUIType;
 
   let fntFilePath =
     Node.Path.join([|Node.Process.cwd(), "./test/res/font/myFont.fnt"|]);
@@ -228,7 +228,7 @@ let prepareFntData = record => {
       ...record.assetData,
       fntDataMap:
         record.assetData.fntDataMap
-        |> WonderCommonlib.HashMapService.set(fontData.fntId, fntData),
+        |> WonderCommonlib.HashMapService.set(record.assetData.fntId, fntData),
     },
   };
 };

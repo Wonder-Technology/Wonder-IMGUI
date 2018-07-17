@@ -4,45 +4,10 @@ open WonderBsMost.Most;
 
 open Js.Promise;
 
-let addFont = ((fntFilePath, bitmapFilePath), (fntId, bitmapId), record) => {
+let addFont = ((fntFilePath, bitmapFilePath), record) => {
   ...record,
-  fontData: Some({fntFilePath, bitmapFilePath, fntId, bitmapId}),
+  fontData: Some({fntFilePath, bitmapFilePath}),
 };
-
-/* let _loadImageByBlobPromise:
-     Fetch.blob => Js.Promise.t(WonderWebgl.DomExtendType.imageElement) = [%raw
-     blob => {|
-       return new Promise((resolve, reject) => {
-       var image = new Image();
-
-
-       image.src = URL.createObjectURL(blob);
-
-
-       image.onload = (function (image) {
-         throw new Error("aaa")
-           return resolve(image);
-         });
-
-       image.onerror = (function (e) {
-         throw new Error("bbb")
-         console.trace();
-                 return reject(new Error(e));
-               });
-       });
-
-       URL.revokeObjectURL( blob );
-       |}
-   ];
-
-
-
-
-
-
-
-   let _loadImageByBlobStream = blob =>
-     fromPromise(_loadImageByBlobPromise(blob)); */
 
 let _loadBlobImage = [%raw
   (objectUrl, resolve, reject) => {|
@@ -72,7 +37,8 @@ let _loadImageByBlobPromise = objectUrl =>
   |> fromPromise;
 
 let load = (fetchFunc, {assetData} as record) => {
-  let {fntFilePath, bitmapFilePath, fntId, bitmapId} =
+  let {fntId, bitmapId} = assetData;
+  let {fntFilePath, bitmapFilePath} =
     RecordIMGUIService.unsafeGetFontData(record);
   let {fntDataMap, bitmapMap} = assetData;
 

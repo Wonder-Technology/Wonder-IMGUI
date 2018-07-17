@@ -4,6 +4,5 @@ let load = record =>
 let addFont = (fntFilePath, bitmapFilePath, record) =>
   FontIMGUIService.addFont(
     (fntFilePath, bitmapFilePath),
-    ("fnt", "bitmap"),
     record,
   );
