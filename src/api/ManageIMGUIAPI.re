@@ -4,9 +4,11 @@ let init = (gl, record) => ManageIMGUIService.init(gl, record);
 
 let render = ManageIMGUIService.render;
 
-let getSetting = ManageIMGUIService.getSetting;
+let getSetting = RecordIMGUIService.getSetting;
 
-let setSetting = ManageIMGUIService.setSetting;
+let setSetting = RecordIMGUIService.setSetting;
+
+let getCustomData = ManageIMGUIService.getCustomData;
 
 let getIMGUIFunc = ManageIMGUIService.getIMGUIFunc;
 

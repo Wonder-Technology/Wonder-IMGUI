@@ -1,4 +1,4 @@
-open Wonder_jest;
+/* open Wonder_jest;
 
 open Js.Typed_array;
 
@@ -38,7 +38,7 @@ let _ =
               testBufferDataFunc(
                 sandbox,
                 record,
-                (. record) => {
+                (record) => {
                   let record =
                     record
                     |> FixedLayoutControlIMGUIAPI.label(
@@ -184,7 +184,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (. record) => {
+                (record) => {
                   let record =
                     record
                     |> FixedLayoutControlIMGUIAPI.label(
@@ -211,7 +211,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (. record) => {
+                (record) => {
                   let record =
                     record
                     |> FixedLayoutControlIMGUIAPI.label(
@@ -259,7 +259,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (. record) => {
+                  (record) => {
                     let record =
                       record
                       |> FixedLayoutControlIMGUIAPI.label(
@@ -319,7 +319,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (. record) => {
+                  (record) => {
                     let record =
                       record
                       |> FixedLayoutControlIMGUIAPI.label(
@@ -368,7 +368,7 @@ let _ =
                   RenderIMGUITool.testPositionBufferData(
                     sandbox,
                     record,
-                    (. record) => {
+                    (record) => {
                       let record =
                         record
                         |> FixedLayoutControlIMGUIAPI.label(
@@ -424,7 +424,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (. record) => {
+                  (record) => {
                     let record =
                       record
                       |> FixedLayoutControlIMGUIAPI.label(
@@ -468,7 +468,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (. record) => {
+                  (record) => {
                     let record =
                       record
                       |> FixedLayoutControlIMGUIAPI.label(
@@ -520,7 +520,7 @@ let _ =
                   let record = RenderIMGUITool. prepareFntData(record^);
 
                   RenderIMGUITool.testPositionBufferData(sandbox, record,
-                    (. record) => {
+                    (record) => {
                       let record =
                         record
                         |> FixedLayoutControlIMGUIAPI.label(
@@ -544,4 +544,4 @@ let _ =
         })
       )
     );
-  });
+  }); */

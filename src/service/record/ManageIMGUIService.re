@@ -513,19 +513,31 @@ let _finish = (gl, canvasSize, record) => {
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
 };
 
+let getCustomData = ({customDataForIMGUIFunc}) => customDataForIMGUIFunc;
+
 let getIMGUIFunc = ({imguiFunc}) => imguiFunc;
 
-let setIMGUIFunc = (func, record) => {...record, imguiFunc: Some(func)};
+let setIMGUIFunc = (customData, func, record) => {
+  ...record,
+  imguiFunc: Some(func),
+  customDataForIMGUIFunc: Some(customData),
+};
+
+let _buildAPIJsObj = () => {
+  "label": FixedLayoutControlIMGUIService.label,
+  "image": FixedLayoutControlIMGUIService.image,
+};
 
 let _exec = record =>
   switch (getIMGUIFunc(record)) {
   | None => record
-  | Some(func) => func(. record)
+  | Some(func) =>
+    func(
+      record.customDataForIMGUIFunc |> OptionService.unsafeGet,
+      _buildAPIJsObj(),
+      record,
+    )
   };
-
-let getSetting = record => record.setting;
-
-let setSetting = (setting, record) => {...record, setting};
 
 let render = (gl, canvasSize, record) =>
   ! AssetIMGUIService.isLoadAsset(record) ?
@@ -553,4 +565,5 @@ let createRecord = () => {
        mousePositionPrev: (0, 0),
      }, */
   imguiFunc: None,
+  customDataForIMGUIFunc: None,
 };

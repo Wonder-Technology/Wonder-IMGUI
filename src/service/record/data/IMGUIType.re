@@ -38,7 +38,7 @@ type webglData = {
   uProjectionMatLocation: uniformLocation,
   uSampler2DLocation: uniformLocation,
   lastWebglData: option(lastWebglData),
-  currentFontTextureDrawDataBaseIndex: int
+  currentFontTextureDrawDataBaseIndex: int,
 };
 
 type fftCharData = {
@@ -63,10 +63,27 @@ type assetData = {
   fntId: string,
   bitmapId: string,
   fntDataMap: WonderCommonlib.HashMapService.t(fntData),
-  bitmapMap: WonderCommonlib.HashMapService.t(WonderWebgl.DomExtendType.imageElement),
+  bitmapMap:
+    WonderCommonlib.HashMapService.t(WonderWebgl.DomExtendType.imageElement),
 };
 
-type imguiFunc = (. imguiRecord) => imguiRecord
+type customDataForIMGUIFunc;
+
+type apiJsObj = {
+  .
+  "label":
+    (. (int, int, int, int), string, FontType.align, imguiRecord) =>
+    imguiRecord,
+  "image":
+    (
+      . (int, int, int, int),
+      (float, float, float, float),
+      WonderWebgl.GlType.texture,
+      imguiRecord
+    ) =>
+    imguiRecord,
+}
+and imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
 and imguiRecord = {
   setting,
   assetData,
@@ -76,4 +93,5 @@ and imguiRecord = {
   /* ioData, */
   /* activeWidgetId: option(int), */
   imguiFunc: option(imguiFunc),
+  customDataForIMGUIFunc: option(customDataForIMGUIFunc),
 };

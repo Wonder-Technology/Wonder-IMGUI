@@ -76,7 +76,7 @@ let _generateIndices = (baseIndex, indexArr) =>
      |]);
 
 let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
-  let {textColorArr} = ManageIMGUIService.getSetting(record);
+  let {textColorArr} = RecordIMGUIService.getSetting(record);
 
   switch (AssetIMGUIService.getFntData(record)) {
   | None =>

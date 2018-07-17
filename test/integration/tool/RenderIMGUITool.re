@@ -144,7 +144,7 @@ let testBufferData =
     |> Obj.magic;
   let canvasWidth = 1000;
   let canvasHeight = 500;
-  let record = record |> ManageIMGUIAPI.setIMGUIFunc(imguiFunc);
+  let record = record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
   let record = ManageIMGUIAPI.init(gl, record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
@@ -193,7 +193,7 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
     |> Obj.magic;
   let canvasWidth = 1000;
   let canvasHeight = 500;
-  let record = record |> ManageIMGUIAPI.setIMGUIFunc(imguiFunc);
+  let record = record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
   let record = ManageIMGUIAPI.init(gl, record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
