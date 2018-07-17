@@ -102,8 +102,15 @@ let init = (gl, record) =>
       };
     };
 
-let _prepare = record => {...record, drawDataArr: [||]};
-/* record; */
+let _prepare = record => {
+  ...record,
+  drawDataArr: [||],
+  webglData:
+    Some({
+      ...RecordIMGUIService.unsafeGetWebglData(record),
+      currentFontTextureDrawDataBaseIndex: 0,
+    }),
+};
 
 let _unbindVAO = gl =>
   switch (getExtension("OES_vertex_array_object", gl) |> Js.toOption) {
@@ -505,11 +512,15 @@ let _finish = (gl, canvasSize, record) => {
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
 };
 
-let _getIMGUIFunc = ({imguiFunc}) => imguiFunc |> OptionService.unsafeGet;
+let _getIMGUIFunc = ({imguiFunc}) => imguiFunc;
 
 let setIMGUIFunc = (func, record) => {...record, imguiFunc: Some(func)};
 
-let _exec = record => (_getIMGUIFunc(record))(. record);
+let _exec = record =>
+  switch (_getIMGUIFunc(record)) {
+  | None => record
+  | Some(func) => func(. record)
+  };
 
 let getSetting = record => record.setting;
 

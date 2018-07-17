@@ -171,6 +171,84 @@ let _ =
 
         record.drawDataArr |> Js.Array.length |> expect == 1;
       });
+      test("reset currentFontTextureDrawDataBaseIndex", () => {
+        let (
+          (
+            (labelX1, labelY1, labelWidth1, labelHeight1),
+            labelStr1,
+            labelAlign1,
+          ),
+          (
+            (labelX2, labelY2, labelWidth2, labelHeight2),
+            labelStr2,
+            labelAlign2,
+          ),
+        ) =
+          RenderIMGUITool.buildLabelData();
+        let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
+        let element_array_buffer = 1;
+        let dynamic_draw = 2;
+        let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+        let gl =
+          FakeGlTool.buildFakeGl(
+            ~sandbox,
+            ~getExtension,
+            ~element_array_buffer,
+            ~bufferData,
+            ~dynamic_draw,
+            (),
+          )
+          |> Obj.magic;
+        let canvasWidth = 1000;
+        let canvasHeight = 500;
+        let record =
+          record^
+          |> ManageIMGUIAPI.setIMGUIFunc((. record) => {
+               let record =
+                 record
+                 |> FixedLayoutControlIMGUIAPI.label(
+                      (labelX1, labelY1, labelWidth1, labelHeight1),
+                      labelStr1,
+                      labelAlign1,
+                    );
+
+               record;
+             });
+        let record = RenderIMGUITool.prepareFntData(record);
+        let record = ManageIMGUIAPI.init(gl, record);
+
+        let record =
+          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+        let bufferDataCallCountAfterFirstRender = bufferData |> getCallCount;
+        let record =
+          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+
+        bufferData
+        |> getCall(bufferDataCallCountAfterFirstRender + 3)
+        |> expect
+        |> toCalledWith([|
+             element_array_buffer,
+             Uint16Array.make([|0, 1, 2, 3, 2, 1|]) |> Obj.magic,
+             dynamic_draw,
+           |]);
+      });
+
+      test("if has no imguiFunc, not error", () => {
+        let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
+        let gl =
+          FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ()) |> Obj.magic;
+        let canvasWidth = 1000;
+        let canvasHeight = 500;
+        let record = ManageIMGUIAPI.init(gl, record^);
+
+        expect(() => {
+          let record =
+            ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+          ();
+        })
+        |> not_
+        |> toThrow;
+      });
 
       test("unbind vao", () => {
         let getExtension = createEmptyStubWithJsObjSandbox(sandbox);
