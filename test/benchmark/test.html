@@ -30,22 +30,22 @@
                 image2.src = "./1.png";
                 image2.onload = () => {
 
-                    var texture1 = gl.createTexture();
-                    gl.bindTexture(gl.TEXTURE_2D, texture1);
+                    // var texture1 = gl.createTexture();
+                    // gl.bindTexture(gl.TEXTURE_2D, texture1);
 
-                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image1);
-
-
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image1);
 
 
-                    var texture2 = gl.createTexture();
-                    gl.bindTexture(gl.TEXTURE_2D, texture2);
-
-                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image2);
+                    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                    // var texture2 = gl.createTexture();
+                    // gl.bindTexture(gl.TEXTURE_2D, texture2);
+
+                    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image2);
+
+
+                    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
 
 
@@ -78,31 +78,38 @@
                         window.requestAnimationFrame(step);
                     }
 
-                    wdimgui.load(record)
+                    wdimgui.load(
+                        [
+                            ["./1.jpg", "a1"],
+                            ["./1.png", "a2"],
+                        ],
+                        record)
                         .then((record) => {
-                            var record = wdimgui.setIMGUIFunc((record) => {
-                                var record = wdimgui.label(
+                            var record = wdimgui.setIMGUIFunc(null, (_, apiJsObj, record) => {
+                                var label = apiJsObj.label;
+                                var image = apiJsObj.image;
+                                var record = label(
                                     [20, 20, 300, 100], "ab", 1, record
                                 );
 
 
 
-                                var record = wdimgui.image(
-                                    [50, 150, 50, 100], [0, 0, 1, 1], texture1, record
+                                var record = image(
+                                    [50, 150, 50, 100], [0, 0, 1, 1], "a1", record
                                 );
 
 
-                                var record = wdimgui.image(
-                                    [200, 300, 100, 100], [0, 0, 1, 1], texture2, record
+                                var record = image(
+                                    [200, 300, 100, 100], [0, 0, 1, 1], "a2", record
                                 );
 
 
-                                var record = wdimgui.label(
+                                var record = label(
                                     [20, 150, 300, 100], "c", 1, record
                                 );
 
-                                var record = wdimgui.image(
-                                    [500, 300, 100, 100], [0, 0, 1, 1], texture2, record
+                                var record = image(
+                                    [500, 300, 100, 100], [0, 0, 1, 1], "a2", record
                                 );
 
 

@@ -1,4 +1,4 @@
-/* open Wonder_jest;
+open Wonder_jest;
 
 open Js.Typed_array;
 
@@ -38,14 +38,15 @@ let _ =
               testBufferDataFunc(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let label = apiJsObj##label;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX, labelY, labelWidth, labelHeight),
-                         labelStr,
-                         labelAlign,
-                       );
+                    label(.
+                      (labelX, labelY, labelWidth, labelHeight),
+                      labelStr,
+                      labelAlign,
+                      record,
+                    );
 
                   record;
                 },
@@ -184,14 +185,15 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let label = apiJsObj##label;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX, labelY, labelWidth, labelHeight),
-                         labelStr,
-                         labelAlign,
-                       );
+                    label(.
+                      (labelX, labelY, labelWidth, labelHeight),
+                      labelStr,
+                      labelAlign,
+                      record,
+                    );
 
                   record;
                 },
@@ -211,14 +213,15 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let label = apiJsObj##label;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX, labelY, labelWidth, labelHeight),
-                         labelStr,
-                         labelAlign,
-                       );
+                    label(.
+                      (labelX, labelY, labelWidth, labelHeight),
+                      labelStr,
+                      labelAlign,
+                      record,
+                    );
 
                   record;
                 },
@@ -259,14 +262,15 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (record) => {
+                  (_, apiJsObj, record) => {
+                    let label = apiJsObj##label;
                     let record =
-                      record
-                      |> FixedLayoutControlIMGUIAPI.label(
-                           (labelX, labelY, labelWidth, labelHeight),
-                           labelStr,
-                           labelAlign,
-                         );
+                      label(.
+                        (labelX, labelY, labelWidth, labelHeight),
+                        labelStr,
+                        labelAlign,
+                        record,
+                      );
 
                     record;
                   },
@@ -319,14 +323,15 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (record) => {
+                  (_, apiJsObj, record) => {
+                    let label = apiJsObj##label;
                     let record =
-                      record
-                      |> FixedLayoutControlIMGUIAPI.label(
-                           (labelX, labelY, labelWidth, labelHeight),
-                           labelStr,
-                           labelAlign,
-                         );
+                      label(.
+                        (labelX, labelY, labelWidth, labelHeight),
+                        labelStr,
+                        labelAlign,
+                        record,
+                      );
 
                     record;
                   },
@@ -368,14 +373,15 @@ let _ =
                   RenderIMGUITool.testPositionBufferData(
                     sandbox,
                     record,
-                    (record) => {
+                    (_, apiJsObj, record) => {
+                      let label = apiJsObj##label;
                       let record =
-                        record
-                        |> FixedLayoutControlIMGUIAPI.label(
-                             (labelX, labelY, labelWidth, labelHeight),
-                             labelStr,
-                             labelAlign,
-                           );
+                        label(.
+                          (labelX, labelY, labelWidth, labelHeight),
+                          labelStr,
+                          labelAlign,
+                          record,
+                        );
 
                       record;
                     },
@@ -424,14 +430,15 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (record) => {
+                  (_, apiJsObj, record) => {
+                    let label = apiJsObj##label;
                     let record =
-                      record
-                      |> FixedLayoutControlIMGUIAPI.label(
-                           (labelX, labelY, labelWidth, labelHeight),
-                           labelStr,
-                           labelAlign,
-                         );
+                      label(.
+                        (labelX, labelY, labelWidth, labelHeight),
+                        labelStr,
+                        labelAlign,
+                        record,
+                      );
 
                     record;
                   },
@@ -468,14 +475,15 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (record) => {
+                  (_, apiJsObj, record) => {
+                    let label = apiJsObj##label;
                     let record =
-                      record
-                      |> FixedLayoutControlIMGUIAPI.label(
-                           (labelX, labelY, labelWidth, labelHeight),
-                           labelStr,
-                           labelAlign,
-                         );
+                      label(.
+                        (labelX, labelY, labelWidth, labelHeight),
+                        labelStr,
+                        labelAlign,
+                        record,
+                      );
 
                     record;
                   },
@@ -544,4 +552,4 @@ let _ =
         })
       )
     );
-  }); */
+  });

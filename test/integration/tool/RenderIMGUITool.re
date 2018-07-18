@@ -24,6 +24,11 @@ let buildLabelData = () => {
 };
 
 let buildImageData = () => {
+  let customImageDataArr = AssetTool.buildCustomImageDataArr();
+  let (_, id1, _) = customImageDataArr[0];
+  let (_, id2, _) = customImageDataArr[1];
+  let (_, id3, _) = customImageDataArr[2];
+
   let imageX1 = 50;
   let imageY1 = 60;
   let imageWidth1 = 150;
@@ -32,7 +37,6 @@ let buildImageData = () => {
   let imageT01 = 0.5;
   let imageS11 = 1.;
   let imageT11 = 0.8;
-  let texture1 = Obj.magic(101);
 
   let imageX2 = 51;
   let imageY2 = 61;
@@ -42,7 +46,6 @@ let buildImageData = () => {
   let imageT02 = 0.6;
   let imageS12 = 0.9;
   let imageT12 = 0.7;
-  let texture2 = Obj.magic(102);
 
   let imageX3 = 52;
   let imageY3 = 62;
@@ -52,23 +55,22 @@ let buildImageData = () => {
   let imageT03 = 0.3;
   let imageS13 = 0.6;
   let imageT13 = 0.5;
-  let texture3 = Obj.magic(104);
 
   (
     (
       (imageX1, imageY1, imageWidth1, imageHeight1),
       (imageS01, imageT01, imageS11, imageT11),
-      texture1,
+      id1,
     ),
     (
       (imageX2, imageY2, imageWidth2, imageHeight2),
       (imageS02, imageT02, imageS12, imageT12),
-      texture2,
+      id2,
     ),
     (
       (imageX3, imageY3, imageWidth3, imageHeight3),
       (imageS03, imageT03, imageS13, imageT13),
-      texture3,
+      id3,
     ),
   );
 };
@@ -120,6 +122,24 @@ let buildNoVAOExtension = sandbox => {
   getExtension;
 };
 
+let createCreateGlTextureStub = (sandbox) => {
+  open Sinon;
+  
+  let fontTexture = Obj.magic(21);
+  let customTexture1 = Obj.magic(22);
+  let customTexture2 = Obj.magic(23);
+  let customTexture3 = Obj.magic(24);
+  let createTexture = createEmptyStubWithJsObjSandbox(sandbox);
+  createTexture |> onCall(0) |> returns(fontTexture);
+  createTexture |> onCall(1) |> returns(customTexture1);
+  createTexture |> onCall(2) |> returns(customTexture2);
+  createTexture |> onCall(3) |> returns(customTexture3);
+
+  (
+    ( fontTexture, customTexture1, customTexture2, customTexture3 ), createTexture
+  )
+};
+
 let testBufferData =
     (sandbox, bufferDataIndex, record, imguiFunc, targetBufferDataArr) => {
   open Wonder_jest;
@@ -132,6 +152,9 @@ let testBufferData =
   let array_buffer = 1;
   let dynamic_draw = 2;
   let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+  let (
+    ( fontTexture, customTexture1, customTexture2, customTexture3 ), createTexture
+  ) = createCreateGlTextureStub(sandbox);
   let gl =
     FakeGlTool.buildFakeGl(
       ~sandbox,
@@ -139,12 +162,14 @@ let testBufferData =
       ~array_buffer,
       ~bufferData,
       ~dynamic_draw,
+      ~createTexture,
       (),
     )
     |> Obj.magic;
   let canvasWidth = 1000;
   let canvasHeight = 500;
-  let record = record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
+  let record =
+    record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
   let record = ManageIMGUIAPI.init(gl, record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
@@ -193,7 +218,8 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
     |> Obj.magic;
   let canvasWidth = 1000;
   let canvasHeight = 500;
-  let record = record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
+  let record =
+    record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
   let record = ManageIMGUIAPI.init(gl, record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
@@ -232,3 +258,5 @@ let prepareFntData = record => {
     },
   };
 };
+
+let buildCustomData = () => Obj.magic(501);

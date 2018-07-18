@@ -79,8 +79,19 @@ let init = (gl, record) =>
           |> WonderWebgl.GlType.imageElementToTextureSource,
         );
 
+      let {customImageArr, customTextureMap} = record.assetData;
+
       {
         ...record,
+        assetData: {
+          ...record.assetData,
+          customTextureMap:
+            AssetIMGUIService.createCustomTextures(
+              gl,
+              customImageArr,
+              customTextureMap,
+            ),
+        },
         webglData:
           Some({
             program,
@@ -554,6 +565,8 @@ let createRecord = () => {
     bitmapId: "bitmap",
     fntDataMap: WonderCommonlib.HashMapService.createEmpty(),
     bitmapMap: WonderCommonlib.HashMapService.createEmpty(),
+    customImageArr: [||],
+    customTextureMap: WonderCommonlib.HashMapService.createEmpty(),
   },
   fontData: None,
   webglData: None,

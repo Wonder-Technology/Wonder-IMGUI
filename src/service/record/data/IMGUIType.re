@@ -65,6 +65,12 @@ type assetData = {
   fntDataMap: WonderCommonlib.HashMapService.t(fntData),
   bitmapMap:
     WonderCommonlib.HashMapService.t(WonderWebgl.DomExtendType.imageElement),
+  customImageArr:
+    array(
+      (WonderWebgl.DomExtendType.imageElement, string, ImageType.imageType),
+    ),
+  customTextureMap:
+    WonderCommonlib.HashMapService.t(WonderWebgl.GlType.texture),
 };
 
 type customDataForIMGUIFunc;
@@ -78,7 +84,7 @@ type apiJsObj = {
     (
       . (int, int, int, int),
       (float, float, float, float),
-      WonderWebgl.GlType.texture,
+      string,
       imguiRecord
     ) =>
     imguiRecord,

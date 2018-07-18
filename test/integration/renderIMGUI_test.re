@@ -1,4 +1,4 @@
-/* open Wonder_jest;
+open Wonder_jest;
 
 open Js.Typed_array;
 
@@ -43,54 +43,73 @@ let _ =
           (
             (imageX1, imageY1, imageWidth1, imageHeight1),
             (imageS01, imageT01, imageS11, imageT11),
-            texture1,
+            textureId1,
           ),
           (
             (imageX2, imageY2, imageWidth2, imageHeight2),
             (imageS02, imageT02, imageS12, imageT12),
-            texture2,
+            textureId2,
           ),
           (
             (imageX3, imageY3, imageWidth3, imageHeight3),
             (imageS03, imageT03, imageS13, imageT13),
-            texture3,
+            textureId3,
           ),
         ) =
           RenderIMGUITool.buildImageData();
 
         let record =
-          record^
-          |> ManageIMGUIAPI.setIMGUIFunc((label, image, record) => {
-               let record =
-                 record
-                 |> FixedLayoutControlIMGUIAPI.label(
-                      (labelX1, labelY1, labelWidth1, labelHeight1),
-                      labelStr1,
-                      labelAlign1,
-                    )
-                 |> FixedLayoutControlIMGUIAPI.image(
-                      (imageX1, imageY1, imageWidth1, imageHeight1),
-                      (imageS01, imageT01, imageS11, imageT11),
-                      texture2,
-                    )
-                 |> FixedLayoutControlIMGUIAPI.image(
-                      (imageX2, imageY2, imageWidth2, imageHeight2),
-                      (imageS02, imageT02, imageS12, imageT12),
-                      texture1,
-                    )
-                 |> FixedLayoutControlIMGUIAPI.label(
-                      (labelX2, labelY2, labelWidth2, labelHeight2),
-                      labelStr2,
-                      labelAlign2,
-                    )
-                 |> FixedLayoutControlIMGUIAPI.image(
-                      (imageX3, imageY3, imageWidth3, imageHeight3),
-                      (imageS03, imageT03, imageS13, imageT13),
-                      texture2,
-                    );
+          AssetIMGUIService.setCustomImageArr(
+            AssetTool.buildCustomImageDataArr(),
+            record^,
+          );
 
-               record;
-             });
+        let record =
+          record
+          |> ManageIMGUIAPI.setIMGUIFunc(
+               Obj.magic(1),
+               (_, apiJsObj, record) => {
+                 let label = apiJsObj##label;
+                 let image = apiJsObj##image;
+                 let record =
+                   label(.
+                     (labelX1, labelY1, labelWidth1, labelHeight1),
+                     labelStr1,
+                     labelAlign1,
+                     record,
+                   );
+                 let record =
+                   image(.
+                     (imageX1, imageY1, imageWidth1, imageHeight1),
+                     (imageS01, imageT01, imageS11, imageT11),
+                     textureId1,
+                     record,
+                   );
+                 let record =
+                   image(.
+                     (imageX2, imageY2, imageWidth2, imageHeight2),
+                     (imageS02, imageT02, imageS12, imageT12),
+                     textureId2,
+                     record,
+                   );
+                 let record =
+                   label(.
+                     (labelX2, labelY2, labelWidth2, labelHeight2),
+                     labelStr2,
+                     labelAlign2,
+                     record,
+                   );
+                 let record =
+                   image(.
+                     (imageX3, imageY3, imageWidth3, imageHeight3),
+                     (imageS03, imageT03, imageS13, imageT13),
+                     textureId3,
+                     record,
+                   );
+
+                 record;
+               },
+             );
 
         (
           record,
@@ -103,17 +122,17 @@ let _ =
               (
                 (imageX1, imageY1, imageWidth1, imageHeight1),
                 (imageS01, imageT01, imageS11, imageT11),
-                texture1,
+                textureId1,
               ),
               (
                 (imageX2, imageY2, imageWidth2, imageHeight2),
                 (imageS02, imageT02, imageS12, imageT12),
-                texture2,
+                textureId2,
               ),
               (
                 (imageX3, imageY3, imageWidth3, imageHeight3),
                 (imageS03, imageT03, imageS13, imageT13),
-                texture3,
+                textureId3,
               ),
             ),
           ),
@@ -124,7 +143,11 @@ let _ =
         let canvasWidth = 1000;
         let canvasHeight = 500;
         let record =
-          record^ |> ManageIMGUIAPI.setIMGUIFunc((record) => record);
+          record^
+          |> ManageIMGUIAPI.setIMGUIFunc(
+               RenderIMGUITool.buildCustomData(), (_, _, record) =>
+               record
+             );
 
         let record = ManageIMGUIAPI.init(gl, record);
         let record =
@@ -138,7 +161,7 @@ let _ =
           (
             (imageX1, imageY1, imageWidth1, imageHeight1),
             (imageS01, imageT01, imageS11, imageT11),
-            texture1,
+            textureId1,
           ),
           _,
           _,
@@ -151,17 +174,21 @@ let _ =
         let canvasHeight = 500;
         let record =
           record^
-          |> ManageIMGUIAPI.setIMGUIFunc((record) => {
-               let record =
-                 record
-                 |> FixedLayoutControlIMGUIAPI.image(
-                      (imageX1, imageY1, imageWidth1, imageHeight1),
-                      (imageS01, imageT01, imageS11, imageT11),
-                      texture1,
-                    );
+          |> ManageIMGUIAPI.setIMGUIFunc(
+               RenderIMGUITool.buildCustomData(),
+               (_, apiJsObj, record) => {
+                 let imageFunc = apiJsObj##image;
+                 let record =
+                   imageFunc(.
+                     (imageX1, imageY1, imageWidth1, imageHeight1),
+                     (imageS01, imageT01, imageS11, imageT11),
+                     textureId1,
+                     record,
+                   );
 
-               record;
-             });
+                 record;
+               },
+             );
         let record = ManageIMGUIAPI.init(gl, record);
 
         let record =
@@ -171,6 +198,7 @@ let _ =
 
         record.drawDataArr |> Js.Array.length |> expect == 1;
       });
+
       test("reset currentFontTextureDrawDataBaseIndex", () => {
         let (
           (
@@ -203,17 +231,21 @@ let _ =
         let canvasHeight = 500;
         let record =
           record^
-          |> ManageIMGUIAPI.setIMGUIFunc((record) => {
-               let record =
-                 record
-                 |> FixedLayoutControlIMGUIAPI.label(
-                      (labelX1, labelY1, labelWidth1, labelHeight1),
-                      labelStr1,
-                      labelAlign1,
-                    );
+          |> ManageIMGUIAPI.setIMGUIFunc(
+               RenderIMGUITool.buildCustomData(),
+               (_, apiJsObj, record) => {
+                 let label = apiJsObj##label;
+                 let record =
+                   label(.
+                     (labelX1, labelY1, labelWidth1, labelHeight1),
+                     labelStr1,
+                     labelAlign1,
+                     record,
+                   );
 
-               record;
-             });
+                 record;
+               },
+             );
         let record = RenderIMGUITool.prepareFntData(record);
         let record = ManageIMGUIAPI.init(gl, record);
 
@@ -267,10 +299,12 @@ let _ =
 
         let canvasWidth = 1000;
         let canvasHeight = 500;
-
         let record =
-          record |> ManageIMGUIAPI.setIMGUIFunc((record) => record);
-
+          record
+          |> ManageIMGUIAPI.setIMGUIFunc(
+               RenderIMGUITool.buildCustomData(), (_, apiJsObj, record) =>
+               record
+             );
         let record =
           ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
 
@@ -321,17 +355,21 @@ let _ =
           let canvasHeight = 500;
           let record =
             record^
-            |> ManageIMGUIAPI.setIMGUIFunc((record) => {
-                 let record =
-                   record
-                   |> FixedLayoutControlIMGUIAPI.label(
-                        (labelX1, labelY1, labelWidth1, labelHeight1),
-                        labelStr1,
-                        labelAlign1,
-                      );
+            |> ManageIMGUIAPI.setIMGUIFunc(
+                 RenderIMGUITool.buildCustomData(),
+                 (_, apiJsObj, record) => {
+                   let label = apiJsObj##label;
+                   let record =
+                     label(.
+                       (labelX1, labelY1, labelWidth1, labelHeight1),
+                       labelStr1,
+                       labelAlign1,
+                       record,
+                     );
 
-                 record;
-               });
+                   record;
+                 },
+               );
           let record = RenderIMGUITool.prepareFntData(record);
 
           let record = ManageIMGUIAPI.init(gl, record);
@@ -366,7 +404,7 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 _,
                 _,
@@ -378,14 +416,15 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
 
                   record;
                 },
@@ -398,12 +437,12 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 (
                   (imageX2, imageY2, imageWidth2, imageHeight2),
                   (imageS02, imageT02, imageS12, imageT12),
-                  texture2,
+                  textureId2,
                 ),
                 _,
               ) =
@@ -415,19 +454,22 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX2, imageY2, imageWidth2, imageHeight2),
-                         (imageS02, imageT02, imageS12, imageT12),
-                         texture1,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX2, imageY2, imageWidth2, imageHeight2),
+                      (imageS02, imageT02, imageS12, imageT12),
+                      textureId1,
+                      record,
+                    );
 
                   record;
                 },
@@ -440,45 +482,56 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 (
                   (imageX2, imageY2, imageWidth2, imageHeight2),
                   (imageS02, imageT02, imageS12, imageT12),
-                  texture2,
+                  textureId2,
                 ),
                 (
                   (imageX3, imageY3, imageWidth3, imageHeight3),
                   (imageS03, imageT03, imageS13, imageT13),
-                  texture3,
+                  textureId3,
                 ),
               ) =
                 RenderIMGUITool.buildImageData();
+              let record =
+                AssetIMGUIService.setCustomImageArr(
+                  AssetTool.buildCustomImageDataArr(),
+                  record^,
+                );
+
               let (_, (image1Data, image2Data, image3Data)) =
                 _getPositionBufferData();
-              let record = RenderIMGUITool.prepareFntData(record^);
+              let record = RenderIMGUITool.prepareFntData(record);
 
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture2,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX2, imageY2, imageWidth2, imageHeight2),
-                         (imageS02, imageT02, imageS12, imageT12),
-                         texture1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX3, imageY3, imageWidth3, imageHeight3),
-                         (imageS03, imageT03, imageS13, imageT13),
-                         texture2,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId2,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX2, imageY2, imageWidth2, imageHeight2),
+                      (imageS02, imageT02, imageS12, imageT12),
+                      textureId1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX3, imageY3, imageWidth3, imageHeight3),
+                      (imageS03, imageT03, imageS13, imageT13),
+                      textureId2,
+                      record,
+                    );
 
                   record;
                 },
@@ -512,53 +565,68 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 (
                   (imageX2, imageY2, imageWidth2, imageHeight2),
                   (imageS02, imageT02, imageS12, imageT12),
-                  texture2,
+                  textureId2,
                 ),
                 (
                   (imageX3, imageY3, imageWidth3, imageHeight3),
                   (imageS03, imageT03, imageS13, imageT13),
-                  texture3,
+                  textureId3,
                 ),
               ) =
                 RenderIMGUITool.buildImageData();
-              let record = RenderIMGUITool.prepareFntData(record^);
+              let record =
+                AssetIMGUIService.setCustomImageArr(
+                  AssetTool.buildCustomImageDataArr(),
+                  record^,
+                );
+              let record = RenderIMGUITool.prepareFntData(record);
 
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let label = apiJsObj##label;
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX1, labelY1, labelWidth1, labelHeight1),
-                         labelStr1,
-                         labelAlign1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture2,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX2, imageY2, imageWidth2, imageHeight2),
-                         (imageS02, imageT02, imageS12, imageT12),
-                         texture1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX2, labelY2, labelWidth2, labelHeight2),
-                         labelStr2,
-                         labelAlign2,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX3, imageY3, imageWidth3, imageHeight3),
-                         (imageS03, imageT03, imageS13, imageT13),
-                         texture2,
-                       );
+                    label(.
+                      (labelX1, labelY1, labelWidth1, labelHeight1),
+                      labelStr1,
+                      labelAlign1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId2,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX2, imageY2, imageWidth2, imageHeight2),
+                      (imageS02, imageT02, imageS12, imageT12),
+                      textureId1,
+                      record,
+                    );
+                  let record =
+                    label(.
+                      (labelX2, labelY2, labelWidth2, labelHeight2),
+                      labelStr2,
+                      labelAlign2,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX3, imageY3, imageWidth3, imageHeight3),
+                      (imageS03, imageT03, imageS13, imageT13),
+                      textureId2,
+                      record,
+                    );
 
                   record;
                 },
@@ -580,6 +648,7 @@ let _ =
             )
           )
         );
+
         describe("test send color buffer data", () => {
           describe("test buffer data", () =>
             test("test draw one image", () => {
@@ -587,7 +656,7 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 _,
                 _,
@@ -597,14 +666,15 @@ let _ =
               RenderIMGUITool.testColorBufferData(
                 sandbox,
                 record^,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
 
                   record;
                 },
@@ -627,7 +697,7 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 _,
                 _,
@@ -637,14 +707,15 @@ let _ =
               RenderIMGUITool.testTexCoordBufferData(
                 sandbox,
                 record^,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
 
                   record;
                 },
@@ -662,7 +733,6 @@ let _ =
             )
           );
         });
-
         describe("test send index buffer data", () =>
           describe("test buffer data", () => {
             test("test draw two labels", () => {
@@ -679,34 +749,27 @@ let _ =
                 ),
               ) =
                 RenderIMGUITool.buildLabelData();
-              /* let (
-                   (
-                     (imageX1, imageY1, imageWidth1, imageHeight1),
-                     (imageS01, imageT01, imageS11, imageT11),
-                     texture1,
-                   ),
-                   _,
-                   _,
-                 ) =
-                   RenderIMGUITool.buildImageData(); */
               let record = RenderIMGUITool.prepareFntData(record^);
 
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let label = apiJsObj##label;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX1, labelY1, labelWidth1, labelHeight1),
-                         labelStr1,
-                         labelAlign1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX2, labelY2, labelWidth2, labelHeight2),
-                         labelStr2,
-                         labelAlign2,
-                       );
+                    label(.
+                      (labelX1, labelY1, labelWidth1, labelHeight1),
+                      labelStr1,
+                      labelAlign1,
+                      record,
+                    );
+                  let record =
+                    label(.
+                      (labelX2, labelY2, labelWidth2, labelHeight2),
+                      labelStr2,
+                      labelAlign2,
+                      record,
+                    );
 
                   record;
                 },
@@ -728,30 +791,39 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 _,
                 _,
               ) =
                 RenderIMGUITool.buildImageData();
-              let record = RenderIMGUITool.prepareFntData(record^);
+              let record =
+                AssetIMGUIService.setCustomImageArr(
+                  AssetTool.buildCustomImageDataArr(),
+                  record^,
+                );
+              let record = RenderIMGUITool.prepareFntData(record);
 
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let label = apiJsObj##label;
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.label(
-                         (labelX1, labelY1, labelWidth1, labelHeight1),
-                         labelStr1,
-                         labelAlign1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       );
+                    label(.
+                      (labelX1, labelY1, labelWidth1, labelHeight1),
+                      labelStr1,
+                      labelAlign1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
 
                   record;
                 },
@@ -763,34 +835,42 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 (
                   (imageX2, imageY2, imageWidth2, imageHeight2),
                   (imageS02, imageT02, imageS12, imageT12),
-                  texture2,
+                  textureId2,
                 ),
                 _,
               ) =
                 RenderIMGUITool.buildImageData();
-              let record = RenderIMGUITool.prepareFntData(record^);
+              let record =
+                AssetIMGUIService.setCustomImageArr(
+                  AssetTool.buildCustomImageDataArr(),
+                  record^,
+                );
+              let record = RenderIMGUITool.prepareFntData(record);
 
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX2, imageY2, imageWidth2, imageHeight2),
-                         (imageS02, imageT02, imageS12, imageT12),
-                         texture2,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX2, imageY2, imageWidth2, imageHeight2),
+                      (imageS02, imageT02, imageS12, imageT12),
+                      textureId2,
+                      record,
+                    );
 
                   record;
                 },
@@ -802,43 +882,53 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 (
                   (imageX2, imageY2, imageWidth2, imageHeight2),
                   (imageS02, imageT02, imageS12, imageT12),
-                  texture2,
+                  textureId2,
                 ),
                 (
                   (imageX3, imageY3, imageWidth3, imageHeight3),
                   (imageS03, imageT03, imageS13, imageT13),
-                  texture3,
+                  textureId3,
                 ),
               ) =
                 RenderIMGUITool.buildImageData();
-              let record = RenderIMGUITool.prepareFntData(record^);
+              let record =
+                AssetIMGUIService.setCustomImageArr(
+                  AssetTool.buildCustomImageDataArr(),
+                  record^,
+                );
+              let record = RenderIMGUITool.prepareFntData(record);
 
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (record) => {
+                (_, apiJsObj, record) => {
+                  let image = apiJsObj##image;
                   let record =
-                    record
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX1, imageY1, imageWidth1, imageHeight1),
-                         (imageS01, imageT01, imageS11, imageT11),
-                         texture1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX2, imageY2, imageWidth2, imageHeight2),
-                         (imageS02, imageT02, imageS12, imageT12),
-                         texture1,
-                       )
-                    |> FixedLayoutControlIMGUIAPI.image(
-                         (imageX3, imageY3, imageWidth3, imageHeight3),
-                         (imageS03, imageT03, imageS13, imageT13),
-                         texture1,
-                       );
+                    image(.
+                      (imageX1, imageY1, imageWidth1, imageHeight1),
+                      (imageS01, imageT01, imageS11, imageT11),
+                      textureId1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX2, imageY2, imageWidth2, imageHeight2),
+                      (imageS02, imageT02, imageS12, imageT12),
+                      textureId1,
+                      record,
+                    );
+                  let record =
+                    image(.
+                      (imageX3, imageY3, imageWidth3, imageHeight3),
+                      (imageS03, imageT03, imageS13, imageT13),
+                      textureId1,
+                      record,
+                    );
 
                   record;
                 },
@@ -848,82 +938,84 @@ let _ =
           })
         );
       });
-      describe("set gl state", () => {
-        test("set after use program", () => {
-          let getExtension = _buildNoVAOExtension(sandbox);
-          let program = Obj.magic(1);
-          let createProgram = createEmptyStubWithJsObjSandbox(sandbox);
-          createProgram |> returns(program);
-          let useProgram = createEmptyStubWithJsObjSandbox(sandbox);
-          let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
-          let gl =
-            FakeGlTool.buildFakeGl(
-              ~sandbox,
-              ~getExtension,
-              ~createProgram,
-              ~useProgram,
-              ~blendFunc,
-              (),
-            )
-            |> Obj.magic;
 
-          let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+      /*
+       describe("set gl state", () => {
+         test("set after use program", () => {
+           let getExtension = _buildNoVAOExtension(sandbox);
+           let program = Obj.magic(1);
+           let createProgram = createEmptyStubWithJsObjSandbox(sandbox);
+           createProgram |> returns(program);
+           let useProgram = createEmptyStubWithJsObjSandbox(sandbox);
+           let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
+           let gl =
+             FakeGlTool.buildFakeGl(
+               ~sandbox,
+               ~getExtension,
+               ~createProgram,
+               ~useProgram,
+               ~blendFunc,
+               (),
+             )
+             |> Obj.magic;
 
-          blendFunc
-          |> getCall(0)
-          |> expect
-          |> toCalledAfter(useProgram |> getCall(0));
-        });
+           let _ = _prepareAndExecEmptyIMGUIFunc(gl);
 
-        test("disable depth test", () => {
-          let getExtension = _buildNoVAOExtension(sandbox);
-          let getDepthTest = Obj.magic(1);
-          let disable = createEmptyStubWithJsObjSandbox(sandbox);
-          let gl =
-            FakeGlTool.buildFakeGl(
-              ~sandbox,
-              ~getExtension,
-              ~disable,
-              ~getDepthTest,
-              (),
-            )
-            |> Obj.magic;
+           blendFunc
+           |> getCall(0)
+           |> expect
+           |> toCalledAfter(useProgram |> getCall(0));
+         });
 
-          let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+         test("disable depth test", () => {
+           let getExtension = _buildNoVAOExtension(sandbox);
+           let getDepthTest = Obj.magic(1);
+           let disable = createEmptyStubWithJsObjSandbox(sandbox);
+           let gl =
+             FakeGlTool.buildFakeGl(
+               ~sandbox,
+               ~getExtension,
+               ~disable,
+               ~getDepthTest,
+               (),
+             )
+             |> Obj.magic;
 
-          disable |> withOneArg(getDepthTest) |> getCallCount |> expect >= 1;
-        });
-        test("enable blend", () => {
-          let getExtension = _buildNoVAOExtension(sandbox);
-          let getBlend = Obj.magic(1);
-          let getSrcAlpha = Obj.magic(2);
-          let getOneMinusSrcAlpha = Obj.magic(3);
-          let enable = createEmptyStubWithJsObjSandbox(sandbox);
-          let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
-          let gl =
-            FakeGlTool.buildFakeGl(
-              ~sandbox,
-              ~getExtension,
-              ~getBlend,
-              ~getSrcAlpha,
-              ~getOneMinusSrcAlpha,
-              ~enable,
-              ~blendFunc,
-              (),
-            )
-            |> Obj.magic;
+           let _ = _prepareAndExecEmptyIMGUIFunc(gl);
 
-          let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+           disable |> withOneArg(getDepthTest) |> getCallCount |> expect >= 1;
+         });
+         test("enable blend", () => {
+           let getExtension = _buildNoVAOExtension(sandbox);
+           let getBlend = Obj.magic(1);
+           let getSrcAlpha = Obj.magic(2);
+           let getOneMinusSrcAlpha = Obj.magic(3);
+           let enable = createEmptyStubWithJsObjSandbox(sandbox);
+           let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
+           let gl =
+             FakeGlTool.buildFakeGl(
+               ~sandbox,
+               ~getExtension,
+               ~getBlend,
+               ~getSrcAlpha,
+               ~getOneMinusSrcAlpha,
+               ~enable,
+               ~blendFunc,
+               (),
+             )
+             |> Obj.magic;
 
-          (
-            enable |> withOneArg(getBlend) |> getCallCount,
-            blendFunc
-            |> withTwoArgs(getSrcAlpha, getOneMinusSrcAlpha)
-            |> getCallCount,
-          )
-          |> expect == (1, 1);
-        });
-      });
+           let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+
+           (
+             enable |> withOneArg(getBlend) |> getCallCount,
+             blendFunc
+             |> withTwoArgs(getSrcAlpha, getOneMinusSrcAlpha)
+             |> getCallCount,
+           )
+           |> expect == (1, 1);
+         });
+       }); */
 
       describe("send uniform data", () => {
         test("send u_projectionMat data", () => {
@@ -993,8 +1085,14 @@ let _ =
             let bindTexture = createEmptyStubWithJsObjSandbox(sandbox);
             let uniform1i = createEmptyStubWithJsObjSandbox(sandbox);
             let fontTexture = Obj.magic(21);
+            let customTexture1 = Obj.magic(22);
+            let customTexture2 = Obj.magic(23);
+            let customTexture3 = Obj.magic(24);
             let createTexture = createEmptyStubWithJsObjSandbox(sandbox);
             createTexture |> onCall(0) |> returns(fontTexture);
+            createTexture |> onCall(1) |> returns(customTexture1);
+            createTexture |> onCall(2) |> returns(customTexture2);
+            createTexture |> onCall(3) |> returns(customTexture3);
             let gl =
               FakeGlTool.buildFakeGl(
                 ~sandbox,
@@ -1010,11 +1108,7 @@ let _ =
               |> Obj.magic;
             let canvasWidth = 1000;
             let canvasHeight = 500;
-            let (
-              record,
-              (_, ((_, _, texture1), (_, _, texture2), (_, _, texture3))),
-            ) =
-              _drawTwoLabelsAndThreeImages();
+            let (record, _) = _drawTwoLabelsAndThreeImages();
             let record = RenderIMGUITool.prepareFntData(record);
 
             let record = ManageIMGUIAPI.init(gl, record);
@@ -1023,16 +1117,42 @@ let _ =
               bindTexture
               |> withTwoArgs(texture2D, fontTexture)
               |> getCallCount;
+            let bindCustomTexture1CallCountAfterInit =
+              bindTexture
+              |> withTwoArgs(texture2D, customTexture1)
+              |> getCallCount;
+            let bindCustomTexture2CallCountAfterInit =
+              bindTexture
+              |> withTwoArgs(texture2D, customTexture2)
+              |> getCallCount;
+            let bindCustomTexture3CallCountAfterInit =
+              bindTexture
+              |> withTwoArgs(texture2D, customTexture3)
+              |> getCallCount;
 
             let record =
               ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
 
             (
               (
-                bindTexture |> withTwoArgs(texture2D, texture1) |> getCallCount,
-                bindTexture
-                |> withTwoArgs(texture2D, texture2)
-                |> getCallCount,
+                (
+                  bindTexture
+                  |> withTwoArgs(texture2D, customTexture1)
+                  |> getCallCount
+                )
+                - bindCustomTexture1CallCountAfterInit,
+                (
+                  bindTexture
+                  |> withTwoArgs(texture2D, customTexture2)
+                  |> getCallCount
+                )
+                - bindCustomTexture2CallCountAfterInit,
+                (
+                  bindTexture
+                  |> withTwoArgs(texture2D, customTexture3)
+                  |> getCallCount
+                )
+                - bindCustomTexture3CallCountAfterInit,
                 (
                   bindTexture
                   |> withTwoArgs(texture2D, fontTexture)
@@ -1042,113 +1162,20 @@ let _ =
               ),
               uniform1i |> withTwoArgs(location, 0) |> getCallCount,
             )
-            |> expect == ((1, 1, 1), 3);
+            |> expect == ((1, 1, 1, 1), 4);
           })
         );
 
         describe("draw", () => {
-          /* let _drawTwoImagesOfTheSameTexture = () => {
-               let (
-                 (
-                   (labelX1, labelY1, labelWidth1, labelHeight1),
-                   labelStr1,
-                   labelAlign1,
-                 ),
-                 (
-                   (labelX2, labelY2, labelWidth2, labelHeight2),
-                   labelStr2,
-                   labelAlign2,
-                 ),
-               ) =
-                 RenderIMGUITool.buildLabelData();
-               let (
-                 (
-                   (imageX1, imageY1, imageWidth1, imageHeight1),
-                   (imageS01, imageT01, imageS11, imageT11),
-                   texture1,
-                 ),
-                 (
-                   (imageX2, imageY2, imageWidth2, imageHeight2),
-                   (imageS02, imageT02, imageS12, imageT12),
-                   texture2,
-                 ),
-                 (
-                   (imageX3, imageY3, imageWidth3, imageHeight3),
-                   (imageS03, imageT03, imageS13, imageT13),
-                   texture3,
-                 ),
-               ) =
-                 RenderIMGUITool.buildImageData();
-
-               let record =
-                 record^
-                 |> ManageIMGUIAPI.setIMGUIFunc((record) => {
-                      let record =
-                        record
-                        |> FixedLayoutControlIMGUIAPI.label(
-                             (labelX1, labelY1, labelWidth1, labelHeight1),
-                             labelStr1,
-                             labelAlign1,
-                           )
-                        |> FixedLayoutControlIMGUIAPI.image(
-                             (imageX1, imageY1, imageWidth1, imageHeight1),
-                             (imageS01, imageT01, imageS11, imageT11),
-                             texture2,
-                           )
-                        |> FixedLayoutControlIMGUIAPI.image(
-                             (imageX2, imageY2, imageWidth2, imageHeight2),
-                             (imageS02, imageT02, imageS12, imageT12),
-                             texture1,
-                           )
-                        |> FixedLayoutControlIMGUIAPI.label(
-                             (labelX2, labelY2, labelWidth2, labelHeight2),
-                             labelStr2,
-                             labelAlign2,
-                           )
-                        |> FixedLayoutControlIMGUIAPI.image(
-                             (imageX3, imageY3, imageWidth3, imageHeight3),
-                             (imageS03, imageT03, imageS13, imageT13),
-                             texture2,
-                           );
-
-                      record;
-                    });
-
-               (
-                 record,
-                 (
-                   (
-                     ((labelX1, labelY1, labelWidth1, labelHeight1), labelStr1),
-                     ((labelX2, labelY2, labelWidth2, labelHeight2), labelStr2),
-                   ),
-                   (
-                     (
-                       (imageX1, imageY1, imageWidth1, imageHeight1),
-                       (imageS01, imageT01, imageS11, imageT11),
-                       texture1,
-                     ),
-                     (
-                       (imageX2, imageY2, imageWidth2, imageHeight2),
-                       (imageS02, imageT02, imageS12, imageT12),
-                       texture2,
-                     ),
-                     (
-                       (imageX3, imageY3, imageWidth3, imageHeight3),
-                       (imageS03, imageT03, imageS13, imageT13),
-                       texture3,
-                     ),
-                   ),
-                 ),
-               );
-             }; */
-
           test("test bind correct texture before draw", () => {
             let getExtension = _buildNoVAOExtension(sandbox);
             let texture2D = 1;
             let bindTexture = createEmptyStubWithJsObjSandbox(sandbox);
-            let fontTexture = Obj.magic(21);
-            let createTexture = createEmptyStubWithJsObjSandbox(sandbox);
-            createTexture |> onCall(0) |> returns(fontTexture);
+            let (
+              (fontTexture, customTexture1, customTexture2, customTexture3),
+              createTexture,
+            ) =
+              RenderIMGUITool.createCreateGlTextureStub(sandbox);
             let drawElements = createEmptyStubWithJsObjSandbox(sandbox);
             let gl =
               FakeGlTool.buildFakeGl(
@@ -1165,7 +1192,14 @@ let _ =
             let canvasHeight = 500;
             let (
               record,
-              (_, ((_, _, texture1), (_, _, texture2), (_, _, texture3))),
+              (
+                _,
+                (
+                  (_, _, textureId1),
+                  (_, _, textureId2),
+                  (_, _, textureId3),
+                ),
+              ),
             ) =
               _drawTwoLabelsAndThreeImages();
             let record = RenderIMGUITool.prepareFntData(record);
@@ -1175,6 +1209,18 @@ let _ =
             let bindFontTextureCallCountAfterInit =
               bindTexture
               |> withTwoArgs(texture2D, fontTexture)
+              |> getCallCount;
+            let bindCustomTexture1CallCountAfterInit =
+              bindTexture
+              |> withTwoArgs(texture2D, customTexture1)
+              |> getCallCount;
+            let bindCustomTexture2CallCountAfterInit =
+              bindTexture
+              |> withTwoArgs(texture2D, customTexture2)
+              |> getCallCount;
+            let bindCustomTexture3CallCountAfterInit =
+              bindTexture
+              |> withTwoArgs(texture2D, customTexture3)
               |> getCallCount;
 
             let record =
@@ -1186,11 +1232,11 @@ let _ =
               |> getCall(bindFontTextureCallCountAfterInit)
               |. calledBefore(drawElements |> getCall(0)),
               bindTexture
-              |> withTwoArgs(texture2D, texture1)
+              |> withTwoArgs(texture2D, customTexture1)
               |> getCall(0)
               |. calledBefore(drawElements |> getCall(1)),
               bindTexture
-              |> withTwoArgs(texture2D, texture2)
+              |> withTwoArgs(texture2D, customTexture2)
               |> getCall(0)
               |. calledBefore(drawElements |> getCall(2)),
             )
@@ -1204,9 +1250,11 @@ let _ =
               let triangles = 2;
               let unsigned_short = 3;
               let bindTexture = createEmptyStubWithJsObjSandbox(sandbox);
-              let fontTexture = Obj.magic(21);
-              let createTexture = createEmptyStubWithJsObjSandbox(sandbox);
-              createTexture |> onCall(0) |> returns(fontTexture);
+              let (
+                (fontTexture, customTexture1, customTexture2, customTexture3),
+                createTexture,
+              ) =
+                RenderIMGUITool.createCreateGlTextureStub(sandbox);
               let drawElements = createEmptyStubWithJsObjSandbox(sandbox);
               let gl =
                 FakeGlTool.buildFakeGl(
@@ -1227,43 +1275,56 @@ let _ =
                 (
                   (imageX1, imageY1, imageWidth1, imageHeight1),
                   (imageS01, imageT01, imageS11, imageT11),
-                  texture1,
+                  textureId1,
                 ),
                 (
                   (imageX2, imageY2, imageWidth2, imageHeight2),
                   (imageS02, imageT02, imageS12, imageT12),
-                  texture2,
+                  textureId2,
                 ),
                 (
                   (imageX3, imageY3, imageWidth3, imageHeight3),
                   (imageS03, imageT03, imageS13, imageT13),
-                  texture3,
+                  textureId3,
                 ),
               ) =
                 RenderIMGUITool.buildImageData();
               let record =
-                record^
-                |> ManageIMGUIAPI.setIMGUIFunc((record) => {
-                     let record =
-                       record
-                       |> FixedLayoutControlIMGUIAPI.image(
-                            (imageX1, imageY1, imageWidth1, imageHeight1),
-                            (imageS01, imageT01, imageS11, imageT11),
-                            texture1,
-                          )
-                       |> FixedLayoutControlIMGUIAPI.image(
-                            (imageX2, imageY2, imageWidth2, imageHeight2),
-                            (imageS02, imageT02, imageS12, imageT12),
-                            texture1,
-                          )
-                       |> FixedLayoutControlIMGUIAPI.image(
-                            (imageX3, imageY3, imageWidth3, imageHeight3),
-                            (imageS03, imageT03, imageS13, imageT13),
-                            texture3,
-                          );
+                AssetIMGUIService.setCustomImageArr(
+                  AssetTool.buildCustomImageDataArr(),
+                  record^,
+                );
+              let record =
+                record
+                |> ManageIMGUIAPI.setIMGUIFunc(
+                     RenderIMGUITool.buildCustomData(),
+                     (_, apiJsObj, record) => {
+                       let image = apiJsObj##image;
+                       let record =
+                         image(.
+                           (imageX1, imageY1, imageWidth1, imageHeight1),
+                           (imageS01, imageT01, imageS11, imageT11),
+                           textureId1,
+                           record,
+                         );
+                       let record =
+                         image(.
+                           (imageX2, imageY2, imageWidth2, imageHeight2),
+                           (imageS02, imageT02, imageS12, imageT12),
+                           textureId1,
+                           record,
+                         );
+                       let record =
+                         image(.
+                           (imageX3, imageY3, imageWidth3, imageHeight3),
+                           (imageS03, imageT03, imageS13, imageT13),
+                           textureId3,
+                           record,
+                         );
 
-                     record;
-                   });
+                       record;
+                     },
+                   );
 
               let record = ManageIMGUIAPI.init(gl, record);
               let record =
@@ -1290,9 +1351,11 @@ let _ =
               let triangles = 2;
               let unsigned_short = 3;
               let bindTexture = createEmptyStubWithJsObjSandbox(sandbox);
-              let fontTexture = Obj.magic(21);
-              let createTexture = createEmptyStubWithJsObjSandbox(sandbox);
-              createTexture |> onCall(0) |> returns(fontTexture);
+              let (
+                (fontTexture, customTexture1, customTexture2, customTexture3),
+                createTexture,
+              ) =
+                RenderIMGUITool.createCreateGlTextureStub(sandbox);
               let drawElements = createEmptyStubWithJsObjSandbox(sandbox);
               let gl =
                 FakeGlTool.buildFakeGl(
@@ -1325,22 +1388,19 @@ let _ =
                 |> withFourArgs(triangles, 6 * 2, unsigned_short, 0)
                 |> getCallCount,
                 drawElements
-                |> withFourArgs(triangles, 6 * 1, unsigned_short, 6 * 2 * 2)
+                |> withFourArgs(triangles, 6 * 1, unsigned_short, 24)
                 |> getCallCount,
                 drawElements
-                |> withFourArgs(
-                     triangles,
-                     6 * 2,
-                     unsigned_short,
-                     (6 * 2 + 6 * 1) * 2,
-                   )
+                |> withFourArgs(triangles, 6, unsigned_short, 36)
+                |> getCallCount,
+                drawElements
+                |> withFourArgs(triangles, 6, unsigned_short, 48)
                 |> getCallCount,
               )
-              |> expect == (1, 1, 1);
+              |> expect == (1, 1, 1, 1);
             });
           });
         });
-
         describe("restore gl state", () => {
           test("bind last vao buffers", () => {
             let getExtension = _buildNoVAOExtension(sandbox);
@@ -1411,7 +1471,7 @@ let _ =
             |> getCallCount
             |> expect == 1;
           });
-          test("bind last texture2d", () => {
+          test("bind last textureId2d", () => {
             let getExtension = _buildNoVAOExtension(sandbox);
             let texture2D = 2;
             let getBindingTexture2D = 3;
@@ -1502,4 +1562,4 @@ let _ =
         });
       });
     });
-  }); */
+  });

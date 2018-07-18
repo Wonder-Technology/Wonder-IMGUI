@@ -5,8 +5,13 @@ let label =
     record |> DrawTextIMGUIService.draw(rect, str, align);
 
 let image =
-  (. rect, uv, texture, record) =>
-    record |> DrawImageIMGUIService.draw(rect, uv, texture);
+  (. rect, uv, id, record) =>
+    record
+    |> DrawImageIMGUIService.draw(
+         rect,
+         uv,
+         AssetIMGUIService.unsafeGetCustomTexture(id, record),
+       );
 
 /* let button = () => {
 

@@ -40,19 +40,37 @@ let _ =
               "./test/res/font/myFont.png",
             |]);
           let bitmap = bitmapFilePath;
+          let customTextureSourceSrc1 = "./test/res/image/1.jpg";
+          let customTextureSourceSrc2 = "./test/res/image/2.png";
+          let customTextureSourceDataArr = [|
+            (customTextureSourceSrc1, "a1"),
+            (customTextureSourceSrc2, "a2"),
+          |];
+          let customImageArr = [|
+            (customTextureSourceSrc1, "a1", ImageType.Jpg),
+            (customTextureSourceSrc2, "a2", ImageType.Png),
+          |];
           IOIMGUITool.buildFakeURL(sandbox^);
           IOIMGUITool.buildFakeLoadImage(.);
           let fetch =
-            IOIMGUITool.buildFakeFetch(sandbox, fntFilePath, bitmapFilePath);
+            IOIMGUITool.buildFakeFetch(
+              sandbox,
+              fntFilePath,
+              bitmapFilePath,
+              customTextureSourceSrc1,
+              customTextureSourceSrc2,
+            );
 
           record^
           |> IOIMGUIAPI.addFont(fntFilePath, bitmapFilePath)
-          |> IOIMGUITool.load(fetch)
-          |> then_(record => testFunc(bitmap, record));
+          |> IOIMGUITool.load(customTextureSourceDataArr, fetch)
+          |> then_(record =>
+               testFunc(bitmap, customImageArr, record)
+             );
         };
 
         testPromise("load bitmap image", () =>
-          _test((bitmap, record) =>
+          _test((bitmap, _, record) =>
             AssetTool.unsafeGetBitmap(record)
             |> Obj.magic
             |> expect == bitmap
@@ -60,10 +78,19 @@ let _ =
           )
         );
 
+        testPromise("load custom texture sources", () =>
+          _test((bitmap, customImageArr, record) =>
+            AssetIMGUIAPI.getCustomImageArr(record)
+            |> Obj.magic
+            |> expect == customImageArr
+            |> resolve
+          )
+        );
+
         describe("load fnt data", () =>
           describe("parse data", () =>
             testPromise("test", () =>
-              _test((_bitmap, record) => {
+              _test((_bitmap, _, record) => {
                 let {
                   commonHeight,
                   commonBase,
