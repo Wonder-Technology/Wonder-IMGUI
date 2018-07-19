@@ -261,3 +261,5 @@ let prepareFntData = record => {
 };
 
 let buildCustomData = () => Obj.magic(501);
+
+let markNeedUpdateBufferData = ManageIMGUIService._markNeedUpdateBufferData;

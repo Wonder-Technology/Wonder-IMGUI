@@ -189,14 +189,18 @@ let _getLastWebglData = record =>
   RecordIMGUIService.unsafeGetWebglData(record).lastWebglData
   |> OptionService.unsafeGet;
 
-let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
+let _bufferArrayBufferData =
+    (isNeedUpdateBufferData, (buffer, pointArr, location, size), gl) => {
   bindBuffer(getArrayBuffer(gl), buffer, gl);
-  bufferFloat32Data(
-    getArrayBuffer(gl),
-    Float32Array.make(pointArr),
-    getDynamicDraw(gl),
-    gl,
-  );
+  isNeedUpdateBufferData ?
+    bufferFloat32Data(
+      getArrayBuffer(gl),
+      Float32Array.make(pointArr),
+      getDynamicDraw(gl),
+      gl,
+    ) :
+    ();
+
   enableVertexAttribArray(location, gl);
   vertexAttribPointer(location, size, getFloat(gl), false, 0, 0, gl);
   resetBuffer(getArrayBuffer(gl), Js.Nullable.null, gl);
@@ -204,14 +208,17 @@ let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
   gl;
 };
 
-let _bufferElementArrayBufferData = (buffer, pointArr, gl) => {
+let _bufferElementArrayBufferData =
+    (isNeedUpdateBufferData, buffer, pointArr, gl) => {
   bindBuffer(getElementArrayBuffer(gl), buffer, gl);
-  bufferUint16Data(
-    getElementArrayBuffer(gl),
-    Uint16Array.make(pointArr),
-    getDynamicDraw(gl),
-    gl,
-  );
+  isNeedUpdateBufferData ?
+    bufferUint16Data(
+      getElementArrayBuffer(gl),
+      Uint16Array.make(pointArr),
+      getDynamicDraw(gl),
+      gl,
+    ) :
+    ();
 
   gl;
 };
@@ -239,6 +246,18 @@ let _addCustomTextureDrawDataBaseIndex = ({verticeArr, indexArr} as drawData) =>
   };
 };
 
+let _isNeedUpdateBufferData = record => record.needUpdateBufferData;
+
+let _markNotNeedUpdateBufferData = record => {
+  ...record,
+  needUpdateBufferData: false,
+};
+
+let _markNeedUpdateBufferData = record => {
+  ...record,
+  needUpdateBufferData: true,
+};
+
 let _bufferAllData = (gl, groupedDrawDataArr, record) => {
   let {
     program,
@@ -251,6 +270,8 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
     aTexCoordLocation,
   } =
     RecordIMGUIService.unsafeGetWebglData(record);
+
+  let isNeedUpdateBufferData = _isNeedUpdateBufferData(record);
 
   let (
     drawElementsDataArr,
@@ -290,42 +311,59 @@ let _bufferAllData = (gl, groupedDrawDataArr, record) => {
 
            let baseIndex = DrawDataArrayService.getBaseIndex(totalVerticeArr);
 
-           (
-             drawElementsDataArr
-             |> ArrayService.push(
-                  {drawType, customTexture, count, countOffset}: drawElementsData,
-                ),
-             countOffset + count * 2,
-             totalVerticeArr |> Js.Array.concat(verticeArr),
-             totalColorArr |> Js.Array.concat(colorArr),
-             totalTexCoordArr |> Js.Array.concat(texCoordArr),
-             totalIndexArr
-             |> Js.Array.concat(
-                  indexArr |> Js.Array.map(index => index + baseIndex),
-                ),
-           );
+           let newCountOffset = countOffset + count * 2;
+
+           isNeedUpdateBufferData ?
+             (
+               drawElementsDataArr
+               |> ArrayService.push(
+                    {drawType, customTexture, count, countOffset}: drawElementsData,
+                  ),
+               newCountOffset,
+               totalVerticeArr |> Js.Array.concat(verticeArr),
+               totalColorArr |> Js.Array.concat(colorArr),
+               totalTexCoordArr |> Js.Array.concat(texCoordArr),
+               totalIndexArr
+               |> Js.Array.concat(
+                    indexArr |> Js.Array.map(index => index + baseIndex),
+                  ),
+             ) :
+             (
+               drawElementsDataArr
+               |> ArrayService.push(
+                    {drawType, customTexture, count, countOffset}: drawElementsData,
+                  ),
+               newCountOffset,
+               totalVerticeArr,
+               totalColorArr,
+               totalTexCoordArr,
+               totalIndexArr,
+             );
          },
          ([||], 0, [||], [||], [||], [||]),
        );
 
   gl
-  |> _bufferArrayBufferData((
-       positionBuffer,
-       totalVerticeArr,
-       aPositonLocation,
-       2,
-     ))
-  |> _bufferArrayBufferData((colorBuffer, totalColorArr, aColorLocation, 3))
-  |> _bufferArrayBufferData((
-       texCoordBuffer,
-       totalTexCoordArr,
-       aTexCoordLocation,
-       2,
-     ))
-  |> _bufferElementArrayBufferData(indexBuffer, totalIndexArr)
+  |> _bufferArrayBufferData(
+       isNeedUpdateBufferData,
+       (positionBuffer, totalVerticeArr, aPositonLocation, 2),
+     )
+  |> _bufferArrayBufferData(
+       isNeedUpdateBufferData,
+       (colorBuffer, totalColorArr, aColorLocation, 3),
+     )
+  |> _bufferArrayBufferData(
+       isNeedUpdateBufferData,
+       (texCoordBuffer, totalTexCoordArr, aTexCoordLocation, 2),
+     )
+  |> _bufferElementArrayBufferData(
+       isNeedUpdateBufferData,
+       indexBuffer,
+       totalIndexArr,
+     )
   |> ignore;
 
-  (record, drawElementsDataArr);
+  (record |> _markNotNeedUpdateBufferData, drawElementsDataArr);
 };
 
 let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
@@ -538,14 +576,16 @@ let getCustomData = ({customDataForIMGUIFunc}) => customDataForIMGUIFunc;
 
 let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
 
-let setIMGUIFunc = (customData, func, record) => {
-  ...record,
-  imguiFuncData: {
-    ...record.imguiFuncData,
-    imguiFunc: Some(func),
-    customDataForIMGUIFunc: Some(customData),
-  },
-};
+let setIMGUIFunc = (customData, func, record) =>
+  {
+    ...record,
+    imguiFuncData: {
+      ...record.imguiFuncData,
+      imguiFunc: Some(func),
+      customDataForIMGUIFunc: Some(customData),
+    },
+  }
+  |> _markNeedUpdateBufferData;
 
 let _getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 
@@ -597,4 +637,5 @@ let createRecord = () => {
     imguiFunc: None,
     customDataForIMGUIFunc: None,
   },
+  needUpdateBufferData: true,
 };

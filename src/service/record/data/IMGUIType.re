@@ -100,6 +100,7 @@ and imguiRecord = {
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
+  needUpdateBufferData: bool,
   /* ioData, */
   /* activeWidgetId: option(int), */
 };

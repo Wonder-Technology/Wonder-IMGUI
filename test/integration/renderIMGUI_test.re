@@ -251,6 +251,7 @@ let _ =
 
         let record = ManageIMGUIAPI.render(gl, record);
         let bufferDataCallCountAfterFirstRender = bufferData |> getCallCount;
+        let record = RenderIMGUITool.markNeedUpdateBufferData(record);
         let record = ManageIMGUIAPI.render(gl, record);
 
         bufferData
@@ -1370,11 +1371,7 @@ let _ =
 
               let record =
                 ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
-              let record =
-                ManageIMGUIAPI.render(
-                  gl,
-                  record,
-                );
+              let record = ManageIMGUIAPI.render(gl, record);
 
               (
                 drawElements
