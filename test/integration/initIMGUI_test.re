@@ -29,6 +29,7 @@ let _ =
         let record =
           ManageIMGUIAPI.init(
             FakeGlTool.buildFakeGl(~sandbox, ~shaderSource, ()) |> Obj.magic,
+            (0, 0),
             record^,
           );
 
@@ -44,6 +45,7 @@ let _ =
         let record =
           ManageIMGUIAPI.init(
             FakeGlTool.buildFakeGl(~sandbox, ~shaderSource, ()) |> Obj.magic,
+            (0, 0),
             record^,
           );
 
@@ -63,6 +65,7 @@ let _ =
         let record =
           ManageIMGUIAPI.init(
             FakeGlTool.buildFakeGl(~sandbox, ~createProgram, ()) |> Obj.magic,
+            (0, 0),
             record^,
           );
 
@@ -96,6 +99,7 @@ let _ =
                 (),
               )
               |> Obj.magic,
+              (0, 0),
               record^,
             );
 
@@ -139,6 +143,7 @@ let _ =
                 (),
               )
               |> Obj.magic,
+              (0, 0),
               record^,
             );
 
@@ -195,6 +200,7 @@ let _ =
               (),
             )
             |> Obj.magic,
+            (0, 0),
             record^,
           );
 
@@ -233,6 +239,7 @@ let _ =
               (),
             )
             |> Obj.magic,
+            (0, 0),
             record^,
           );
 
@@ -273,6 +280,7 @@ let _ =
                 (),
               )
               |> Obj.magic,
+              (0, 0),
               record^,
             );
 
@@ -319,22 +327,13 @@ let _ =
                 (),
               )
               |> Obj.magic,
+              (0, 0),
               record^,
             );
 
           getRecordLocationFunc(record) |> expect == location;
         };
-
-        test("test get u_projectionMat location", () =>
-          _test("u_projectionMat", record =>
-            RecordIMGUITool.unsafeGetWebglData(record).uProjectionMatLocation
-          )
-        );
-        test("test get u_sampler2D location", () =>
-          _test("u_sampler2D", record =>
-            RecordIMGUITool.unsafeGetWebglData(record).uSampler2DLocation
-          )
-        );
+        ();
       });
     });
 
@@ -376,6 +375,7 @@ let _ =
                 (),
               )
               |> Obj.magic,
+              (0, 0),
               record,
             );
 
@@ -416,6 +416,7 @@ let _ =
                 (),
               )
               |> Obj.magic,
+              (0, 0),
               record,
             );
 

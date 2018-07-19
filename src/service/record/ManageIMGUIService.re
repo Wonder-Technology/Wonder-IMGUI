@@ -54,7 +54,33 @@ let _createFontTexture = (gl, source) => {
   texture;
 };
 
-let init = (gl, record) =>
+let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeight)) =>
+  WonderWebgl.Matrix4Service.ortho(
+    0.,
+    canvasWidth |> NumberType.intToFloat,
+    canvasHeight |> NumberType.intToFloat,
+    0.,
+    -1.,
+    1.,
+    WonderWebgl.Matrix4Service.createIdentityMatrix4(),
+  );
+
+let _sendUniformData = (gl, program, canvasSize) => {
+  useProgram(program, gl);
+
+  uniformMatrix4fv(
+    gl |> getUniformLocation(program, "u_projectionMat"),
+    false,
+    _buildOrthoProjectionMat4TypeArr(canvasSize),
+    gl,
+  );
+
+  uniform1i(gl |> getUniformLocation(program, "u_sampler2D"), 0, gl);
+
+  ();
+};
+
+let init = (gl, canvasSize, record) =>
   ! AssetIMGUIService.isLoadAsset(record) ?
     record :
     {
@@ -78,6 +104,8 @@ let init = (gl, record) =>
           AssetIMGUIService.unsafeGetBitmap(record)
           |> WonderWebgl.GlType.imageElementToTextureSource,
         );
+
+      _sendUniformData(gl, program, canvasSize);
 
       let {customImageArr, customTextureMap} = record.assetData;
 
@@ -103,10 +131,6 @@ let init = (gl, record) =>
             aPositonLocation: gl |> getAttribLocation(program, "a_position"),
             aColorLocation: gl |> getAttribLocation(program, "a_color"),
             aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
-            uProjectionMatLocation:
-              gl |> getUniformLocation(program, "u_projectionMat"),
-            uSampler2DLocation:
-              gl |> getUniformLocation(program, "u_sampler2D"),
             lastWebglData: None,
             currentFontTextureDrawDataBaseIndex: 0,
           }),
@@ -397,17 +421,6 @@ let _groupByDrawTypeAndCustomTexture = (drawDataArr: drawDataArr) =>
       totalResultArr |> ArrayService.push(oneGroupDrawData);
     };
 
-let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeight)) =>
-  WonderWebgl.Matrix4Service.ortho(
-    0.,
-    canvasWidth |> NumberType.intToFloat,
-    canvasHeight |> NumberType.intToFloat,
-    0.,
-    -1.,
-    1.,
-    WonderWebgl.Matrix4Service.createIdentityMatrix4(),
-  );
-
 let _setGlState = gl => {
   /* no depth testing; we handle this by manually placing out widgets in the order we wish them to be rendered.  */
   disable(getDepthTest(gl), gl);
@@ -418,8 +431,7 @@ let _setGlState = gl => {
 };
 
 let _draw = (gl, drawElementsDataArr, record) => {
-  let {fontTexture, uSampler2DLocation} =
-    RecordIMGUIService.unsafeGetWebglData(record);
+  let {fontTexture} = RecordIMGUIService.unsafeGetWebglData(record);
 
   drawElementsDataArr
   |> WonderCommonlib.ArrayService.forEach(
@@ -441,7 +453,6 @@ let _draw = (gl, drawElementsDataArr, record) => {
          };
 
        bindTexture(getTexture2D(gl), texture, gl);
-       uniform1i(uSampler2DLocation, 0, gl);
 
        drawElements(
          getTriangles(gl),
@@ -488,7 +499,7 @@ let _restoreGlState = (gl, record) => {
   record;
 };
 
-let _finish = (gl, canvasSize, record) => {
+let _finish = (gl, record) => {
   /*
    If a VAO is already bound, we need to unbound it. Otherwise, we will write into a VAO created by the user of the library
    when calling vertexAttribPointer, which means that we would effectively corrupt the user data!
@@ -507,19 +518,18 @@ let _finish = (gl, canvasSize, record) => {
   let (record, drawElementsDataArr) =
     _bufferAllData(gl, groupedDrawDataArr, record);
 
-  let {program, fontTexture, uProjectionMatLocation, uSampler2DLocation} =
-    RecordIMGUIService.unsafeGetWebglData(record);
+  let {program} = RecordIMGUIService.unsafeGetWebglData(record);
 
   useProgram(program, gl);
 
   _setGlState(gl);
 
-  uniformMatrix4fv(
-    uProjectionMatLocation,
-    false,
-    _buildOrthoProjectionMat4TypeArr(canvasSize),
-    gl,
-  );
+  /* uniformMatrix4fv(
+       uProjectionMatLocation,
+       false,
+       _buildOrthoProjectionMat4TypeArr(canvasSize),
+       gl,
+     ); */
 
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
 };
@@ -555,9 +565,9 @@ let _exec = ({imguiFuncData} as record) =>
     )
   };
 
-let render = (gl, canvasSize, record) =>
+let render = (gl, record) =>
   ! AssetIMGUIService.isLoadAsset(record) ?
-    record : record |> _prepare |> _exec |> _finish(gl, canvasSize);
+    record : record |> _prepare |> _exec |> _finish(gl);
 
 let createRecord = () => {
   setting:

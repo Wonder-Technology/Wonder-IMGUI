@@ -35,8 +35,6 @@ type webglData = {
   aPositonLocation: attributeLocation,
   aColorLocation: attributeLocation,
   aTexCoordLocation: attributeLocation,
-  uProjectionMatLocation: uniformLocation,
-  uSampler2DLocation: uniformLocation,
   lastWebglData: option(lastWebglData),
   currentFontTextureDrawDataBaseIndex: int,
 };
@@ -101,7 +99,7 @@ and imguiRecord = {
   fontData: option(fontData),
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
-  imguiFuncData
+  imguiFuncData,
   /* ioData, */
   /* activeWidgetId: option(int), */
 };

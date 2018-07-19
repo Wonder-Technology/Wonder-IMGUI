@@ -149,9 +149,9 @@ let _ =
                record
              );
 
-        let record = ManageIMGUIAPI.init(gl, record);
         let record =
-          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+          ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
+        let record = ManageIMGUIAPI.render(gl, record);
 
         (record, canvasWidth, canvasHeight);
       };
@@ -189,12 +189,11 @@ let _ =
                  record;
                },
              );
-        let record = ManageIMGUIAPI.init(gl, record);
+        let record =
+          ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
-        let record =
-          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
-        let record =
-          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+        let record = ManageIMGUIAPI.render(gl, record);
+        let record = ManageIMGUIAPI.render(gl, record);
 
         record.drawDataArr |> Js.Array.length |> expect == 1;
       });
@@ -247,13 +246,12 @@ let _ =
                },
              );
         let record = RenderIMGUITool.prepareFntData(record);
-        let record = ManageIMGUIAPI.init(gl, record);
+        let record =
+          ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
-        let record =
-          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+        let record = ManageIMGUIAPI.render(gl, record);
         let bufferDataCallCountAfterFirstRender = bufferData |> getCallCount;
-        let record =
-          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+        let record = ManageIMGUIAPI.render(gl, record);
 
         bufferData
         |> getCall(bufferDataCallCountAfterFirstRender + 3)
@@ -271,11 +269,11 @@ let _ =
           FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ()) |> Obj.magic;
         let canvasWidth = 1000;
         let canvasHeight = 500;
-        let record = ManageIMGUIAPI.init(gl, record^);
+        let record =
+          ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record^);
 
         expect(() => {
-          let record =
-            ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+          let record = ManageIMGUIAPI.render(gl, record);
           ();
         })
         |> not_
@@ -295,7 +293,7 @@ let _ =
         let gl =
           FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ()) |> Obj.magic;
 
-        let record = ManageIMGUIAPI.init(gl, record^);
+        let record = ManageIMGUIAPI.init(gl, (0, 0), record^);
 
         let canvasWidth = 1000;
         let canvasHeight = 500;
@@ -305,8 +303,7 @@ let _ =
                RenderIMGUITool.buildCustomData(), (_, apiJsObj, record) =>
                record
              );
-        let record =
-          ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+        let record = ManageIMGUIAPI.render(gl, record);
 
         bindVertexArrayOES |> expect |> toCalledWith([|Js.Nullable.null|]);
       });
@@ -372,9 +369,9 @@ let _ =
                );
           let record = RenderIMGUITool.prepareFntData(record);
 
-          let record = ManageIMGUIAPI.init(gl, record);
           let record =
-            ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+            ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
+          let record = ManageIMGUIAPI.render(gl, record);
 
           (
             enableVertexAttribArray |> withOneArg(location) |> getCallCount,
@@ -1111,7 +1108,8 @@ let _ =
             let (record, _) = _drawTwoLabelsAndThreeImages();
             let record = RenderIMGUITool.prepareFntData(record);
 
-            let record = ManageIMGUIAPI.init(gl, record);
+            let record =
+              ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
             let bindFontTextureCallCountAfterInit =
               bindTexture
@@ -1130,8 +1128,7 @@ let _ =
               |> withTwoArgs(texture2D, customTexture3)
               |> getCallCount;
 
-            let record =
-              ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+            let record = ManageIMGUIAPI.render(gl, record);
 
             (
               (
@@ -1162,7 +1159,7 @@ let _ =
               ),
               uniform1i |> withTwoArgs(location, 0) |> getCallCount,
             )
-            |> expect == ((1, 1, 1, 1), 4);
+            |> expect == ((1, 1, 1, 1), 1);
           })
         );
 
@@ -1204,7 +1201,8 @@ let _ =
               _drawTwoLabelsAndThreeImages();
             let record = RenderIMGUITool.prepareFntData(record);
 
-            let record = ManageIMGUIAPI.init(gl, record);
+            let record =
+              ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
             let bindFontTextureCallCountAfterInit =
               bindTexture
@@ -1223,8 +1221,7 @@ let _ =
               |> withTwoArgs(texture2D, customTexture3)
               |> getCallCount;
 
-            let record =
-              ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+            let record = ManageIMGUIAPI.render(gl, record);
 
             (
               bindTexture
@@ -1326,13 +1323,9 @@ let _ =
                      },
                    );
 
-              let record = ManageIMGUIAPI.init(gl, record);
               let record =
-                ManageIMGUIAPI.render(
-                  gl,
-                  (canvasWidth, canvasHeight),
-                  record,
-                );
+                ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
+              let record = ManageIMGUIAPI.render(gl, record);
 
               (
                 drawElements
@@ -1375,11 +1368,11 @@ let _ =
               let (record, _) = _drawTwoLabelsAndThreeImages();
               let record = RenderIMGUITool.prepareFntData(record);
 
-              let record = ManageIMGUIAPI.init(gl, record);
+              let record =
+                ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
               let record =
                 ManageIMGUIAPI.render(
                   gl,
-                  (canvasWidth, canvasHeight),
                   record,
                 );
 

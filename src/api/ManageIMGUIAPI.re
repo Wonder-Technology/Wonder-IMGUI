@@ -1,6 +1,6 @@
 let createRecord = ManageIMGUIService.createRecord;
 
-let init = (gl, record) => ManageIMGUIService.init(gl, record);
+let init = ManageIMGUIService.init;
 
 let render = ManageIMGUIService.render;
 

@@ -122,9 +122,9 @@ let buildNoVAOExtension = sandbox => {
   getExtension;
 };
 
-let createCreateGlTextureStub = (sandbox) => {
+let createCreateGlTextureStub = sandbox => {
   open Sinon;
-  
+
   let fontTexture = Obj.magic(21);
   let customTexture1 = Obj.magic(22);
   let customTexture2 = Obj.magic(23);
@@ -136,8 +136,9 @@ let createCreateGlTextureStub = (sandbox) => {
   createTexture |> onCall(3) |> returns(customTexture3);
 
   (
-    ( fontTexture, customTexture1, customTexture2, customTexture3 ), createTexture
-  )
+    (fontTexture, customTexture1, customTexture2, customTexture3),
+    createTexture,
+  );
 };
 
 let testBufferData =
@@ -153,8 +154,10 @@ let testBufferData =
   let dynamic_draw = 2;
   let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
   let (
-    ( fontTexture, customTexture1, customTexture2, customTexture3 ), createTexture
-  ) = createCreateGlTextureStub(sandbox);
+    (fontTexture, customTexture1, customTexture2, customTexture3),
+    createTexture,
+  ) =
+    createCreateGlTextureStub(sandbox);
   let gl =
     FakeGlTool.buildFakeGl(
       ~sandbox,
@@ -171,10 +174,9 @@ let testBufferData =
   let record =
     record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
-  let record = ManageIMGUIAPI.init(gl, record);
+  let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
-  let record =
-    ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+  let record = ManageIMGUIAPI.render(gl, record);
 
   bufferData
   |> getCall(bufferDataCallCountAfterInit + bufferDataIndex)
@@ -221,10 +223,9 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
   let record =
     record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
-  let record = ManageIMGUIAPI.init(gl, record);
+  let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
-  let record =
-    ManageIMGUIAPI.render(gl, (canvasWidth, canvasHeight), record);
+  let record = ManageIMGUIAPI.render(gl, record);
 
   bufferData
   |> getCall(bufferDataCallCountAfterInit + 3)
