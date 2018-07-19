@@ -572,7 +572,8 @@ let _finish = (gl, record) => {
   record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
 };
 
-let getCustomData = ({customDataForIMGUIFunc}) => customDataForIMGUIFunc;
+let getCustomData = ({imguiFuncData}) =>
+  imguiFuncData.customDataForIMGUIFunc;
 
 let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
 
