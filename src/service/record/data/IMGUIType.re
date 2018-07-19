@@ -90,14 +90,18 @@ type apiJsObj = {
     imguiRecord,
 }
 and imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
+and imguiFuncData = {
+  imguiFunc: option(imguiFunc),
+  customDataForIMGUIFunc: option(customDataForIMGUIFunc),
+  apiJsObj,
+}
 and imguiRecord = {
   setting,
   assetData,
   fontData: option(fontData),
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
+  imguiFuncData
   /* ioData, */
   /* activeWidgetId: option(int), */
-  imguiFunc: option(imguiFunc),
-  customDataForIMGUIFunc: option(customDataForIMGUIFunc),
 };

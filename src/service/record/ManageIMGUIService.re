@@ -526,26 +526,31 @@ let _finish = (gl, canvasSize, record) => {
 
 let getCustomData = ({customDataForIMGUIFunc}) => customDataForIMGUIFunc;
 
-let getIMGUIFunc = ({imguiFunc}) => imguiFunc;
+let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
 
 let setIMGUIFunc = (customData, func, record) => {
   ...record,
-  imguiFunc: Some(func),
-  customDataForIMGUIFunc: Some(customData),
+  imguiFuncData: {
+    ...record.imguiFuncData,
+    imguiFunc: Some(func),
+    customDataForIMGUIFunc: Some(customData),
+  },
 };
+
+let _getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 
 let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
   "image": FixedLayoutControlIMGUIService.image,
 };
 
-let _exec = record =>
+let _exec = ({imguiFuncData} as record) =>
   switch (getIMGUIFunc(record)) {
   | None => record
   | Some(func) =>
     func(
-      record.customDataForIMGUIFunc |> OptionService.unsafeGet,
-      _buildAPIJsObj(),
+      imguiFuncData.customDataForIMGUIFunc |> OptionService.unsafeGet,
+      _getAPIJsObj(record),
       record,
     )
   };
@@ -577,6 +582,9 @@ let createRecord = () => {
        mousePositionCur: (0, 0),
        mousePositionPrev: (0, 0),
      }, */
-  imguiFunc: None,
-  customDataForIMGUIFunc: None,
+  imguiFuncData: {
+    apiJsObj: _buildAPIJsObj(),
+    imguiFunc: None,
+    customDataForIMGUIFunc: None,
+  },
 };
