@@ -77,6 +77,7 @@ let _generateIndices = (baseIndex, indexArr) =>
 
 let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
   let {textColor} = RecordIMGUIService.getSetting(record);
+  WonderLog.Log.print(textColor) |> ignore;
 
   switch (AssetIMGUIService.getFntData(record)) {
   | None =>
@@ -111,7 +112,7 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
 
              (
                verticeArr |> _generateVertices(x, y, layoutData),
-               colorArr |> _generateColor(textColor),
+               colorArr |> _generateColor(textColor) ,
                texCoordArr
                |> _generateTexCoords(
                     layoutData,
@@ -130,7 +131,8 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
         Some({
           ...webglData,
           currentFontTextureDrawDataBaseIndex:
-            DrawDataArrayService.getBaseIndex(verticeArr),
+            currentFontTextureDrawDataBaseIndex
+            + DrawDataArrayService.getBaseIndex(verticeArr),
         }),
       drawDataArr:
         drawDataArr

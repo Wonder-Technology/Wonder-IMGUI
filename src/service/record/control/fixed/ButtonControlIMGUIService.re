@@ -17,7 +17,7 @@ let _setLastColor = (currentColor, record) => {
 };
 
 let button = (rect, str, record) => {
-  let {buttonSpacing, buttonColor, hoverButtonColor, clickButtonColor} =
+  let {buttonColor, hoverButtonColor, clickButtonColor} =
     RecordIMGUIService.getSetting(record);
 
   let {mouseClick, mouseDown, mousePosition, mouseMovementDelte} =
@@ -30,7 +30,6 @@ let button = (rect, str, record) => {
         mouseDown ? (false, clickButtonColor) : (false, hoverButtonColor) :
       (false, buttonColor);
 
-  /* TODO test */
   let record =
     _isLastColorNotEqualCurrentColor(color, record) ?
       record

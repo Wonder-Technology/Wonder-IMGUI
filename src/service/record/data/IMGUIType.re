@@ -6,7 +6,6 @@ open FontType;
 
 type setting = {
   textColor: colorArr,
-  buttonSpacing: int,
   buttonColor: colorArr,
   hoverButtonColor: colorArr,
   clickButtonColor: colorArr,
@@ -94,6 +93,8 @@ type apiJsObj = {
       imguiRecord
     ) =>
     imguiRecord,
+  "button":
+    (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
 }
 and imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
 and imguiFuncData = {

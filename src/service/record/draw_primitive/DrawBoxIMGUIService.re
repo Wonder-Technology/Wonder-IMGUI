@@ -14,23 +14,32 @@ let draw = ((x, y, width, height), color, {drawDataArr} as record) => {
   let width = width |> NumberType.intToFloat;
   let height = height |> NumberType.intToFloat;
 
+  let verticeArr = [|
+    x,
+    y,
+    x,
+    y +. height,
+    x +. width,
+    y,
+    x +. width,
+    y +. height,
+  |];
+
   {
     ...record,
+    webglData:
+      Some({
+        ...webglData,
+        currentFontTextureDrawDataBaseIndex:
+          currentFontTextureDrawDataBaseIndex
+          + DrawDataArrayService.getBaseIndex(verticeArr),
+      }),
     drawDataArr:
       drawDataArr
       |> ArrayService.push({
            drawType: FontTexture,
            customTexture: None,
-           verticeArr: [|
-             x,
-             y,
-             x,
-             y +. height,
-             x +. width,
-             y,
-             x +. width,
-             y +. height,
-           |],
+           verticeArr,
            colorArr:
              color
              |> DrawDataArrayService.addPoints(color)

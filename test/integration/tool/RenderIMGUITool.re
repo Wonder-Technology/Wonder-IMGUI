@@ -4,6 +4,11 @@ open FontType;
 
 open IMGUIType;
 
+let buildCanvasSize = (~canvasWidth=1000, ~canvasHeight=500, ()) => (
+  canvasWidth,
+  canvasHeight,
+);
+
 let buildIOData =
     (
       ~mouseClick=false,
@@ -157,8 +162,8 @@ let createCreateGlTextureStub = sandbox => {
   );
 };
 
-let testBufferData =
-    (sandbox, bufferDataIndex, record, imguiFunc, targetBufferDataArr) => {
+let testBufferDataWithIOData =
+    (sandbox, bufferDataIndex, ioData, record, imguiFunc, targetBufferDataArr) => {
   open Wonder_jest;
   open Expect;
   open Expect.Operators;
@@ -192,7 +197,7 @@ let testBufferData =
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
-  let record = ManageIMGUIAPI.render(gl, buildIOData(), record);
+  let record = ManageIMGUIAPI.render(gl, ioData, record);
 
   bufferData
   |> getCall(bufferDataCallCountAfterInit + bufferDataIndex)
@@ -203,6 +208,28 @@ let testBufferData =
        dynamic_draw,
      |]);
 };
+
+let testColorBufferDataWithIOData =
+    (ioData, sandbox, record, imguiFunc, targetBufferDataArr) =>
+  testBufferDataWithIOData(
+    sandbox,
+    1,
+    ioData,
+    record,
+    imguiFunc,
+    targetBufferDataArr,
+  );
+
+let testBufferData =
+    (sandbox, bufferDataIndex, record, imguiFunc, targetBufferDataArr) =>
+  testBufferDataWithIOData(
+    sandbox,
+    bufferDataIndex,
+    buildIOData(),
+    record,
+    imguiFunc,
+    targetBufferDataArr,
+  );
 
 let testPositionBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
   testBufferData(sandbox, 0, record, imguiFunc, targetBufferDataArr);

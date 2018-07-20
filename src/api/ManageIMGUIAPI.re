@@ -9,7 +9,6 @@ let render = ManageIMGUIService.render;
 let getSetting = record => {
   let {
     textColor,
-    buttonSpacing,
     buttonColor,
     hoverButtonColor,
     clickButtonColor,
@@ -19,7 +18,6 @@ let getSetting = record => {
 
   {
     "textColor": textColor,
-    "buttonSpacing": buttonSpacing,
     "buttonColor": buttonColor,
     "hoverButtonColor": hoverButtonColor,
     "clickButtonColor": clickButtonColor,
@@ -31,7 +29,6 @@ let setSetting = (settingJsObj, record) =>
   RecordIMGUIService.setSetting(
     {
       textColor: settingJsObj##textColor,
-      buttonSpacing: settingJsObj##buttonSpacing,
       buttonColor: settingJsObj##buttonColor,
       hoverButtonColor: settingJsObj##hoverButtonColor,
       clickButtonColor: settingJsObj##clickButtonColor,

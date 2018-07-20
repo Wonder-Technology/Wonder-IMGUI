@@ -410,6 +410,7 @@ let _getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
   "image": FixedLayoutControlIMGUIService.image,
+  "button": FixedLayoutControlIMGUIService.button,
 };
 
 let _exec = ({imguiFuncData} as record) =>
@@ -430,7 +431,6 @@ let render = (gl, ioData, record) =>
 let createRecord = () => {
   setting: {
     textColor: [|1., 1., 1.|],
-    buttonSpacing: 3,
     buttonColor: [|0.35, 0.1, 0.1|],
     hoverButtonColor: [|0.40, 0.1, 0.1|],
     clickButtonColor: [|0.50, 0.1, 0.1|],
