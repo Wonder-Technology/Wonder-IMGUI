@@ -13,9 +13,8 @@ let image =
          AssetIMGUIService.unsafeGetCustomTexture(id, record),
        );
 
-/* let button = () => {
-
-   }; */
+let button = (rect, str, record) =>
+  ButtonControlIMGUIService.button(rect, str, record);
 
 /* let beginGroup = () => {
 

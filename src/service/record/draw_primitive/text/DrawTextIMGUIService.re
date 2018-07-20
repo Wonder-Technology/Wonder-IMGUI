@@ -29,12 +29,12 @@ let _generateVertices =
      |]);
 };
 
-let _generateColor = (textColorArr, colorArr) =>
+let _generateColor = (textColor, colorArr) =>
   colorArr
-  |> DrawDataArrayService.addPoints(textColorArr)
-  |> DrawDataArrayService.addPoints(textColorArr)
-  |> DrawDataArrayService.addPoints(textColorArr)
-  |> DrawDataArrayService.addPoints(textColorArr);
+  |> DrawDataArrayService.addPoints(textColor)
+  |> DrawDataArrayService.addPoints(textColor)
+  |> DrawDataArrayService.addPoints(textColor)
+  |> DrawDataArrayService.addPoints(textColor);
 
 let _generateTexCoords =
     ({position, data, index, line}, textureWidth, textureHeight, texCoordArr) => {
@@ -76,7 +76,7 @@ let _generateIndices = (baseIndex, indexArr) =>
      |]);
 
 let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
-  let {textColorArr} = RecordIMGUIService.getSetting(record);
+  let {textColor} = RecordIMGUIService.getSetting(record);
 
   switch (AssetIMGUIService.getFntData(record)) {
   | None =>
@@ -111,7 +111,7 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
 
              (
                verticeArr |> _generateVertices(x, y, layoutData),
-               colorArr |> _generateColor(textColorArr),
+               colorArr |> _generateColor(textColor),
                texCoordArr
                |> _generateTexCoords(
                     layoutData,

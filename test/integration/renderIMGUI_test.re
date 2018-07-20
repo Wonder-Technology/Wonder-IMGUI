@@ -151,7 +151,8 @@ let _ =
 
         let record =
           ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
-        let record = ManageIMGUIAPI.render(gl, record);
+        let record =
+          ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
         (record, canvasWidth, canvasHeight);
       };
@@ -192,8 +193,10 @@ let _ =
         let record =
           ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
-        let record = ManageIMGUIAPI.render(gl, record);
-        let record = ManageIMGUIAPI.render(gl, record);
+        let record =
+          ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
+        let record =
+          ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
         record.drawDataArr |> Js.Array.length |> expect == 1;
       });
@@ -249,10 +252,12 @@ let _ =
         let record =
           ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
-        let record = ManageIMGUIAPI.render(gl, record);
+        let record =
+          ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
         let bufferDataCallCountAfterFirstRender = bufferData |> getCallCount;
         let record = RenderIMGUITool.markNeedUpdateBufferData(record);
-        let record = ManageIMGUIAPI.render(gl, record);
+        let record =
+          ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
         bufferData
         |> getCall(bufferDataCallCountAfterFirstRender + 3)
@@ -274,7 +279,8 @@ let _ =
           ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record^);
 
         expect(() => {
-          let record = ManageIMGUIAPI.render(gl, record);
+          let record =
+            ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
           ();
         })
         |> not_
@@ -304,7 +310,8 @@ let _ =
                RenderIMGUITool.buildCustomData(), (_, apiJsObj, record) =>
                record
              );
-        let record = ManageIMGUIAPI.render(gl, record);
+        let record =
+          ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
         bindVertexArrayOES |> expect |> toCalledWith([|Js.Nullable.null|]);
       });
@@ -372,7 +379,8 @@ let _ =
 
           let record =
             ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
-          let record = ManageIMGUIAPI.render(gl, record);
+          let record =
+            ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
           (
             enableVertexAttribArray |> withOneArg(location) |> getCallCount,
@@ -1129,7 +1137,12 @@ let _ =
               |> withTwoArgs(texture2D, customTexture3)
               |> getCallCount;
 
-            let record = ManageIMGUIAPI.render(gl, record);
+            let record =
+              ManageIMGUIAPI.render(
+                gl,
+                RenderIMGUITool.buildIOData(),
+                record,
+              );
 
             (
               (
@@ -1222,7 +1235,12 @@ let _ =
               |> withTwoArgs(texture2D, customTexture3)
               |> getCallCount;
 
-            let record = ManageIMGUIAPI.render(gl, record);
+            let record =
+              ManageIMGUIAPI.render(
+                gl,
+                RenderIMGUITool.buildIOData(),
+                record,
+              );
 
             (
               bindTexture
@@ -1326,7 +1344,12 @@ let _ =
 
               let record =
                 ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
-              let record = ManageIMGUIAPI.render(gl, record);
+              let record =
+                ManageIMGUIAPI.render(
+                  gl,
+                  RenderIMGUITool.buildIOData(),
+                  record,
+                );
 
               (
                 drawElements
@@ -1371,7 +1394,12 @@ let _ =
 
               let record =
                 ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
-              let record = ManageIMGUIAPI.render(gl, record);
+              let record =
+                ManageIMGUIAPI.render(
+                  gl,
+                  RenderIMGUITool.buildIOData(),
+                  record,
+                );
 
               (
                 drawElements

@@ -2,6 +2,22 @@ open Js.Typed_array;
 
 open FontType;
 
+open IMGUIType;
+
+let buildIOData =
+    (
+      ~mouseClick=false,
+      ~mouseDown=false,
+      ~mousePosition=(0, 0),
+      ~mouseMovementDelte=(0, 0),
+      (),
+    ) => {
+  mouseClick,
+  mouseDown,
+  mousePosition,
+  mouseMovementDelte,
+};
+
 let buildLabelData = () => {
   let labelX1 = 10;
   let labelY1 = 20;
@@ -176,7 +192,7 @@ let testBufferData =
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
-  let record = ManageIMGUIAPI.render(gl, record);
+  let record = ManageIMGUIAPI.render(gl, buildIOData(), record);
 
   bufferData
   |> getCall(bufferDataCallCountAfterInit + bufferDataIndex)
@@ -225,7 +241,7 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
-  let record = ManageIMGUIAPI.render(gl, record);
+  let record = ManageIMGUIAPI.render(gl, buildIOData(), record);
 
   bufferData
   |> getCall(bufferDataCallCountAfterInit + 3)
@@ -262,4 +278,4 @@ let prepareFntData = record => {
 
 let buildCustomData = () => Obj.magic(501);
 
-let markNeedUpdateBufferData = ManageIMGUIService._markNeedUpdateBufferData;
+let markNeedUpdateBufferData = BufferDataIMGUIService.markNeedUpdateBufferData;

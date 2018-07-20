@@ -5,16 +5,22 @@ open StructureType;
 open FontType;
 
 type setting = {
-  /* textScale: float, */
-  textColorArr: colorArr,
+  textColor: colorArr,
+  buttonSpacing: int,
+  buttonColor: colorArr,
+  hoverButtonColor: colorArr,
+  clickButtonColor: colorArr,
+  fontTexUvForWhite: array(float),
 };
 
-/* type ioData = {
-     mouseLeftDownCur: bool,
-     mouseLeftDownPrev: bool,
-     mousePositionCur: (int, int),
-     mousePositionPrev: (int, int),
-   }; */
+type point('a) = ('a, 'a);
+
+type ioData = {
+  mouseClick: bool,
+  mouseDown: bool,
+  mousePosition: point(int),
+  mouseMovementDelte: point(int),
+};
 
 type lastWebglData = {
   lastProgram: option(program),
@@ -71,6 +77,8 @@ type assetData = {
     WonderCommonlib.HashMapService.t(WonderWebgl.GlType.texture),
 };
 
+type buttonData = {lastColor: option(colorArr)};
+
 type customDataForIMGUIFunc;
 
 type apiJsObj = {
@@ -100,7 +108,8 @@ and imguiRecord = {
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
+  buttonData,
   needUpdateBufferData: bool,
-  /* ioData, */
+  ioData,
   /* activeWidgetId: option(int), */
 };
