@@ -20,7 +20,7 @@ let button = (rect, str, record) => {
   let {buttonColor, hoverButtonColor, clickButtonColor} =
     RecordIMGUIService.getSetting(record);
 
-  let {mouseClick, mouseDown, mousePosition, mouseMovementDelte} =
+  let {mouseClick, mouseDown, mousePosition, mouseMovementDelta} =
     RecordIMGUIService.getIOData(record);
 
   let (isButtonClick, color) =

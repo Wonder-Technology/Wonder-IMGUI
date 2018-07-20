@@ -4,7 +4,17 @@ let createRecord = ManageIMGUIService.createRecord;
 
 let init = ManageIMGUIService.init;
 
-let render = ManageIMGUIService.render;
+let render = (gl, ioDataJsObj, record) =>
+  ManageIMGUIService.render(
+    gl,
+    {
+      mouseClick: ioDataJsObj##mouseClick,
+      mouseDown: ioDataJsObj##mouseDown,
+      mousePosition: ioDataJsObj##mousePosition,
+      mouseMovementDelta: ioDataJsObj##mouseMovementDelta,
+    },
+    record,
+  );
 
 let getSetting = record => {
   let {

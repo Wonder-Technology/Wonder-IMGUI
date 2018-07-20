@@ -451,7 +451,7 @@ let createRecord = () => {
     mouseClick: false,
     mouseDown: false,
     mousePosition: (0, 0),
-    mouseMovementDelte: (0, 0),
+    mouseMovementDelta: (0, 0),
   },
   /* mouseLeftDownCur: false,
      mouseLeftDownPrev: false, */

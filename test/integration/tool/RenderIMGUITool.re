@@ -14,13 +14,13 @@ let buildIOData =
       ~mouseClick=false,
       ~mouseDown=false,
       ~mousePosition=(0, 0),
-      ~mouseMovementDelte=(0, 0),
+      ~mouseMovementDelta=(0, 0),
       (),
     ) => {
-  mouseClick,
-  mouseDown,
-  mousePosition,
-  mouseMovementDelte,
+  "mouseClick": mouseClick,
+  "mouseDown": mouseDown,
+  "mousePosition": mousePosition,
+  "mouseMovementDelta": mouseMovementDelta,
 };
 
 let buildLabelData = () => {

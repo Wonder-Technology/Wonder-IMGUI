@@ -77,7 +77,6 @@ let _generateIndices = (baseIndex, indexArr) =>
 
 let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
   let {textColor} = RecordIMGUIService.getSetting(record);
-  WonderLog.Log.print(textColor) |> ignore;
 
   switch (AssetIMGUIService.getFntData(record)) {
   | None =>

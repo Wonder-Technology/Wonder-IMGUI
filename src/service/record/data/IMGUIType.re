@@ -18,7 +18,7 @@ type ioData = {
   mouseClick: bool,
   mouseDown: bool,
   mousePosition: point(int),
-  mouseMovementDelte: point(int),
+  mouseMovementDelta: point(int),
 };
 
 type lastWebglData = {
