@@ -15,10 +15,10 @@ type setting = {
 type point('a) = ('a, 'a);
 
 type ioData = {
-  mouseClick: bool,
-  mouseDown: bool,
-  mousePosition: point(int),
-  mouseMovementDelta: point(int),
+  pointUp: bool,
+  pointDown: bool,
+  pointPosition: point(int),
+  pointMovementDelta: point(int),
 };
 
 type lastWebglData = {

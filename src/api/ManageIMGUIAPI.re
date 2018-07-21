@@ -8,10 +8,10 @@ let render = (gl, ioDataJsObj, record) =>
   ManageIMGUIService.render(
     gl,
     {
-      mouseClick: ioDataJsObj##mouseClick,
-      mouseDown: ioDataJsObj##mouseDown,
-      mousePosition: ioDataJsObj##mousePosition,
-      mouseMovementDelta: ioDataJsObj##mouseMovementDelta,
+      pointUp: ioDataJsObj##pointUp,
+      pointDown: ioDataJsObj##pointDown,
+      pointPosition: ioDataJsObj##pointPosition,
+      pointMovementDelta: ioDataJsObj##pointMovementDelta,
     },
     record,
   );

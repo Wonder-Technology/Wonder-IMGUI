@@ -20,14 +20,14 @@ let button = (rect, str, record) => {
   let {buttonColor, hoverButtonColor, clickButtonColor} =
     RecordIMGUIService.getSetting(record);
 
-  let {mouseClick, mouseDown, mousePosition, mouseMovementDelta} =
+  let {pointUp, pointDown, pointPosition, pointMovementDelta} =
     RecordIMGUIService.getIOData(record);
 
   let (isButtonClick, color) =
-    HitService.inBox(rect, mousePosition) ?
-      mouseClick ?
+    HitService.inBox(rect, pointPosition) ?
+      pointDown && pointUp ?
         (true, clickButtonColor) :
-        mouseDown ? (false, clickButtonColor) : (false, hoverButtonColor) :
+        pointDown ? (false, clickButtonColor) : (false, hoverButtonColor) :
       (false, buttonColor);
 
   let record =

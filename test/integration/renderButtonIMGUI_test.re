@@ -59,9 +59,9 @@ let _ =
           ManageIMGUIAPI.render(
             gl,
             RenderIMGUITool.buildIOData(
-              ~mouseClick=false,
-              ~mouseDown=false,
-              ~mousePosition=(buttonX1, buttonY1),
+              ~pointUp=false,
+              ~pointDown=false,
+              ~pointPosition=(buttonX1, buttonY1),
               (),
             ),
             record,
@@ -71,9 +71,9 @@ let _ =
           ManageIMGUIAPI.render(
             gl,
             RenderIMGUITool.buildIOData(
-              ~mouseClick=false,
-              ~mouseDown=true,
-              ~mousePosition=(buttonX1, buttonY1),
+              ~pointUp=false,
+              ~pointDown=true,
+              ~pointPosition=(buttonX1, buttonY1),
               (),
             ),
             record,
@@ -90,9 +90,9 @@ let _ =
           ManageIMGUIAPI.render(
             gl,
             RenderIMGUITool.buildIOData(
-              ~mouseClick=false,
-              ~mouseDown=false,
-              ~mousePosition=(buttonX1, buttonY1),
+              ~pointUp=false,
+              ~pointDown=false,
+              ~pointPosition=(buttonX1, buttonY1),
               (),
             ),
             record,
@@ -102,9 +102,9 @@ let _ =
           ManageIMGUIAPI.render(
             gl,
             RenderIMGUITool.buildIOData(
-              ~mouseClick=false,
-              ~mouseDown=false,
-              ~mousePosition=(buttonX1, buttonY1),
+              ~pointUp=false,
+              ~pointDown=false,
+              ~pointPosition=(buttonX1, buttonY1),
               (),
             ),
             record,
@@ -403,9 +403,9 @@ let _ =
                 |],
                 RenderIMGUITool.testColorBufferDataWithIOData(
                   RenderIMGUITool.buildIOData(
-                    ~mouseClick=false,
-                    ~mouseDown=false,
-                    ~mousePosition=(buttonX1, buttonY1),
+                    ~pointUp=false,
+                    ~pointDown=false,
+                    ~pointPosition=(buttonX1, buttonY1),
                     (),
                   ),
                 ),
@@ -420,9 +420,9 @@ let _ =
 
             _testButtonClick(
               RenderIMGUITool.buildIOData(
-                ~mouseClick=false,
-                ~mouseDown=false,
-                ~mousePosition=(buttonX1, buttonY1),
+                ~pointUp=false,
+                ~pointDown=false,
+                ~pointPosition=(buttonX1, buttonY1),
                 (),
               ),
               false,
@@ -484,9 +484,9 @@ let _ =
                   |],
                   RenderIMGUITool.testColorBufferDataWithIOData(
                     RenderIMGUITool.buildIOData(
-                      ~mouseClick=false,
-                      ~mouseDown=true,
-                      ~mousePosition=(buttonX1, buttonY1),
+                      ~pointUp=false,
+                      ~pointDown=true,
+                      ~pointPosition=(buttonX1, buttonY1),
                       (),
                     ),
                   ),
@@ -502,9 +502,9 @@ let _ =
 
             _testButtonClick(
               RenderIMGUITool.buildIOData(
-                ~mouseClick=false,
-                ~mouseDown=true,
-                ~mousePosition=(buttonX1, buttonY1),
+                ~pointUp=false,
+                ~pointDown=true,
+                ~pointPosition=(buttonX1, buttonY1),
                 (),
               ),
               false,
@@ -566,9 +566,9 @@ let _ =
                   |],
                   RenderIMGUITool.testColorBufferDataWithIOData(
                     RenderIMGUITool.buildIOData(
-                      ~mouseClick=true,
-                      ~mouseDown=false,
-                      ~mousePosition=(buttonX1, buttonY1),
+                      ~pointUp=true,
+                      ~pointDown=true,
+                      ~pointPosition=(buttonX1, buttonY1),
                       (),
                     ),
                   ),
@@ -584,9 +584,9 @@ let _ =
 
             _testButtonClick(
               RenderIMGUITool.buildIOData(
-                ~mouseClick=true,
-                ~mouseDown=false,
-                ~mousePosition=(buttonX1, buttonY1),
+                ~pointUp=true,
+                ~pointDown=true,
+                ~pointPosition=(buttonX1, buttonY1),
                 (),
               ),
               true,
@@ -649,9 +649,9 @@ let _ =
               |],
               RenderIMGUITool.testColorBufferDataWithIOData(
                 RenderIMGUITool.buildIOData(
-                  ~mouseClick=false,
-                  ~mouseDown=false,
-                  ~mousePosition=(buttonX1 - 1, buttonY1),
+                  ~pointUp=false,
+                  ~pointDown=false,
+                  ~pointPosition=(buttonX1 - 1, buttonY1),
                   (),
                 ),
               ),
@@ -666,9 +666,9 @@ let _ =
 
           _testButtonClick(
             RenderIMGUITool.buildIOData(
-              ~mouseClick=true,
-              ~mouseDown=false,
-              ~mousePosition=(buttonX1 - 1, buttonY1),
+              ~pointUp=true,
+              ~pointDown=false,
+              ~pointPosition=(buttonX1 - 1, buttonY1),
               (),
             ),
             false,

@@ -448,10 +448,10 @@ let createRecord = () => {
   webglData: None,
   drawDataArr: [||],
   ioData: {
-    mouseClick: false,
-    mouseDown: false,
-    mousePosition: (0, 0),
-    mouseMovementDelta: (0, 0),
+    pointUp: false,
+    pointDown: false,
+    pointPosition: (0, 0),
+    pointMovementDelta: (0, 0),
   },
   /* mouseLeftDownCur: false,
      mouseLeftDownPrev: false, */

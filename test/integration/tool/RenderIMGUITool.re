@@ -11,16 +11,16 @@ let buildCanvasSize = (~canvasWidth=1000, ~canvasHeight=500, ()) => (
 
 let buildIOData =
     (
-      ~mouseClick=false,
-      ~mouseDown=false,
-      ~mousePosition=(0, 0),
-      ~mouseMovementDelta=(0, 0),
+      ~pointUp=false,
+      ~pointDown=false,
+      ~pointPosition=(0, 0),
+      ~pointMovementDelta=(0, 0),
       (),
     ) => {
-  "mouseClick": mouseClick,
-  "mouseDown": mouseDown,
-  "mousePosition": mousePosition,
-  "mouseMovementDelta": mouseMovementDelta,
+  "pointUp": pointUp,
+  "pointDown": pointDown,
+  "pointPosition": pointPosition,
+  "pointMovementDelta": pointMovementDelta,
 };
 
 let buildLabelData = () => {
