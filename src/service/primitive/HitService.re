@@ -4,5 +4,5 @@ let inBox = ((x, y, width, height), (posX, posY)) => {
   let maxX = x + width;
   let maxY = y + height;
 
-  minX <= posX && posX <= maxX && minY <= y && y <= maxY;
+  minX <= posX && posX <= maxX && minY <= posY && posY <= maxY;
 };

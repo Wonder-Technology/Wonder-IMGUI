@@ -660,19 +660,35 @@ let _ =
           })
         );
 
-        test("test button is not click", () => {
-          let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-            ButtonIMGUITool.buildButtonData1();
+        describe("test button is not click", () => {
+          test("test1", () => {
+            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+              ButtonIMGUITool.buildButtonData1();
 
-          _testButtonClick(
-            RenderIMGUITool.buildIOData(
-              ~pointUp=true,
-              ~pointDown=false,
-              ~pointPosition=(buttonX1 - 1, buttonY1),
-              (),
-            ),
-            false,
-          );
+            _testButtonClick(
+              RenderIMGUITool.buildIOData(
+                ~pointUp=true,
+                ~pointDown=false,
+                ~pointPosition=(buttonX1 - 1, buttonY1),
+                (),
+              ),
+              false,
+            );
+          });
+          test("test2", () => {
+            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+              ButtonIMGUITool.buildButtonData1();
+
+            _testButtonClick(
+              RenderIMGUITool.buildIOData(
+                ~pointUp=true,
+                ~pointDown=true,
+                ~pointPosition=(buttonX1, buttonY1 + buttonHeight1 + 1),
+                (),
+              ),
+              false,
+            );
+          });
         });
       });
     });

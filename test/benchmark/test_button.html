@@ -45,6 +45,8 @@
 
                     var buttonX = 200;
                     var buttonY = 20;
+                    var buttonWidth=100;
+                    var buttonHeight=100;
 
 
                     var recordForLoop = null;
@@ -57,9 +59,9 @@
 
                         recordForLoop = wdimgui.render(gl,
                             {
-                                mouseClick: true,
-                                pointDown: false,
-                                pointPosition: [buttonX - 1, buttonY],
+                                pointUp: true,
+                                pointDown: true,
+                                pointPosition: [buttonX , buttonY + buttonHeight ],
                                 pointMovementDelta: [0, 0],
                             },
                             record);
@@ -82,7 +84,7 @@
 
 
                                 var [record, isButtonClick] = button(
-                                    [buttonX, buttonY, 100, 100], "a", record
+                                    [buttonX, buttonY, buttonWidth, buttonHeight], "a", record
                                 );
 
 
