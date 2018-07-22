@@ -182,3 +182,15 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
 
   (record |> markNotNeedUpdateBufferData, drawElementsDataArr);
 };
+
+let coloredVertex =
+    (
+      positionArr,
+      colorArr,
+      (verticeArr, colorArr, texCoordArr),
+      fontTexUvForWhite,
+    ) => (
+  verticeArr |> Js.Array.concat(positionArr),
+  colorArr |> Js.Array.concat(colorArr),
+  texCoordArr |> Js.Array.concat(fontTexUvForWhite),
+);

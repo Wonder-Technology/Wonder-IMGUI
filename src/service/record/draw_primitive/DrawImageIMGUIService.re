@@ -25,10 +25,10 @@ let draw =
   /* let baseIndex = _getBaseIndex(drawDataArr); */
   let baseIndex = 0;
 
-  let x = x |> NumberType.intToFloat;
+  /* let x = x |> NumberType.intToFloat;
   let y = y |> NumberType.intToFloat;
   let width = width |> NumberType.intToFloat;
-  let height = height |> NumberType.intToFloat;
+  let height = height |> NumberType.intToFloat; */
 
   {
     ...record,

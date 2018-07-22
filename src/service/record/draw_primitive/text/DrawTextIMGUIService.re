@@ -11,10 +11,8 @@ let _generateVertices =
   let (x, y) = position;
   let w = charWidthInImage |> NumberType.intToFloat;
   let h = charHeightInImage |> NumberType.intToFloat;
-  let leftUpX =
-    (x |> NumberType.intToFloat) +. (posX |> NumberType.intToFloat);
-  let leftUpY =
-    (y |> NumberType.intToFloat) +. (posY |> NumberType.intToFloat);
+  let leftUpX = (x |> NumberType.intToFloat) +. posX;
+  let leftUpY = (y |> NumberType.intToFloat) +. posY;
 
   verticeArr
   |> DrawDataArrayService.addPoints([|
@@ -75,7 +73,7 @@ let _generateIndices = (baseIndex, indexArr) =>
        baseIndex + 1,
      |]);
 
-let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
+let draw = ((x, y, width, _), str, align, {drawDataArr} as record) => {
   let {textColor} = RecordIMGUIService.getSetting(record);
 
   switch (AssetIMGUIService.getFntData(record)) {
@@ -93,7 +91,7 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
     let layoutDataArr =
       BitmapFontLayoutIMGUIService.getLayoutData(
         str,
-        (width, 4, 0, align),
+        (width |> NumberType.floatToInt , 4, 0, align),
         fntData,
         record,
       );
@@ -111,7 +109,7 @@ let draw = ((x, y, width, height), str, align, {drawDataArr} as record) => {
 
              (
                verticeArr |> _generateVertices(x, y, layoutData),
-               colorArr |> _generateColor(textColor) ,
+               colorArr |> _generateColor(textColor),
                texCoordArr
                |> _generateTexCoords(
                     layoutData,

@@ -9,10 +9,10 @@ let draw = ((x, y, width, height), color, {drawDataArr} as record) => {
 
   let baseIndex = currentFontTextureDrawDataBaseIndex;
 
-  let x = x |> NumberType.intToFloat;
+  /* let x = x |> NumberType.intToFloat;
   let y = y |> NumberType.intToFloat;
   let width = width |> NumberType.intToFloat;
-  let height = height |> NumberType.intToFloat;
+  let height = height |> NumberType.intToFloat; */
 
   let verticeArr = [|
     x,

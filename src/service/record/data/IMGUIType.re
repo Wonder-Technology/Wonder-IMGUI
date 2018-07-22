@@ -4,12 +4,27 @@ open StructureType;
 
 open FontType;
 
-type setting = {
-  textColor: colorArr,
+type radioButtonSetting = {
+  radioButtonOuterColor: colorArr,
+  radioButtonInnerColor: colorArr,
+  radioButtonOuterColorHover: colorArr,
+  radioButtonInnerColorHover: colorArr,
+  radioButtonCircleSegments: int,
+  radioButtonInnerRadius: float,
+  radioButtonOuterRadius: float,
+};
+
+type buttonSetting = {
   buttonColor: colorArr,
   hoverButtonColor: colorArr,
   clickButtonColor: colorArr,
+};
+
+type setting = {
+  textColor: colorArr,
   fontTexUvForWhite: array(float),
+  buttonSetting,
+  radioButtonSetting,
 };
 
 type point('a) = ('a, 'a);
@@ -78,6 +93,11 @@ type assetData = {
 
 type buttonData = {lastColor: option(colorArr)};
 
+type radioButtonData = {
+  lastInnerColor: option(colorArr),
+  lastOuterColor: option(colorArr),
+};
+
 type groupData = {
   positionArr: array(position),
   /* isInGroup: bool, */
@@ -121,6 +141,7 @@ and imguiRecord = {
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
   buttonData,
+  radioButtonData,
   needUpdateBufferData: bool,
   ioData,
   layoutData,

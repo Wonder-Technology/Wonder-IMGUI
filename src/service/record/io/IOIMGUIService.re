@@ -1,3 +1,5 @@
+open IMGUIType;
+
 let buildIOData =
     (
       ~pointUp=false,
@@ -10,4 +12,10 @@ let buildIOData =
   "pointDown": pointDown,
   "pointPosition": pointPosition,
   "pointMovementDelta": pointMovementDelta,
+};
+
+let isClick = record => {
+  let {pointUp, pointDown} = RecordIMGUIService.getIOData(record);
+
+  pointDown && pointUp;
 };

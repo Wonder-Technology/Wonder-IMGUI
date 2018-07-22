@@ -433,10 +433,21 @@ let render = (gl, ioData, record) =>
 
 let createRecord = () => {
   setting: {
+    buttonSetting: {
+      buttonColor: [|0.35, 0.1, 0.1|],
+      hoverButtonColor: [|0.40, 0.1, 0.1|],
+      clickButtonColor: [|0.50, 0.1, 0.1|],
+    },
+    radioButtonSetting: {
+      radioButtonOuterColor: [|0.3, 0.3, 0.3|],
+      radioButtonInnerColor: [|0.15, 0.15, 0.15|],
+      radioButtonOuterColorHover: [|0.33, 0.33, 0.33|],
+      radioButtonInnerColorHover: [|0.18, 0.18, 0.18|],
+      radioButtonCircleSegments: 9,
+      radioButtonInnerRadius: 0.6,
+      radioButtonOuterRadius: 1.,
+    },
     textColor: [|1., 1., 1.|],
-    buttonColor: [|0.35, 0.1, 0.1|],
-    hoverButtonColor: [|0.40, 0.1, 0.1|],
-    clickButtonColor: [|0.50, 0.1, 0.1|],
     fontTexUvForWhite: [|0., 0.|],
   },
   assetData: {
@@ -463,6 +474,10 @@ let createRecord = () => {
   },
   buttonData: {
     lastColor: None,
+  },
+  radioButtonData: {
+    lastInnerColor: None,
+    lastOuterColor: None,
   },
   needUpdateBufferData: true,
   layoutData: {

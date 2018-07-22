@@ -18,14 +18,17 @@ let _setLastColor = (currentColor, record) => {
 
 let button = (rect, str, record) => {
   let {buttonColor, hoverButtonColor, clickButtonColor} =
-    RecordIMGUIService.getSetting(record);
+    RecordIMGUIService.getSetting(record).buttonSetting;
 
-  let {pointUp, pointDown, pointPosition, pointMovementDelta} =
+  let {pointUp, pointDown, pointPosition} =
     RecordIMGUIService.getIOData(record);
 
   let (isButtonClick, color) =
-    HitService.inBox(rect, pointPosition) ?
-      pointDown && pointUp ?
+    HitService.isInBox(
+      rect,
+      StructureService.convertIntPositionToFloatPosition(pointPosition),
+    ) ?
+      IOIMGUIService.isClick(record) ?
         (true, clickButtonColor) :
         pointDown ? (false, clickButtonColor) : (false, hoverButtonColor) :
       (false, buttonColor);
