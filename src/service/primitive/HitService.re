@@ -12,7 +12,7 @@ let isInCircle = ((x, y, width, height), (posX, posY)) => {
 
   let radius = width /. 2.;
 
-  let dist = Js.Math.sqrt((x -. centerX) ** 2. +. (y -. centerY) ** 2.);
+  let dist = Js.Math.sqrt((posX -. centerX) ** 2. +. (posY -. centerY) ** 2.);
 
   dist <= radius;
 };

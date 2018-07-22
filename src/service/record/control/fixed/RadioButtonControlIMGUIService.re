@@ -49,13 +49,15 @@ let radioButton = ((x, y, width, height), str, record) => {
   let outerCircleRect = (x, y, outerCircleWidth, outerCircleHeight);
 
   let (isSelected, innerColor, outerColor) =
-    HitService.isInCircle(outerCircleRect, pointPosition) ?
+    HitService.isInCircle(
+      outerCircleRect,
+      pointPosition |> StructureService.convertIntPositionToFloatPosition,
+    ) ?
       IOIMGUIService.isClick(record) ?
         (true, radioButtonInnerColorHover, radioButtonOuterColorHover) :
         (false, radioButtonInnerColorHover, radioButtonOuterColorHover) :
       (false, radioButtonInnerColor, radioButtonOuterColor);
 
-  /* TODO test */
   let record =
     _isLastColorNotEqualCurrentColor(innerColor, outerColor, record) ?
       record
