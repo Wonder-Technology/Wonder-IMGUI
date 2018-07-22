@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>benchmark</title>
+</head>
+
+<body>
+
+    <canvas id="aaa" width=900 height=500></canvas>
+
+    <script src="./IOTool.js"></script>
+    <script src="../../dist/wdimgui.js"></script>
+
+
+
+    <script>
+        window.onload = function () {
+
+            var canvas = document.querySelector("#aaa");
+
+            var gl = canvas.getContext("webgl");
+
+            var image1 = new Image();
+
+            image1.src = "./1.jpg";
+            image1.onload = () => {
+                var image2 = new Image();
+
+                image2.src = "./1.png";
+                image2.onload = () => {
+
+
+                    var record = wdimgui.createRecord();
+
+
+
+
+                    var record =
+                        wdimgui.addFont(
+                            "../res/font/myFont.fnt",
+                            "../res/font/myFont.png",
+                            record
+                        );
+
+                    var boxX = 200;
+                    var boxY = 20;
+                    var boxWidth = 100;
+                    var boxHeight = 100;
+
+
+                    var recordForLoop = null;
+
+                    function step(timestamp) {
+                        var record = recordForLoop;
+
+                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+                        recordForLoop = wdimgui.render(gl,
+                            buildIOData(),
+                            record);
+
+
+                        window.requestAnimationFrame(step);
+                    }
+
+                    wdimgui.load(
+                        [
+                            ["./1.jpg", "a1"],
+                            ["./1.png", "a2"],
+                        ],
+                        record)
+                        .then((record) => {
+                            var record = wdimgui.setIMGUIFunc(null, (_, apiJsObj, record) => {
+                                var box = apiJsObj.box;
+
+
+                                var record = box(
+                                    [boxX, boxY, boxWidth, boxHeight], [0.1, 0.2, 0.3], record
+                                );
+
+
+
+                                return record
+                            }, record);
+
+                            var record =
+                                wdimgui.setSetting(
+                                    {
+                                        "textColor": [1.0, 1.0, 1.0],
+                                        "boxColor": [0.5, 0.5, 0.5],
+                                        "hoverButtonColor": [0.5, 0.0, 1.0],
+                                        "clickButtonColor": [0.5, 1.0, 0.0],
+                                        "fontTexUvForWhite": [0.5, 0.5],
+                                    }, record
+                                );
+
+
+                            var record = wdimgui.init(gl, [canvas.width, canvas.height], record);
+
+
+                            gl.clearColor(0, 1, 1, 1);
+
+                            recordForLoop = record;
+
+
+                            window.requestAnimationFrame(step);
+                        })
+
+
+
+
+
+
+                };
+            }
+
+
+        };
+    </script>
+</body>
+
+</html>
