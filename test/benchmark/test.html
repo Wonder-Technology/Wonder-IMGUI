@@ -72,7 +72,12 @@
                         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-                        recordForLoop = wdimgui.render(gl, record);
+                        recordForLoop = wdimgui.render(gl, {
+                            pointUp: true,
+                            pointDown: true,
+                            pointPosition: [0,0],
+                            pointMovementDelta: [0, 0],
+                        }, record);
 
 
                         window.requestAnimationFrame(step);
