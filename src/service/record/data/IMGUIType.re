@@ -91,16 +91,12 @@ type assetData = {
     WonderCommonlib.HashMapService.t(WonderWebgl.GlType.texture),
 };
 
-/* type buttonData = {lastColorArr: array(colorArr)}; */
-
-/* type radioButtonData = {
-  lastInnerColor: option(colorArr),
-  lastOuterColor: option(colorArr),
-}; */
+type radioButtonData = {
+  isSelectedMap: WonderCommonlib.HashMapService.t(int),
+};
 
 type groupData = {
   positionArr: array(position),
-  /* isInGroup: bool, */
   index: int,
 };
 
@@ -125,7 +121,8 @@ type apiJsObj = {
     (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
   "box": (. (int, int, int, int), colorArr, imguiRecord) => imguiRecord,
   "radioButton":
-    (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
+    (. Js.Array.t(((int, int, int, int), string)), string, imguiRecord) =>
+    (imguiRecord, option(int)),
   "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
   "endGroup": (. imguiRecord) => imguiRecord,
 }
@@ -142,9 +139,7 @@ and imguiRecord = {
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
-  /* buttonData,
-  radioButtonData, */
-  /* needUpdateBufferData: bool, */
+  radioButtonData,
   ioData,
   layoutData,
   /* activeWidgetId: option(int), */

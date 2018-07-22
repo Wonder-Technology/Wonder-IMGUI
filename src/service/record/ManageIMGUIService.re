@@ -394,6 +394,7 @@ let getCustomData = ({imguiFuncData}) =>
 
 let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
 
+/* TODO clear data(e.g. radioButtonData) */
 let setIMGUIFunc = (customData, func, record) => {
   ...record,
   imguiFuncData: {
@@ -460,6 +461,9 @@ let createRecord = () => {
   fontData: None,
   webglData: None,
   drawDataArr: [||],
+  radioButtonData: {
+    isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+  },
   ioData: {
     pointUp: false,
     pointDown: false,

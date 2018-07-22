@@ -84,8 +84,22 @@
                                 var radioButton = apiJsObj.radioButton;
 
 
-                                var [record, isButtonClick] = radioButton(
-                                    [radioButtonX, radioButtonY, radioButtonWidth, radioButtonHeight], "a", record
+                                var [record, selectIndex] = radioButton(
+                                    [
+                                        [
+
+                                            [radioButtonX, radioButtonY, radioButtonWidth, radioButtonHeight], "a"
+
+                                        ],
+                                        [
+
+                                            [radioButtonX * 2, radioButtonY * 2, 100, 150],
+                                            "bc"
+
+                                        ]
+                                    ],
+                                    "group1",
+                                    record
                                 );
 
 
@@ -94,10 +108,6 @@
                                     [50, 150, 50, 100], [0, 0, 1, 1], "a1", record
                                 );
 
-
-                                var [record, isButtonClick] = radioButton(
-                                    [radioButtonX * 2, radioButtonY * 2, 100, 150], "bc", record
-                                );
 
 
 

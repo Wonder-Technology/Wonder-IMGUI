@@ -13,6 +13,4 @@ let setSetting = (setting, record) => {...record, setting};
 
 let getIOData = record => record.ioData;
 
-/* let getButtonData = record => record.buttonData;
-
-   let getRadioButtonData = record => record.radioButtonData; */
+let getRadioButtonData = record => record.radioButtonData;

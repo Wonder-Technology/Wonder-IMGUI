@@ -39,10 +39,5 @@ let box =
     );
 
 let radioButton =
-  (. rect, str, record) =>
-    RadioButtonControlIMGUIService.radioButton(
-      GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
-      |> StructureService.convertIntRectToFloatRect,
-      str,
-      record,
-    );
+  (. groupDataArr, group, record) =>
+    RadioButtonControlIMGUIService.radioButton(groupDataArr, group, record);
