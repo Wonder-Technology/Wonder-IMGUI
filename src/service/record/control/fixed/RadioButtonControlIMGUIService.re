@@ -1,28 +1,5 @@
 open IMGUIType;
 
-let _isLastColorNotEqualCurrentColor =
-    (currentInnerColor, currentOuterColor, record) => {
-  let {lastInnerColor, lastOuterColor} =
-    RecordIMGUIService.getRadioButtonData(record);
-
-  switch (lastInnerColor, lastOuterColor) {
-  | (Some(lastInnerColor), Some(lastOuterColor))
-      when
-        lastInnerColor == currentInnerColor
-        && lastOuterColor == currentOuterColor =>
-    false
-  | _ => true
-  };
-};
-
-let _setLastColor = (currentInnerColor, currentOuterColor, record) => {
-  ...record,
-  radioButtonData: {
-    lastInnerColor: Some(currentInnerColor),
-    lastOuterColor: Some(currentOuterColor),
-  },
-};
-
 let radioButton = ((x, y, width, height), str, record) => {
   let {
     radioButtonOuterColor,
@@ -57,13 +34,6 @@ let radioButton = ((x, y, width, height), str, record) => {
         (true, radioButtonInnerColorHover, radioButtonOuterColorHover) :
         (false, radioButtonInnerColorHover, radioButtonOuterColorHover) :
       (false, radioButtonInnerColor, radioButtonOuterColor);
-
-  let record =
-    _isLastColorNotEqualCurrentColor(innerColor, outerColor, record) ?
-      record
-      |> BufferDataIMGUIService.markNeedUpdateBufferData
-      |> _setLastColor(innerColor, outerColor) :
-      record;
 
   let record =
     record

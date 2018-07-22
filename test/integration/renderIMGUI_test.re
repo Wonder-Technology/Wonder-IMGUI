@@ -255,7 +255,6 @@ let _ =
         let record =
           ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
         let bufferDataCallCountAfterFirstRender = bufferData |> getCallCount;
-        let record = RenderIMGUITool.markNeedUpdateBufferData(record);
         let record =
           ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 

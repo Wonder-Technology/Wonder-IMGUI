@@ -394,16 +394,14 @@ let getCustomData = ({imguiFuncData}) =>
 
 let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
 
-let setIMGUIFunc = (customData, func, record) =>
-  {
-    ...record,
-    imguiFuncData: {
-      ...record.imguiFuncData,
-      imguiFunc: Some(func),
-      customDataForIMGUIFunc: Some(customData),
-    },
-  }
-  |> BufferDataIMGUIService.markNeedUpdateBufferData;
+let setIMGUIFunc = (customData, func, record) => {
+  ...record,
+  imguiFuncData: {
+    ...record.imguiFuncData,
+    imguiFunc: Some(func),
+    customDataForIMGUIFunc: Some(customData),
+  },
+};
 
 let _getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 
@@ -473,14 +471,6 @@ let createRecord = () => {
     imguiFunc: None,
     customDataForIMGUIFunc: None,
   },
-  buttonData: {
-    lastColor: None,
-  },
-  radioButtonData: {
-    lastInnerColor: None,
-    lastOuterColor: None,
-  },
-  needUpdateBufferData: true,
   layoutData: {
     groupData: {
       positionArr: [||],

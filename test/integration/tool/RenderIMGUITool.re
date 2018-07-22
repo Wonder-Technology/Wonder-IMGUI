@@ -305,4 +305,4 @@ let prepareFntData = record => {
 
 let buildCustomData = () => Obj.magic(501);
 
-let markNeedUpdateBufferData = BufferDataIMGUIService.markNeedUpdateBufferData;
+let getBufferDataCallCountPerRender = () => 4;

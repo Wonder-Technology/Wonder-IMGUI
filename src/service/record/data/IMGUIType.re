@@ -91,12 +91,12 @@ type assetData = {
     WonderCommonlib.HashMapService.t(WonderWebgl.GlType.texture),
 };
 
-type buttonData = {lastColor: option(colorArr)};
+/* type buttonData = {lastColorArr: array(colorArr)}; */
 
-type radioButtonData = {
+/* type radioButtonData = {
   lastInnerColor: option(colorArr),
   lastOuterColor: option(colorArr),
-};
+}; */
 
 type groupData = {
   positionArr: array(position),
@@ -142,9 +142,9 @@ and imguiRecord = {
   webglData: option(webglData),
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
-  buttonData,
-  radioButtonData,
-  needUpdateBufferData: bool,
+  /* buttonData,
+  radioButtonData, */
+  /* needUpdateBufferData: bool, */
   ioData,
   layoutData,
   /* activeWidgetId: option(int), */
