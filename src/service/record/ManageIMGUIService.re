@@ -411,6 +411,8 @@ let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
   "image": FixedLayoutControlIMGUIService.image,
   "button": FixedLayoutControlIMGUIService.button,
+  "beginGroup": GroupLayoutIMGUIService.beginGroup,
+  "endGroup": GroupLayoutIMGUIService.endGroup,
 };
 
 let _exec = ({imguiFuncData} as record) =>
@@ -453,10 +455,6 @@ let createRecord = () => {
     pointPosition: (0, 0),
     pointMovementDelta: (0, 0),
   },
-  /* mouseLeftDownCur: false,
-     mouseLeftDownPrev: false, */
-  /* mousePositionCur: (0, 0),
-     mousePositionPrev: (0, 0), */
   imguiFuncData: {
     apiJsObj: _buildAPIJsObj(),
     imguiFunc: None,
@@ -466,4 +464,10 @@ let createRecord = () => {
     lastColor: None,
   },
   needUpdateBufferData: true,
+  layoutData: {
+    groupData: {
+      positionArr: [||],
+      index: 0,
+    },
+  },
 };

@@ -78,6 +78,14 @@ type assetData = {
 
 type buttonData = {lastColor: option(colorArr)};
 
+type groupData = {
+  positionArr: array(position),
+  /* isInGroup: bool, */
+  index: int,
+};
+
+type layoutData = {groupData};
+
 type customDataForIMGUIFunc;
 
 type apiJsObj = {
@@ -95,6 +103,8 @@ type apiJsObj = {
     imguiRecord,
   "button":
     (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
+  "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
+  "endGroup": (. imguiRecord) => imguiRecord,
 }
 and imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
 and imguiFuncData = {
@@ -112,5 +122,6 @@ and imguiRecord = {
   buttonData,
   needUpdateBufferData: bool,
   ioData,
+  layoutData,
   /* activeWidgetId: option(int), */
 };

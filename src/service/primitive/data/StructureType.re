@@ -1,3 +1,4 @@
+type position = (int, int);
 
 type rect = (int, int, int, int);
 
