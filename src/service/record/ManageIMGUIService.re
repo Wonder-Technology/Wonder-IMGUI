@@ -411,6 +411,7 @@ let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
   "image": FixedLayoutControlIMGUIService.image,
   "button": FixedLayoutControlIMGUIService.button,
+  "box": FixedLayoutControlIMGUIService.box,
   "beginGroup": GroupLayoutIMGUIService.beginGroup,
   "endGroup": GroupLayoutIMGUIService.endGroup,
 };

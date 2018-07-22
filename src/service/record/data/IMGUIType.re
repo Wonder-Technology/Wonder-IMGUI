@@ -103,6 +103,7 @@ type apiJsObj = {
     imguiRecord,
   "button":
     (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
+  "box": (. (int, int, int, int), colorArr, imguiRecord) => imguiRecord,
   "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
   "endGroup": (. imguiRecord) => imguiRecord,
 }

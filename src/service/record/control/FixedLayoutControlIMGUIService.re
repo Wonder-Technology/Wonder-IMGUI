@@ -31,3 +31,11 @@ let button =
       str,
       record,
     );
+
+let box =
+  (. rect, color, record) =>
+    DrawBoxIMGUIService.draw(
+      GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record),
+      color,
+      record,
+    );
