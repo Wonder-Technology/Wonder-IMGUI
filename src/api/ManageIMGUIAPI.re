@@ -22,6 +22,7 @@ let getSetting = record => {
     buttonSetting,
     radioButtonSetting,
     checkboxSetting,
+    sliderSetting,
     fontTexUvForWhite,
   } =
     RecordIMGUIService.getSetting(record);
@@ -50,12 +51,19 @@ let getSetting = record => {
     "checkboxInnerSizeRatio": checkboxSetting.checkboxInnerSizeRatio,
     "checkboxOuterSizeRatio": checkboxSetting.checkboxOuterSizeRatio,
   };
+  let sliderSettingJsObj = {
+    "sliderBackgroundColor": sliderSetting.sliderBackgroundColor,
+    "sliderFillColor": sliderSetting.sliderFillColor,
+    "sliderBackgroundColorHover": sliderSetting.sliderBackgroundColorHover,
+    "sliderFillColorHover": sliderSetting.sliderFillColorHover,
+  };
 
   {
     "textColor": textColor,
     "buttonSetting": buttonSettingJsObj,
     "radioButtonSetting": radioButtonSettingJsObj,
     "checkboxSetting": checkboxSettingJsObj,
+    "sliderSetting": sliderSettingJsObj,
     "fontTexUvForWhite": fontTexUvForWhite,
   };
 };
@@ -64,6 +72,7 @@ let setSetting = (settingJsObj, record) => {
   let buttonSettingJsObj = settingJsObj##buttonSetting;
   let radioButtonSettingJsObj = settingJsObj##radioButtonSetting;
   let checkboxSettingJsObj = settingJsObj##checkboxSetting;
+  let sliderSettingJsObj = settingJsObj##sliderSetting;
 
   let buttonSetting = {
     buttonColor: buttonSettingJsObj##buttonColor,
@@ -90,12 +99,20 @@ let setSetting = (settingJsObj, record) => {
     checkboxOuterSizeRatio: checkboxSettingJsObj##checkboxOuterSizeRatio,
   };
 
+  let sliderSetting = {
+    sliderBackgroundColor: sliderSettingJsObj##sliderBackgroundColor,
+    sliderFillColor: sliderSettingJsObj##sliderFillColor,
+    sliderBackgroundColorHover: sliderSettingJsObj##sliderBackgroundColorHover,
+    sliderFillColorHover: sliderSettingJsObj##sliderFillColorHover,
+  };
+
   RecordIMGUIService.setSetting(
     {
       textColor: settingJsObj##textColor,
       buttonSetting,
       radioButtonSetting,
       checkboxSetting,
+      sliderSetting,
       fontTexUvForWhite: settingJsObj##fontTexUvForWhite,
     },
     record,

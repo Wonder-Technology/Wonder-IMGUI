@@ -45,7 +45,39 @@ let radioButton =
 let checkbox =
   (. rect, str, record) =>
     CheckboxControlIMGUIService.checkbox(
-      GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record),
+      GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
+      |> StructureService.convertIntRectToFloatRect,
       str,
+      record,
+    );
+
+let sliderInt =
+  (. (rect, textWidth), (min, max), (defaultValue, str), record) =>
+    SliderControlIMGUIService.sliderInt(
+      (
+        GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
+        |> StructureService.convertIntRectToFloatRect,
+        textWidth |> NumberType.intToFloat,
+      ),
+      (min, max),
+      (defaultValue, str),
+      record,
+    );
+
+let sliderFloat =
+  (.
+    (rect, textWidth),
+    (min, max, numDecimalDigits),
+    (defaultValue, str),
+    record,
+  ) =>
+    SliderControlIMGUIService.sliderFloat(
+      (
+        GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
+        |> StructureService.convertIntRectToFloatRect,
+        textWidth |> NumberType.intToFloat,
+      ),
+      (min, max, numDecimalDigits),
+      (defaultValue, str),
       record,
     );

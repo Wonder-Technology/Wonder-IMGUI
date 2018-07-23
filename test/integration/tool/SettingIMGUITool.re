@@ -18,6 +18,10 @@ let setSetting =
       ~checkboxInnerColorHover=[|1., 0.5, 0.3|],
       ~checkboxInnerSizeRatio=0.9,
       ~checkboxOuterSizeRatio=0.6,
+      ~sliderBackgroundColor=[|1., 0.5, 0.3|],
+      ~sliderFillColor=[|0.2, 0.5, 0.3|],
+      ~sliderBackgroundColorHover=[|1., 0.5, 0.3|],
+      ~sliderFillColorHover=[|1., 0.5, 0.3|],
       ~fontTexUvForWhite=[|0.5, 0.|],
       (),
     ) =>
@@ -45,6 +49,12 @@ let setSetting =
         "checkboxInnerColorHover": checkboxInnerColorHover,
         "checkboxInnerSizeRatio": checkboxInnerSizeRatio,
         "checkboxOuterSizeRatio": checkboxOuterSizeRatio,
+      },
+      "sliderSetting": {
+        "sliderBackgroundColor": sliderBackgroundColor,
+        "sliderFillColor": sliderFillColor,
+        "sliderBackgroundColorHover": sliderBackgroundColorHover,
+        "sliderFillColorHover": sliderFillColorHover,
       },
       "fontTexUvForWhite": fontTexUvForWhite,
     },

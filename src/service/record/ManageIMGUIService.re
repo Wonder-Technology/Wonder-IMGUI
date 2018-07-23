@@ -140,6 +140,11 @@ let init = (gl, canvasSize, record) =>
 let _prepare = (ioData, record) => {
   ...record,
   ioData,
+  sliderData: {
+    ...record.sliderData,
+    /* TODO test */
+    index: 0,
+  },
   drawDataArr: [||],
   webglData:
     Some({
@@ -423,6 +428,8 @@ let _buildAPIJsObj = () => {
   "box": FixedLayoutControlIMGUIService.box,
   "radioButton": FixedLayoutControlIMGUIService.radioButton,
   "checkbox": FixedLayoutControlIMGUIService.checkbox,
+  "sliderInt": FixedLayoutControlIMGUIService.sliderInt,
+  "sliderFloat": FixedLayoutControlIMGUIService.sliderFloat,
   "beginGroup": GroupLayoutIMGUIService.beginGroup,
   "endGroup": GroupLayoutIMGUIService.endGroup,
 };
@@ -466,6 +473,12 @@ let createRecord = () => {
       checkboxInnerSizeRatio: 1.4,
       checkboxOuterSizeRatio: 2.,
     },
+    sliderSetting: {
+      sliderBackgroundColor: [|0.16, 0.16, 0.16|],
+      sliderFillColor: [|0., 0.3, 0.6|],
+      sliderBackgroundColorHover: [|0.19, 0.19, 0.19|],
+      sliderFillColorHover: [|0., 0.3, 0.7|],
+    },
     textColor: [|1., 1., 1.|],
     fontTexUvForWhite: [|0., 0.|],
   },
@@ -482,6 +495,10 @@ let createRecord = () => {
   drawDataArr: [||],
   radioButtonData: {
     isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+  },
+  sliderData: {
+    index: 0,
+    valueMap: WonderCommonlib.SparseMapService.createEmpty(),
   },
   ioData: {
     pointUp: false,

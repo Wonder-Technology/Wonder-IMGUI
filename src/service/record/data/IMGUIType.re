@@ -29,12 +29,20 @@ type checkboxSetting = {
   checkboxOuterSizeRatio: float,
 };
 
+type sliderSetting = {
+  sliderBackgroundColor: colorArr,
+  sliderFillColor: colorArr,
+  sliderBackgroundColorHover: colorArr,
+  sliderFillColorHover: colorArr,
+};
+
 type setting = {
   textColor: colorArr,
   fontTexUvForWhite: array(float),
   buttonSetting,
   radioButtonSetting,
   checkboxSetting,
+  sliderSetting,
 };
 
 type point('a) = ('a, 'a);
@@ -105,6 +113,11 @@ type radioButtonData = {
   isSelectedMap: WonderCommonlib.HashMapService.t(int),
 };
 
+type sliderData = {
+  index: int,
+  valueMap: WonderCommonlib.SparseMapService.t(float),
+};
+
 type groupData = {
   positionArr: array(position),
   index: int,
@@ -135,6 +148,22 @@ type apiJsObj = {
     (imguiRecord, option(int)),
   "checkbox":
     (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
+  "sliderInt":
+    (
+      . ((int, int, int, int), int),
+      (int, int),
+      (int, string),
+      imguiRecord
+    ) =>
+    (imguiRecord, bool, int),
+  "sliderFloat":
+    (
+      . ((int, int, int, int), int),
+      (float, float, int),
+      (float, string),
+      imguiRecord
+    ) =>
+    (imguiRecord, bool, float),
   "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
   "endGroup": (. imguiRecord) => imguiRecord,
 }
@@ -152,6 +181,7 @@ and imguiRecord = {
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
   radioButtonData,
+  sliderData,
   ioData,
   layoutData,
   /* activeWidgetId: option(int), */

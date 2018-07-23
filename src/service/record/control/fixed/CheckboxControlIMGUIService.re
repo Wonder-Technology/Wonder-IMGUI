@@ -1,6 +1,6 @@
 open IMGUIType;
 
-let checkbox = (rect, str, record) => {
+let checkbox = ((x, y, width, height) as rect, str, record) => {
   let {
     checkboxOuterColor,
     checkboxInnerColor,
@@ -11,9 +11,6 @@ let checkbox = (rect, str, record) => {
   } =
     RecordIMGUIService.getSetting(record).checkboxSetting;
   let {pointPosition} = RecordIMGUIService.getIOData(record);
-
-  let (x, y, width, height) as rect =
-    rect |> StructureService.convertIntRectToFloatRect;
 
   let innerSize = height *. checkboxInnerSizeRatio;
   let outerSize = height *. checkboxOuterSizeRatio;
