@@ -45,10 +45,9 @@
                         );
 
                     var checkboxX = 200;
-                    var checkboxY = 20;
-                    var checkboxWidth = 100;
+                    var checkboxY = 400;
+                    var checkboxWidth = 400;
                     var checkboxHeight = 100;
-
 
                     var recordForLoop = null;
 
@@ -85,27 +84,31 @@
 
 
                                 var [record, isSelect1] = checkbox(
-                                    [checkboxX, checkboxY, checkboxWidth, checkboxHeight], "a",
+                                    [checkboxX, checkboxY, checkboxWidth, checkboxHeight], "c",
+                                    // [200, 400, 400, 100],
+                                    // "c",
                                     record
                                 );
 
-
-
-                                var record = image(
-                                    [50, 150, 50, 100], [0, 0, 1, 1], "a1", record
-                                );
+                                
 
 
 
-                                var [record, isSelect2] = checkbox(
-                                    [checkboxX * 2, checkboxY, checkboxWidth, checkboxHeight], "a",
-                                    record
-                                );
+                                // var record = image(
+                                //     [50, 150, 50, 100], [0, 0, 1, 1], "a1", record
+                                // );
 
 
-                                var record = label(
-                                    [20, 20, 300, 100], "ab", 1, record
-                                );
+
+                                // var [record, isSelect2] = checkbox(
+                                //     [checkboxX * 2, checkboxY, checkboxWidth, checkboxHeight], "a",
+                                //     record
+                                // );
+
+
+                                // var record = label(
+                                //     [20, 20, 300, 100], "ab", 1, record
+                                // );
 
 
                                 // console.log(isSelect1, isSelect2);

@@ -70,8 +70,8 @@ let checkbox = ((x, y, width, height) as rect, str, record) => {
       record
       |> DrawBoxIMGUIService.draw(
            (
-             0.5 *. (x +. (x +. width) -. innerSize) |> Js.Math.round,
-             0.5 *. (y +. (y +. height) -. innerSize) |> Js.Math.round,
+             0.5 *. (x +. (x +. outerSize) -. innerSize) |> Js.Math.round,
+             0.5 *. (y +. (y +. outerSize) -. innerSize) |> Js.Math.round,
              innerSize,
              innerSize,
            ),
