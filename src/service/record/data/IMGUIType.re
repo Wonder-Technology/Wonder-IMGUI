@@ -113,6 +113,11 @@ type radioButtonData = {
   isSelectedMap: WonderCommonlib.HashMapService.t(int),
 };
 
+type checkboxData = {
+  index: int,
+  isSelectedMap: WonderCommonlib.SparseMapService.t(bool),
+};
+
 type sliderData = {
   index: int,
   valueMap: WonderCommonlib.SparseMapService.t(float),
@@ -181,6 +186,7 @@ and imguiRecord = {
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
   radioButtonData,
+checkboxData,
   sliderData,
   ioData,
   layoutData,

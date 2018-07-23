@@ -58,6 +58,24 @@ function setSetting(record) {
                 "checkboxOuterSizeRatio":
                     1.0
             },
+            "sliderSetting": {
+
+                "sliderBackgroundColor": [0.3, 0.3, 0.3],
+                "sliderFillColor":
+
+
+
+                    [0.15, 0.15, 0.15],
+
+
+                "sliderBackgroundColorHover":
+                    [0.33, 0.33, 0.33],
+
+
+                "sliderFillColorHover":
+
+                    [0.15, 0.15, 0.15],
+            },
 
 
             "fontTexUvForWhite": [0.5, 0.5]

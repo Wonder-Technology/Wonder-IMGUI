@@ -604,5 +604,185 @@ let _ =
           );
         })
       );
+
+      describe("test select", () => {
+        test(
+          {|test first frame select it;
+   second frame not select it;
+
+   it should be still selected
+  |},
+          () => {
+            let (
+              (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+              str1,
+            ) =
+              CheckboxIMGUITool.buildCheckboxData1();
+            let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
+            let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+            let gl =
+              FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ~bufferData, ())
+              |> Obj.magic;
+            let isClick = ref(false);
+            let record =
+              record^
+              |> ManageIMGUIAPI.setIMGUIFunc(
+                   RenderIMGUITool.buildCustomData(),
+                   (_, apiJsObj, record) => {
+                     let checkboxFunc = apiJsObj##checkbox;
+                     let (record, isCheckboxClick) =
+                       checkboxFunc(.
+                         (
+                           checkboxX1,
+                           checkboxY1,
+                           checkboxWidth1,
+                           checkboxHeight1,
+                         ),
+                         str1,
+                         record,
+                       );
+
+                     isClick := isCheckboxClick;
+
+                     record;
+                   },
+                 );
+            let record = RenderIMGUITool.prepareFntData(record);
+            let record =
+              ManageIMGUIAPI.init(
+                gl,
+                RenderIMGUITool.buildCanvasSize(),
+                record,
+              );
+
+            let record =
+              ManageIMGUIAPI.render(
+                gl,
+                RenderIMGUITool.buildIOData(
+                  ~pointUp=true,
+                  ~pointDown=true,
+                  ~pointPosition=
+                    _buildHitPosition(
+                      checkboxX1,
+                      checkboxY1,
+                      checkboxWidth1,
+                      checkboxHeight1,
+                    ),
+                  (),
+                ),
+                record,
+              );
+
+            let record =
+              ManageIMGUIAPI.render(
+                gl,
+                RenderIMGUITool.buildIOData(
+                  ~pointUp=false,
+                  ~pointDown=false,
+                  ~pointPosition=
+                    _buildNotHitPosition(
+                      checkboxX1,
+                      checkboxY1,
+                      checkboxWidth1,
+                      checkboxHeight1,
+                    ),
+                  (),
+                ),
+                record,
+              );
+
+            isClick^ |> expect == true;
+          },
+        );
+
+        test(
+          {|test first frame select it;
+   second frame select it;
+
+   it should be not selected
+  |},
+          () => {
+            let (
+              (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+              str1,
+            ) =
+              CheckboxIMGUITool.buildCheckboxData1();
+            let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
+            let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+            let gl =
+              FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ~bufferData, ())
+              |> Obj.magic;
+            let isClick = ref(false);
+            let record =
+              record^
+              |> ManageIMGUIAPI.setIMGUIFunc(
+                   RenderIMGUITool.buildCustomData(),
+                   (_, apiJsObj, record) => {
+                     let checkboxFunc = apiJsObj##checkbox;
+                     let (record, isCheckboxClick) =
+                       checkboxFunc(.
+                         (
+                           checkboxX1,
+                           checkboxY1,
+                           checkboxWidth1,
+                           checkboxHeight1,
+                         ),
+                         str1,
+                         record,
+                       );
+
+                     isClick := isCheckboxClick;
+
+                     record;
+                   },
+                 );
+            let record = RenderIMGUITool.prepareFntData(record);
+            let record =
+              ManageIMGUIAPI.init(
+                gl,
+                RenderIMGUITool.buildCanvasSize(),
+                record,
+              );
+
+            let record =
+              ManageIMGUIAPI.render(
+                gl,
+                RenderIMGUITool.buildIOData(
+                  ~pointUp=true,
+                  ~pointDown=true,
+                  ~pointPosition=
+                    _buildHitPosition(
+                      checkboxX1,
+                      checkboxY1,
+                      checkboxWidth1,
+                      checkboxHeight1,
+                    ),
+                  (),
+                ),
+                record,
+              );
+
+            let record =
+              ManageIMGUIAPI.render(
+                gl,
+                RenderIMGUITool.buildIOData(
+                  ~pointUp=true,
+                  ~pointDown=true,
+                  ~pointPosition=
+                    _buildHitPosition(
+                      checkboxX1,
+                      checkboxY1,
+                      checkboxWidth1,
+                      checkboxHeight1,
+                    ),
+                  (),
+                ),
+                record,
+              );
+
+            isClick^ |> expect == false;
+          },
+        );
+      });
     });
   });

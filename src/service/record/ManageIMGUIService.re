@@ -142,7 +142,10 @@ let _prepare = (ioData, record) => {
   ioData,
   sliderData: {
     ...record.sliderData,
-    /* TODO test */
+    index: 0,
+  },
+  checkboxData: {
+    ...record.checkboxData,
     index: 0,
   },
   drawDataArr: [||],
@@ -495,6 +498,10 @@ let createRecord = () => {
   drawDataArr: [||],
   radioButtonData: {
     isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+  },
+  checkboxData: {
+    index: 0,
+    isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
   },
   sliderData: {
     index: 0,
