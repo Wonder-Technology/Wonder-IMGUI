@@ -41,3 +41,11 @@ let box =
 let radioButton =
   (. groupDataArr, group, record) =>
     RadioButtonControlIMGUIService.radioButton(groupDataArr, group, record);
+
+let checkbox =
+  (. rect, str, record) =>
+    CheckboxControlIMGUIService.checkbox(
+      GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record),
+      str,
+      record,
+    );

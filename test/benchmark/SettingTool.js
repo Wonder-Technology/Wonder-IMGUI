@@ -34,6 +34,30 @@ function setSetting(record) {
                 "radioButtonOuterRadius":
                     1.0
             },
+            "checkboxSetting": {
+
+                "checkboxOuterColor": [0.3, 0.3, 0.3],
+                "checkboxInnerColor":
+
+
+
+                    [0.15, 0.15, 0.15],
+
+
+                "checkboxOuterColorHover":
+                    [0.33, 0.33, 0.33],
+
+
+                "checkboxInnerColorHover":
+
+                    [0.15, 0.15, 0.15],
+
+
+                "checkboxInnerSizeRatio": 0.6,
+
+                "checkboxOuterSizeRatio":
+                    1.0
+            },
 
 
             "fontTexUvForWhite": [0.5, 0.5]

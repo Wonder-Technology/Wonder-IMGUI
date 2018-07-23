@@ -422,6 +422,7 @@ let _buildAPIJsObj = () => {
   "button": FixedLayoutControlIMGUIService.button,
   "box": FixedLayoutControlIMGUIService.box,
   "radioButton": FixedLayoutControlIMGUIService.radioButton,
+  "checkbox": FixedLayoutControlIMGUIService.checkbox,
   "beginGroup": GroupLayoutIMGUIService.beginGroup,
   "endGroup": GroupLayoutIMGUIService.endGroup,
 };
@@ -456,6 +457,14 @@ let createRecord = () => {
       radioButtonCircleSegments: 9,
       radioButtonInnerRadius: 0.6,
       radioButtonOuterRadius: 1.,
+    },
+    checkboxSetting: {
+      checkboxOuterColor: [|0.3, 0.3, 0.3|],
+      checkboxInnerColor: [|0.15, 0.15, 0.15|],
+      checkboxOuterColorHover: [|0.33, 0.33, 0.33|],
+      checkboxInnerColorHover: [|0.18, 0.18, 0.18|],
+      checkboxInnerSizeRatio: 1.4,
+      checkboxOuterSizeRatio: 2.,
     },
     textColor: [|1., 1., 1.|],
     fontTexUvForWhite: [|0., 0.|],

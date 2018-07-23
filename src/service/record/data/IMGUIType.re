@@ -20,11 +20,21 @@ type buttonSetting = {
   clickButtonColor: colorArr,
 };
 
+type checkboxSetting = {
+  checkboxOuterColor: colorArr,
+  checkboxInnerColor: colorArr,
+  checkboxOuterColorHover: colorArr,
+  checkboxInnerColorHover: colorArr,
+  checkboxInnerSizeRatio: float,
+  checkboxOuterSizeRatio: float,
+};
+
 type setting = {
   textColor: colorArr,
   fontTexUvForWhite: array(float),
   buttonSetting,
   radioButtonSetting,
+  checkboxSetting,
 };
 
 type point('a) = ('a, 'a);
@@ -123,6 +133,8 @@ type apiJsObj = {
   "radioButton":
     (. Js.Array.t(((int, int, int, int), string)), string, imguiRecord) =>
     (imguiRecord, option(int)),
+  "checkbox":
+    (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
   "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
   "endGroup": (. imguiRecord) => imguiRecord,
 }

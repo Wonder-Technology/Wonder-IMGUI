@@ -60,7 +60,7 @@ let _ =
                 RadioButtonIMGUITool.buildRadioButtonData1();
 
               let radioButtonFunc = apiJsObj##radioButton;
-              let (record, isRadioButtonClick) =
+              let (record, clickRadioButtonIndex) =
                 radioButtonFunc(.
                   [|
                     (
@@ -82,57 +82,6 @@ let _ =
           ),
           record,
         );
-
-      /* let _testRadioButtonClick = (ioData, result) => {
-           let (
-             (
-               radioButtonX1,
-               radioButtonY1,
-               radioButtonWidth1,
-               radioButtonHeight1,
-             ),
-             str1,
-             group1,
-           ) =
-             RadioButtonIMGUITool.buildRadioButtonData1();
-           let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
-           let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
-           let gl =
-             FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ~bufferData, ())
-             |> Obj.magic;
-           let isClick = ref(false);
-           let record =
-             record^
-             |> ManageIMGUIAPI.setIMGUIFunc(
-                  RenderIMGUITool.buildCustomData(),
-                  (_, apiJsObj, record) => {
-                    let radioButtonFunc = apiJsObj##radioButton;
-                    let (record, isRadioButtonClick) =
-                      radioButtonFunc(.
-                        (
-                          radioButtonX1,
-                          radioButtonY1,
-                          radioButtonWidth1,
-                          radioButtonHeight1,
-                        ),
-                        str1,
-                        group1,
-                        record,
-                      );
-
-                    isClick := isRadioButtonClick;
-
-                    record;
-                  },
-                );
-           let record = RenderIMGUITool.prepareFntData(record);
-           let record =
-             ManageIMGUIAPI.init(gl, RenderIMGUITool.buildCanvasSize(), record);
-
-           let record = ManageIMGUIAPI.render(gl, ioData, record);
-
-           isClick^ |> expect == result;
-         }; */
 
       describe("test buffer data", () =>
         describe("test draw circle and draw text", () => {
@@ -443,317 +392,9 @@ let _ =
 
       describe("if mouse hit radioButton", () => {
         describe("if mouse not click", () =>
-          describe("test color buffer data", ()
-            =>
-              test(
-                "outterColor should be hover color and not draw inner circle",
-                () => {
-                let (
-                  (
-                    radioButtonX1,
-                    radioButtonY1,
-                    radioButtonWidth1,
-                    radioButtonHeight1,
-                  ),
-                  str1,
-                  group1,
-                ) =
-                  RadioButtonIMGUITool.buildRadioButtonData1();
-
-                let record =
-                  SettingIMGUITool.setSetting(
-                    ~record=record^,
-                    ~radioButtonOuterColorHover=[|0., 0.2, 0.3|],
-                    ~radioButtonInnerColorHover=[|0.5, 0.5, 0.3|],
-                    (),
-                  );
-
-                _test(
-                  [|
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    0.,
-                    0.2,
-                    0.3,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                  |],
-                  RenderIMGUITool.testColorBufferDataWithIOData(
-                    RenderIMGUITool.buildIOData(
-                      ~pointUp=false,
-                      ~pointDown=false,
-                      ~pointPosition=
-                        _buildHitPosition(
-                          radioButtonX1,
-                          radioButtonY1,
-                          radioButtonWidth1,
-                          radioButtonHeight1,
-                        ),
-                      (),
-                    ),
-                  ),
-                  record,
-                );
-              })
-            )
-            /* test("test radioButton is not click", () => {
-                 let (
-                   (
-                     radioButtonX1,
-                     radioButtonY1,
-                     radioButtonWidth1,
-                     radioButtonHeight1,
-                   ),
-                   str1,
-                   group1,
-                 ) =
-                   RadioButtonIMGUITool.buildRadioButtonData1();
-
-                 _testRadioButtonClick(
-                   RenderIMGUITool.buildIOData(
-                     ~pointUp=false,
-                     ~pointDown=false,
-                     ~pointPosition=
-                       _buildHitPosition(
-                         radioButtonX1,
-                         radioButtonY1,
-                         radioButtonWidth1,
-                         radioButtonHeight1,
-                       ),
-                     (),
-                   ),
-                   false,
-                 );
-               }); */
-        );
-
-        describe("if mouse click", () =>
-          describe("test buffer data", ()
-            =>
-              describe("test color buffer data", () =>
-                test(
-                  "innerColor and outterColor should be hover color and should draw inner circle",
-                  () => {
-                    let record =
-                      SettingIMGUITool.setSetting(
-                        ~record=record^,
-                        ~radioButtonOuterColorHover=[|0.1, 0.2, 0.3|],
-                        ~radioButtonInnerColorHover=[|0.5, 0.5, 0.3|],
-                        (),
-                      );
-                    let (
-                      (
-                        radioButtonX1,
-                        radioButtonY1,
-                        radioButtonWidth1,
-                        radioButtonHeight1,
-                      ),
-                      str1,
-                      group1,
-                    ) =
-                      RadioButtonIMGUITool.buildRadioButtonData1();
-
-                    _test(
-                      [|
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.1,
-                        0.2,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        0.5,
-                        0.5,
-                        0.3,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                        1.,
-                      |],
-                      RenderIMGUITool.testColorBufferDataWithIOData(
-                        RenderIMGUITool.buildIOData(
-                          ~pointUp=true,
-                          ~pointDown=true,
-                          ~pointPosition=
-                            _buildHitPosition(
-                              radioButtonX1,
-                              radioButtonY1,
-                              radioButtonWidth1,
-                              radioButtonHeight1,
-                            ),
-                          (),
-                        ),
-                      ),
-                      record,
-                    );
-                  },
-                )
-              )
-            )
-            /* test("test radioButton is click", () => {
-                 let (
-                   (
-                     radioButtonX1,
-                     radioButtonY1,
-                     radioButtonWidth1,
-                     radioButtonHeight1,
-                   ),
-                   str1,
-                   group1,
-                 ) =
-                   RadioButtonIMGUITool.buildRadioButtonData1();
-
-                 _testRadioButtonClick(
-                   RenderIMGUITool.buildIOData(
-                     ~pointUp=true,
-                     ~pointDown=true,
-                     ~pointPosition=
-                       _buildHitPosition(
-                         radioButtonX1,
-                         radioButtonY1,
-                         radioButtonWidth1,
-                         radioButtonHeight1,
-                       ),
-                     (),
-                   ),
-                   true,
-                 );
-               }); */
-        );
-      });
-
-      describe("else", () =>
-        describe("test color buffer data", ()
-          =>
+          describe("test color buffer data", () =>
             test(
-              "outterColor should be radioButtonOuterColor and not draw inner circle",
-              () => {
+              "outterColor should be hover color and not draw inner circle", () => {
               let (
                 (
                   radioButtonX1,
@@ -769,43 +410,44 @@ let _ =
               let record =
                 SettingIMGUITool.setSetting(
                   ~record=record^,
-                  ~radioButtonOuterColor=[|0.1, 0.2, 0.3|],
+                  ~radioButtonOuterColorHover=[|0., 0.2, 0.3|],
+                  ~radioButtonInnerColorHover=[|0.5, 0.5, 0.3|],
                   (),
                 );
 
               _test(
                 [|
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
-                  0.1,
+                  0.,
                   0.2,
                   0.3,
                   1.,
@@ -837,7 +479,13 @@ let _ =
                   RenderIMGUITool.buildIOData(
                     ~pointUp=false,
                     ~pointDown=false,
-                    ~pointPosition=(radioButtonX1 - 1, radioButtonY1),
+                    ~pointPosition=
+                      _buildHitPosition(
+                        radioButtonX1,
+                        radioButtonY1,
+                        radioButtonWidth1,
+                        radioButtonHeight1,
+                      ),
                     (),
                   ),
                 ),
@@ -845,38 +493,335 @@ let _ =
               );
             })
           )
-          /* describe("test radioButton is not click", () =>
-               test("test1", () => {
-                 let (
-                   (
+        );
+        /* test("test radioButton is not click", () => {
+             let (
+               (
+                 radioButtonX1,
+                 radioButtonY1,
+                 radioButtonWidth1,
+                 radioButtonHeight1,
+               ),
+               str1,
+               group1,
+             ) =
+               RadioButtonIMGUITool.buildRadioButtonData1();
+
+             _testRadioButtonClick(
+               RenderIMGUITool.buildIOData(
+                 ~pointUp=false,
+                 ~pointDown=false,
+                 ~pointPosition=
+                   _buildHitPosition(
                      radioButtonX1,
                      radioButtonY1,
                      radioButtonWidth1,
                      radioButtonHeight1,
                    ),
-                   str1,
-                   group1,
-                 ) =
-                   RadioButtonIMGUITool.buildRadioButtonData1();
+                 (),
+               ),
+               false,
+             );
+           }); */
 
-                 _testRadioButtonClick(
-                   RenderIMGUITool.buildIOData(
-                     ~pointUp=true,
-                     ~pointDown=true,
-                     ~pointPosition=
-                       _buildNotHitPosition(
-                         radioButtonX1,
-                         radioButtonY1,
-                         radioButtonWidth1,
-                         radioButtonHeight1,
-                       ),
-                     (),
+        describe("if mouse click", () =>
+          describe("test buffer data", () =>
+            describe("test color buffer data", () =>
+              test(
+                "innerColor and outterColor should be hover color and should draw inner circle",
+                () => {
+                  let record =
+                    SettingIMGUITool.setSetting(
+                      ~record=record^,
+                      ~radioButtonOuterColorHover=[|0.1, 0.2, 0.3|],
+                      ~radioButtonInnerColorHover=[|0.5, 0.5, 0.3|],
+                      (),
+                    );
+                  let (
+                    (
+                      radioButtonX1,
+                      radioButtonY1,
+                      radioButtonWidth1,
+                      radioButtonHeight1,
+                    ),
+                    str1,
+                    group1,
+                  ) =
+                    RadioButtonIMGUITool.buildRadioButtonData1();
+
+                  _test(
+                    [|
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      0.5,
+                      0.5,
+                      0.3,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                      1.,
+                    |],
+                    RenderIMGUITool.testColorBufferDataWithIOData(
+                      RenderIMGUITool.buildIOData(
+                        ~pointUp=true,
+                        ~pointDown=true,
+                        ~pointPosition=
+                          _buildHitPosition(
+                            radioButtonX1,
+                            radioButtonY1,
+                            radioButtonWidth1,
+                            radioButtonHeight1,
+                          ),
+                        (),
+                      ),
+                    ),
+                    record,
+                  );
+                },
+              )
+            )
+          )
+        );
+        /* test("test radioButton is click", () => {
+             let (
+               (
+                 radioButtonX1,
+                 radioButtonY1,
+                 radioButtonWidth1,
+                 radioButtonHeight1,
+               ),
+               str1,
+               group1,
+             ) =
+               RadioButtonIMGUITool.buildRadioButtonData1();
+
+             _testRadioButtonClick(
+               RenderIMGUITool.buildIOData(
+                 ~pointUp=true,
+                 ~pointDown=true,
+                 ~pointPosition=
+                   _buildHitPosition(
+                     radioButtonX1,
+                     radioButtonY1,
+                     radioButtonWidth1,
+                     radioButtonHeight1,
                    ),
-                   false,
-                 );
-               })
-             ); */
+                 (),
+               ),
+               true,
+             );
+           }); */
+      });
+
+      describe("else", () =>
+        describe("test color buffer data", () =>
+          test(
+            "outterColor should be radioButtonOuterColor and not draw inner circle",
+            () => {
+            let (
+              (
+                radioButtonX1,
+                radioButtonY1,
+                radioButtonWidth1,
+                radioButtonHeight1,
+              ),
+              str1,
+              group1,
+            ) =
+              RadioButtonIMGUITool.buildRadioButtonData1();
+
+            let record =
+              SettingIMGUITool.setSetting(
+                ~record=record^,
+                ~radioButtonOuterColor=[|0.1, 0.2, 0.3|],
+                (),
+              );
+
+            _test(
+              [|
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                0.1,
+                0.2,
+                0.3,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+              |],
+              RenderIMGUITool.testColorBufferDataWithIOData(
+                RenderIMGUITool.buildIOData(
+                  ~pointUp=false,
+                  ~pointDown=false,
+                  ~pointPosition=(radioButtonX1 - 1, radioButtonY1),
+                  (),
+                ),
+              ),
+              record,
+            );
+          })
+        )
       );
+      /* describe("test radioButton is not click", () =>
+           test("test1", () => {
+             let (
+               (
+                 radioButtonX1,
+                 radioButtonY1,
+                 radioButtonWidth1,
+                 radioButtonHeight1,
+               ),
+               str1,
+               group1,
+             ) =
+               RadioButtonIMGUITool.buildRadioButtonData1();
+
+             _testRadioButtonClick(
+               RenderIMGUITool.buildIOData(
+                 ~pointUp=true,
+                 ~pointDown=true,
+                 ~pointPosition=
+                   _buildNotHitPosition(
+                     radioButtonX1,
+                     radioButtonY1,
+                     radioButtonWidth1,
+                     radioButtonHeight1,
+                   ),
+                 (),
+               ),
+               false,
+             );
+           })
+         ); */
 
       describe("test group", () => {
         test(
