@@ -33,13 +33,17 @@ let rec _drawCircle =
           fontTexUvForWhite,
         );
 
+      /* let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr); */
+
       let indexArr =
         theta !== 0. ?
           indexArr
           |> Js.Array.concat([|
-               curIndex + 0,
-               curIndex - 1,
-               centerVertexIndex,
+               /* baseIndex + curIndex + 0,
+               baseIndex + curIndex - 1, */
+                curIndex + 0,
+                curIndex - 1,
+                centerVertexIndex,
              |]) :
           indexArr;
 

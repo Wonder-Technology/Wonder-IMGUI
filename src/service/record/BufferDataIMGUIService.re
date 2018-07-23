@@ -70,8 +70,6 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
   } =
     RecordIMGUIService.unsafeGetWebglData(record);
 
-  /* let isNeedUpdateBufferData = _isNeedUpdateBufferData(record); */
-
   let (
     drawElementsDataArr,
     _,

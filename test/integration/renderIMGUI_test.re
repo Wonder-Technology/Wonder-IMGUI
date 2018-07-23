@@ -942,85 +942,369 @@ let _ =
             });
           })
         );
+
+        describe("fix bug", () =>
+          test("font texture draw data's order should keep no change", () => {
+            let (
+              (
+                radioButtonX1,
+                radioButtonY1,
+                radioButtonWidth1,
+                radioButtonHeight1,
+              ),
+              str1,
+              group1,
+            ) =
+              RadioButtonIMGUITool.buildRadioButtonData1();
+            let (
+              (
+                radioButtonX2,
+                radioButtonY2,
+                radioButtonWidth2,
+                radioButtonHeight2,
+              ),
+              str2,
+              group2,
+            ) =
+              RadioButtonIMGUITool.buildRadioButtonData2();
+            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+              ButtonIMGUITool.buildButtonData1();
+            let ((buttonX2, buttonY2, buttonWidth2, buttonHeight2), str2) =
+              ButtonIMGUITool.buildButtonData2();
+
+            let record = RenderIMGUITool.prepareFntData(record^);
+
+            RenderIMGUITool.testIndexBufferData(
+              sandbox,
+              record,
+              (_, apiJsObj, record) => {
+                let radioButton = apiJsObj##radioButton;
+                let button = apiJsObj##button;
+                let (record, _) =
+                  radioButton(.
+                    [|
+                      (
+                        (
+                          radioButtonX1,
+                          radioButtonY1,
+                          radioButtonWidth1,
+                          radioButtonHeight1,
+                        ),
+                        str1,
+                      ),
+                      (
+                        (
+                          radioButtonX2,
+                          radioButtonY2,
+                          radioButtonWidth2,
+                          radioButtonHeight2,
+                        ),
+                        str2,
+                      ),
+                    |],
+                    group1,
+                    record,
+                  );
+
+                let (record, _) =
+                  radioButton(.
+                    [|
+                      (
+                        (
+                          radioButtonX1,
+                          radioButtonY1,
+                          radioButtonWidth1,
+                          radioButtonHeight1,
+                        ),
+                        str1,
+                      ),
+                      (
+                        (
+                          radioButtonX2,
+                          radioButtonY2,
+                          radioButtonWidth2,
+                          radioButtonHeight2,
+                        ),
+                        str2,
+                      ),
+                    |],
+                    group1,
+                    record,
+                  );
+
+                let (record, _) =
+                  button(.
+                    (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                    str1,
+                    record,
+                  );
+
+                let (record, _) =
+                  button(.
+                    (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
+                    str2,
+                    record,
+                  );
+
+                record;
+              },
+              [|
+                2,
+                1,
+                0,
+                3,
+                2,
+                0,
+                4,
+                3,
+                0,
+                5,
+                4,
+                0,
+                6,
+                5,
+                0,
+                7,
+                6,
+                0,
+                8,
+                7,
+                0,
+                9,
+                8,
+                0,
+                10,
+                9,
+                0,
+                11,
+                12,
+                13,
+                14,
+                13,
+                12,
+                15,
+                16,
+                17,
+                18,
+                17,
+                16,
+                21,
+                20,
+                19,
+                22,
+                21,
+                19,
+                23,
+                22,
+                19,
+                24,
+                23,
+                19,
+                25,
+                24,
+                19,
+                26,
+                25,
+                19,
+                27,
+                26,
+                19,
+                28,
+                27,
+                19,
+                29,
+                28,
+                19,
+                30,
+                31,
+                32,
+                33,
+                32,
+                31,
+                36,
+                35,
+                34,
+                37,
+                36,
+                34,
+                38,
+                37,
+                34,
+                39,
+                38,
+                34,
+                40,
+                39,
+                34,
+                41,
+                40,
+                34,
+                42,
+                41,
+                34,
+                43,
+                42,
+                34,
+                44,
+                43,
+                34,
+                45,
+                46,
+                47,
+                48,
+                47,
+                46,
+                49,
+                50,
+                51,
+                52,
+                51,
+                50,
+                55,
+                54,
+                53,
+                56,
+                55,
+                53,
+                57,
+                56,
+                53,
+                58,
+                57,
+                53,
+                59,
+                58,
+                53,
+                60,
+                59,
+                53,
+                61,
+                60,
+                53,
+                62,
+                61,
+                53,
+                63,
+                62,
+                53,
+                64,
+                65,
+                66,
+                67,
+                66,
+                65,
+                68,
+                69,
+                70,
+                71,
+                70,
+                69,
+                72,
+                73,
+                74,
+                75,
+                74,
+                73,
+                76,
+                77,
+                78,
+                79,
+                78,
+                77,
+                80,
+                81,
+                82,
+                83,
+                82,
+                81,
+                84,
+                85,
+                86,
+                87,
+                86,
+                85,
+              |],
+            );
+          })
+        );
       });
 
-      /*
-       describe("set gl state", () => {
-         test("set after use program", () => {
-           let getExtension = _buildNoVAOExtension(sandbox);
-           let program = Obj.magic(1);
-           let createProgram = createEmptyStubWithJsObjSandbox(sandbox);
-           createProgram |> returns(program);
-           let useProgram = createEmptyStubWithJsObjSandbox(sandbox);
-           let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
-           let gl =
-             FakeGlTool.buildFakeGl(
-               ~sandbox,
-               ~getExtension,
-               ~createProgram,
-               ~useProgram,
-               ~blendFunc,
-               (),
-             )
-             |> Obj.magic;
+      describe("set gl state", () => {
+        test("set after use program", () => {
+          let getExtension = _buildNoVAOExtension(sandbox);
+          let program = Obj.magic(1);
+          let createProgram = createEmptyStubWithJsObjSandbox(sandbox);
+          createProgram |> returns(program);
+          let useProgram = createEmptyStubWithJsObjSandbox(sandbox);
+          let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
+          let gl =
+            FakeGlTool.buildFakeGl(
+              ~sandbox,
+              ~getExtension,
+              ~createProgram,
+              ~useProgram,
+              ~blendFunc,
+              (),
+            )
+            |> Obj.magic;
 
-           let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+          let _ = _prepareAndExecEmptyIMGUIFunc(gl);
 
-           blendFunc
-           |> getCall(0)
-           |> expect
-           |> toCalledAfter(useProgram |> getCall(0));
-         });
+          blendFunc
+          |> getCall(0)
+          |> expect
+          |> toCalledAfter(useProgram |> getCall(0));
+        });
 
-         test("disable depth test", () => {
-           let getExtension = _buildNoVAOExtension(sandbox);
-           let getDepthTest = Obj.magic(1);
-           let disable = createEmptyStubWithJsObjSandbox(sandbox);
-           let gl =
-             FakeGlTool.buildFakeGl(
-               ~sandbox,
-               ~getExtension,
-               ~disable,
-               ~getDepthTest,
-               (),
-             )
-             |> Obj.magic;
+        test("disable depth test", () => {
+          let getExtension = _buildNoVAOExtension(sandbox);
+          let getDepthTest = Obj.magic(1);
+          let disable = createEmptyStubWithJsObjSandbox(sandbox);
+          let gl =
+            FakeGlTool.buildFakeGl(
+              ~sandbox,
+              ~getExtension,
+              ~disable,
+              ~getDepthTest,
+              (),
+            )
+            |> Obj.magic;
 
-           let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+          let _ = _prepareAndExecEmptyIMGUIFunc(gl);
 
-           disable |> withOneArg(getDepthTest) |> getCallCount |> expect >= 1;
-         });
-         test("enable blend", () => {
-           let getExtension = _buildNoVAOExtension(sandbox);
-           let getBlend = Obj.magic(1);
-           let getSrcAlpha = Obj.magic(2);
-           let getOneMinusSrcAlpha = Obj.magic(3);
-           let enable = createEmptyStubWithJsObjSandbox(sandbox);
-           let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
-           let gl =
-             FakeGlTool.buildFakeGl(
-               ~sandbox,
-               ~getExtension,
-               ~getBlend,
-               ~getSrcAlpha,
-               ~getOneMinusSrcAlpha,
-               ~enable,
-               ~blendFunc,
-               (),
-             )
-             |> Obj.magic;
+          disable |> withOneArg(getDepthTest) |> getCallCount |> expect >= 1;
+        });
+        test("enable blend", () => {
+          let getExtension = _buildNoVAOExtension(sandbox);
+          let getBlend = Obj.magic(1);
+          let getSrcAlpha = Obj.magic(2);
+          let getOneMinusSrcAlpha = Obj.magic(3);
+          let enable = createEmptyStubWithJsObjSandbox(sandbox);
+          let blendFunc = createEmptyStubWithJsObjSandbox(sandbox);
+          let gl =
+            FakeGlTool.buildFakeGl(
+              ~sandbox,
+              ~getExtension,
+              ~getBlend,
+              ~getSrcAlpha,
+              ~getOneMinusSrcAlpha,
+              ~enable,
+              ~blendFunc,
+              (),
+            )
+            |> Obj.magic;
 
-           let _ = _prepareAndExecEmptyIMGUIFunc(gl);
+          let _ = _prepareAndExecEmptyIMGUIFunc(gl);
 
-           (
-             enable |> withOneArg(getBlend) |> getCallCount,
-             blendFunc
-             |> withTwoArgs(getSrcAlpha, getOneMinusSrcAlpha)
-             |> getCallCount,
-           )
-           |> expect == (1, 1);
-         });
-       }); */
+          (
+            enable |> withOneArg(getBlend) |> getCallCount,
+            blendFunc
+            |> withTwoArgs(getSrcAlpha, getOneMinusSrcAlpha)
+            |> getCallCount,
+          )
+          |> expect == (1, 1);
+        });
+      });
 
       describe("send uniform data", () => {
         test("send u_projectionMat data", () => {
