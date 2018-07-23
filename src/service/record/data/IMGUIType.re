@@ -186,9 +186,8 @@ and imguiRecord = {
   drawDataArr: DrawDataArrType.drawDataArr,
   imguiFuncData,
   radioButtonData,
-checkboxData,
+  checkboxData,
   sliderData,
   ioData,
   layoutData,
-  /* activeWidgetId: option(int), */
 };

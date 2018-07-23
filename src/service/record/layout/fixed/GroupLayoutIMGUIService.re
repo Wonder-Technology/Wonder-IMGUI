@@ -13,8 +13,8 @@ let beginGroup =
       layoutData: {
         ...record.layoutData,
         groupData: {
+          ...groupData,
           index: groupData.index + 1,
-          positionArr: groupData.positionArr,
         },
       },
     };

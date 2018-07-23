@@ -410,17 +410,39 @@ let _finish = (gl, record) => {
 let getCustomData = ({imguiFuncData}) =>
   imguiFuncData.customDataForIMGUIFunc;
 
-let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
-
-/* TODO clear data(e.g. radioButtonData) */
-let setIMGUIFunc = (customData, func, record) => {
+let _clearData = record => {
   ...record,
-  imguiFuncData: {
-    ...record.imguiFuncData,
-    imguiFunc: Some(func),
-    customDataForIMGUIFunc: Some(customData),
+  radioButtonData: {
+    isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+  },
+  checkboxData: {
+    index: 0,
+    isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
+  },
+  sliderData: {
+    index: 0,
+    valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+  },
+  layoutData: {
+    groupData: {
+      positionArr: [||],
+      index: 0,
+    },
   },
 };
+
+let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
+
+let setIMGUIFunc = (customData, func, record) =>
+  {
+    ...record,
+    imguiFuncData: {
+      ...record.imguiFuncData,
+      imguiFunc: Some(func),
+      customDataForIMGUIFunc: Some(customData),
+    },
+  }
+  |> _clearData;
 
 let _getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 

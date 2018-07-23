@@ -1863,4 +1863,55 @@ let _ =
         });
       });
     });
+
+    describe("fix bug", () =>
+      describe("setIMGUIFunc", () =>
+        test("clear all controls data and layout data", () => {
+          let {radioButtonData, checkboxData, sliderData, layoutData} as record =
+            record^;
+          let record = {
+            ...record,
+            radioButtonData: {
+              isSelectedMap:
+                radioButtonData.isSelectedMap
+                |> WonderCommonlib.HashMapService.set("aaa", 1),
+            },
+            checkboxData: {
+              index: 3,
+              isSelectedMap:
+                checkboxData.isSelectedMap
+                |> WonderCommonlib.SparseMapService.set(2, true),
+            },
+            sliderData: {
+              index: 4,
+              valueMap:
+                sliderData.valueMap
+                |> WonderCommonlib.SparseMapService.set(1, 1.5),
+            },
+            layoutData: {
+              groupData: {
+                positionArr: [|(1, 5)|],
+                index: 1,
+              },
+            },
+          };
+
+          let {radioButtonData, checkboxData, sliderData, layoutData} =
+            record
+            |> ManageIMGUIAPI.setIMGUIFunc(
+                 RenderIMGUITool.buildCustomData(), (_, apiJsObj, record) =>
+                 record
+               );
+
+          (
+            radioButtonData.isSelectedMap
+            |> WonderCommonlib.HashMapService.length,
+            checkboxData.isSelectedMap |> SparseMapService.length,
+            sliderData.valueMap |> SparseMapService.length,
+            layoutData.groupData.positionArr |> Js.Array.length,
+          )
+          |> expect == (0, 0, 0, 0);
+        })
+      )
+    );
   });
