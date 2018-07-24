@@ -132,47 +132,49 @@ type layoutData = {groupData};
 
 type customDataForIMGUIFunc;
 
-type apiJsObj = {
-  .
-  "label":
-    (. (int, int, int, int), string, FontType.align, imguiRecord) =>
-    imguiRecord,
-  "image":
-    (
-      . (int, int, int, int),
-      (float, float, float, float),
-      string,
-      imguiRecord
-    ) =>
-    imguiRecord,
-  "button":
-    (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
-  "box": (. (int, int, int, int), colorArr, imguiRecord) => imguiRecord,
-  "radioButton":
-    (. Js.Array.t(((int, int, int, int), string)), string, imguiRecord) =>
-    (imguiRecord, option(int)),
-  "checkbox":
-    (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
-  "sliderInt":
-    (
-      . ((int, int, int, int), int),
-      (int, int),
-      (int, string),
-      imguiRecord
-    ) =>
-    (imguiRecord, bool, int),
-  "sliderFloat":
-    (
-      . ((int, int, int, int), int),
-      (float, float, int),
-      (float, string),
-      imguiRecord
-    ) =>
-    (imguiRecord, bool, float),
-  "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
-  "endGroup": (. imguiRecord) => imguiRecord,
-}
-and imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
+type apiJsObj;
+
+/* type apiJsObj = {
+     .
+     "label":
+       (. (int, int, int, int), string, FontType.align, imguiRecord) =>
+       imguiRecord,
+     "image":
+       (
+         . (int, int, int, int),
+         (float, float, float, float),
+         string,
+         imguiRecord
+       ) =>
+       imguiRecord,
+     "button":
+       (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
+     "box": (. (int, int, int, int), colorArr, imguiRecord) => imguiRecord,
+     "radioButton":
+       (. Js.Array.t(((int, int, int, int), string)), string, imguiRecord) =>
+       (imguiRecord, option(int)),
+     "checkbox":
+       (. (int, int, int, int), string, imguiRecord) => (imguiRecord, bool),
+     "sliderInt":
+       (
+         . ((int, int, int, int), int),
+         (int, int),
+         (int, string),
+         imguiRecord
+       ) =>
+       (imguiRecord, bool, int),
+     "sliderFloat":
+       (
+         . ((int, int, int, int), int),
+         (float, float, int),
+         (float, string),
+         imguiRecord
+       ) =>
+       (imguiRecord, bool, float),
+     "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
+     "endGroup": (. imguiRecord) => imguiRecord,
+   } */
+type imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
 and imguiFuncData = {
   imguiFunc: option(imguiFunc),
   customDataForIMGUIFunc: option(customDataForIMGUIFunc),

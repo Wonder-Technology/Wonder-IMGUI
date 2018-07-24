@@ -38,6 +38,7 @@ let _ =
               let ((boxX1, boxY1, boxWidth1, boxHeight1), color) =
                 BoxIMGUITool.buildBoxData1();
 
+              let apiJsObj = Obj.magic(apiJsObj);
               let boxFunc = apiJsObj##box;
 
               let record =

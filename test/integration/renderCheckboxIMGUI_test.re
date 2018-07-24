@@ -53,6 +53,7 @@ let _ =
               ) =
                 CheckboxIMGUITool.buildCheckboxData1();
 
+              let apiJsObj = Obj.magic(apiJsObj);
               let checkboxFunc = apiJsObj##checkbox;
               let (record, isCheckboxClick) =
                 checkboxFunc(.
@@ -81,6 +82,7 @@ let _ =
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
                (_, apiJsObj, record) => {
+                 let apiJsObj = Obj.magic(apiJsObj);
                  let checkboxFunc = apiJsObj##checkbox;
                  let (record, isCheckboxClick) =
                    checkboxFunc(.
@@ -258,6 +260,7 @@ let _ =
                     ) =
                       CheckboxIMGUITool.buildCheckboxData1();
 
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let checkboxFunc = apiJsObj##checkbox;
 
                     let (record, _) =
@@ -629,6 +632,7 @@ let _ =
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
                    (_, apiJsObj, record) => {
+                     let apiJsObj = Obj.magic(apiJsObj);
                      let checkboxFunc = apiJsObj##checkbox;
                      let (record, isCheckboxClick) =
                        checkboxFunc(.
@@ -718,6 +722,7 @@ let _ =
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
                    (_, apiJsObj, record) => {
+                     let apiJsObj = Obj.magic(apiJsObj);
                      let checkboxFunc = apiJsObj##checkbox;
                      let (record, isCheckboxClick) =
                        checkboxFunc(.

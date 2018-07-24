@@ -39,6 +39,7 @@ let _ =
                 sandbox,
                 record,
                 (_, apiJsObj, record) => {
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
                     label(.
@@ -186,6 +187,7 @@ let _ =
                 sandbox,
                 record,
                 (_, apiJsObj, record) => {
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
                     label(.
@@ -214,6 +216,7 @@ let _ =
                 sandbox,
                 record,
                 (_, apiJsObj, record) => {
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
                     label(.
@@ -263,6 +266,7 @@ let _ =
                   sandbox,
                   record,
                   (_, apiJsObj, record) => {
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
                       label(.
@@ -324,6 +328,7 @@ let _ =
                   sandbox,
                   record,
                   (_, apiJsObj, record) => {
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
                       label(.
@@ -374,6 +379,7 @@ let _ =
                     sandbox,
                     record,
                     (_, apiJsObj, record) => {
+                      let apiJsObj = Obj.magic(apiJsObj);
                       let label = apiJsObj##label;
                       let record =
                         label(.
@@ -431,6 +437,7 @@ let _ =
                   sandbox,
                   record,
                   (_, apiJsObj, record) => {
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
                       label(.
@@ -476,6 +483,7 @@ let _ =
                   sandbox,
                   record,
                   (_, apiJsObj, record) => {
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
                       label(.

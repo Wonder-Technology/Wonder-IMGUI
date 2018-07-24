@@ -4,6 +4,10 @@ let createRecord = ManageIMGUIService.createRecord;
 
 let init = ManageIMGUIService.init;
 
+let _getRecord = record => record;
+
+let _setRecord = (record, data) => record;
+
 let render = (gl, ioDataJsObj, record) =>
   ManageIMGUIService.render(
     gl,
@@ -13,6 +17,8 @@ let render = (gl, ioDataJsObj, record) =>
       pointPosition: ioDataJsObj##pointPosition,
       pointMovementDelta: ioDataJsObj##pointMovementDelta,
     },
+    ManageIMGUIService.getAPIJsObj(record),
+    (_getRecord, _setRecord),
     record,
   );
 

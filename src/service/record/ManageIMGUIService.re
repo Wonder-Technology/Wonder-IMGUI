@@ -137,23 +137,28 @@ let init = (gl, canvasSize, record) =>
       };
     };
 
-let _prepare = (ioData, record) => {
-  ...record,
-  ioData,
-  sliderData: {
-    ...record.sliderData,
-    index: 0,
-  },
-  checkboxData: {
-    ...record.checkboxData,
-    index: 0,
-  },
-  drawDataArr: [||],
-  webglData:
-    Some({
-      ...RecordIMGUIService.unsafeGetWebglData(record),
-      currentFontTextureDrawDataBaseIndex: 0,
-    }),
+let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
+  let record = getRecordFunc(data);
+
+  {
+    ...record,
+    ioData,
+    sliderData: {
+      ...record.sliderData,
+      index: 0,
+    },
+    checkboxData: {
+      ...record.checkboxData,
+      index: 0,
+    },
+    drawDataArr: [||],
+    webglData:
+      Some({
+        ...RecordIMGUIService.unsafeGetWebglData(record),
+        currentFontTextureDrawDataBaseIndex: 0,
+      }),
+  }
+  |. setRecordFunc(data);
 };
 /* record; */
 
@@ -379,7 +384,9 @@ let _restoreGlState = (gl, record) => {
   record;
 };
 
-let _finish = (gl, record) => {
+let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
+  let record = getRecordFunc(data);
+
   /*
    If a VAO is already bound, we need to unbound it. Otherwise, we will write into a VAO created by the user of the library
    when calling vertexAttribPointer, which means that we would effectively corrupt the user data!
@@ -404,7 +411,10 @@ let _finish = (gl, record) => {
 
   _setGlState(gl);
 
-  record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl);
+  record
+  |> _draw(gl, drawElementsDataArr)
+  |> _restoreGlState(gl)
+  |. setRecordFunc(data);
 };
 
 let getCustomData = ({imguiFuncData}) =>
@@ -444,7 +454,7 @@ let setIMGUIFunc = (customData, func, record) =>
   }
   |> _clearData;
 
-let _getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
+let getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 
 let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
@@ -459,20 +469,32 @@ let _buildAPIJsObj = () => {
   "endGroup": GroupLayoutIMGUIService.endGroup,
 };
 
-let _exec = ({imguiFuncData} as record) =>
+let _exec = (apiJsObj, getRecordFunc, data) => {
+  let {imguiFuncData} as record = getRecordFunc(data);
+
   switch (getIMGUIFunc(record)) {
-  | None => record
+  | None => data
   | Some(func) =>
     func(
       imguiFuncData.customDataForIMGUIFunc |> OptionService.unsafeGet,
-      _getAPIJsObj(record),
-      record,
+      /* getAPIJsObj(record), */
+      apiJsObj,
+      /* record, */
+      data,
     )
   };
+};
 
-let render = (gl, ioData, record) =>
+let render = (gl, ioData, apiJsObj, (getRecordFunc, setRecordFunc), data) => {
+  let record = getRecordFunc(data);
+
   ! AssetIMGUIService.isLoadAsset(record) ?
-    record : record |> _prepare(ioData) |> _exec |> _finish(gl);
+    data :
+    data
+    |> _prepare(ioData, (getRecordFunc, setRecordFunc))
+    |> _exec(apiJsObj, getRecordFunc)
+    |> _finish(gl, (getRecordFunc, setRecordFunc));
+};
 
 let createRecord = () => {
   setting: {
@@ -536,7 +558,7 @@ let createRecord = () => {
     pointMovementDelta: (0, 0),
   },
   imguiFuncData: {
-    apiJsObj: _buildAPIJsObj(),
+    apiJsObj: _buildAPIJsObj() |> Obj.magic,
     imguiFunc: None,
     customDataForIMGUIFunc: None,
   },

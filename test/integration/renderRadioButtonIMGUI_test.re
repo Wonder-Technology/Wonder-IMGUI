@@ -59,6 +59,7 @@ let _ =
               ) =
                 RadioButtonIMGUITool.buildRadioButtonData1();
 
+              let apiJsObj = Obj.magic(apiJsObj);
               let radioButtonFunc = apiJsObj##radioButton;
               let (record, clickRadioButtonIndex) =
                 radioButtonFunc(.
@@ -345,6 +346,7 @@ let _ =
                     ) =
                       RadioButtonIMGUITool.buildRadioButtonData1();
 
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let radioButtonFunc = apiJsObj##radioButton;
 
                     let (record, _) =
@@ -859,6 +861,7 @@ let _ =
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
                    (_, apiJsObj, record) => {
+                     let apiJsObj = Obj.magic(apiJsObj);
                      let radioButtonFunc = apiJsObj##radioButton;
                      let (record, clickRadioButtonIndex) =
                        radioButtonFunc(.
@@ -976,6 +979,7 @@ let _ =
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
                    (_, apiJsObj, record) => {
+                     let apiJsObj = Obj.magic(apiJsObj);
                      let radioButtonFunc = apiJsObj##radioButton;
                      let (record, clickRadioButtonIndex) =
                        radioButtonFunc(.

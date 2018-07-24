@@ -38,6 +38,7 @@ let _ =
                   ) =
                     ButtonIMGUITool.buildButtonData1();
 
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let buttonFunc = apiJsObj##button;
                   let beginGroup = apiJsObj##beginGroup;
                   let endGroup = apiJsObj##endGroup;
@@ -108,6 +109,7 @@ let _ =
                     ) =
                       ButtonIMGUITool.buildButtonData2();
 
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let buttonFunc = apiJsObj##button;
                     let beginGroup = apiJsObj##beginGroup;
                     let endGroup = apiJsObj##endGroup;

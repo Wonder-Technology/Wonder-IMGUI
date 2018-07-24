@@ -38,6 +38,7 @@ let _ =
               let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
                 ButtonIMGUITool.buildButtonData1();
 
+              let apiJsObj = Obj.magic(apiJsObj);
               let buttonFunc = apiJsObj##button;
               let (record, isButtonClick) =
                 buttonFunc(.
@@ -66,6 +67,7 @@ let _ =
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
                (_, apiJsObj, record) => {
+                 let apiJsObj = Obj.magic(apiJsObj);
                  let buttonFunc = apiJsObj##button;
                  let (record, isButtonClick) =
                    buttonFunc(.
@@ -229,6 +231,7 @@ let _ =
                     ) =
                       ButtonIMGUITool.buildButtonData1();
 
+                    let apiJsObj = Obj.magic(apiJsObj);
                     let buttonFunc = apiJsObj##button;
                     let (record, isButtonClick) =
                       buttonFunc(.
