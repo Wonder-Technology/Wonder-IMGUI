@@ -2,7 +2,7 @@ open IMGUIType;
 
 open FontType;
 
-open DrawDataArrType;
+open DrawDataType;
 
 let _generateVertices =
     (posX, posY, {position, data, index, line}, verticeArr) => {
@@ -73,7 +73,7 @@ let _generateIndices = (baseIndex, indexArr) =>
        baseIndex + 1,
      |]);
 
-let draw = ((x, y, width, _), str, align, {drawDataArr} as record) => {
+let draw = ((x, y, width, _), str, align, record) => {
   let {textColor} = RecordIMGUIService.getSetting(record);
 
   switch (AssetIMGUIService.getFntData(record)) {
@@ -91,21 +91,23 @@ let draw = ((x, y, width, _), str, align, {drawDataArr} as record) => {
     let layoutDataArr =
       BitmapFontLayoutIMGUIService.getLayoutData(
         str,
-        (width |> NumberType.floatToInt , 4, 0, align),
+        (width |> NumberType.floatToInt, 4, 0, align),
         fntData,
         record,
       );
 
-    let {currentFontTextureDrawDataBaseIndex} as webglData =
-      RecordIMGUIService.unsafeGetWebglData(record);
+      /* TODO remove currentFontTextureDrawDataBaseIndex */
+    /* let {currentFontTextureDrawDataBaseIndex} as webglData =
+       RecordIMGUIService.unsafeGetWebglData(record); */
+    let {verticeArr, colorArr, texCoordArr, indexArr} =
+      RecordIMGUIService.getFontTextureDrawData(record);
 
     let (verticeArr, colorArr, texCoordArr, indexArr) =
       layoutDataArr
       |> WonderCommonlib.ArrayService.reduceOneParam(
            (. (verticeArr, colorArr, texCoordArr, indexArr), layoutData) => {
-             let baseIndex =
-               DrawDataArrayService.getBaseIndex(verticeArr)
-               + currentFontTextureDrawDataBaseIndex;
+             let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
+             /* + currentFontTextureDrawDataBaseIndex; */
 
              (
                verticeArr |> _generateVertices(x, y, layoutData),
@@ -119,28 +121,21 @@ let draw = ((x, y, width, _), str, align, {drawDataArr} as record) => {
                indexArr |> _generateIndices(baseIndex),
              );
            },
-           ([||], [||], [||], [||]),
+           (verticeArr, colorArr, texCoordArr, indexArr),
          );
 
     {
       ...record,
-      webglData:
-        Some({
-          ...webglData,
-          currentFontTextureDrawDataBaseIndex:
-            currentFontTextureDrawDataBaseIndex
-            + DrawDataArrayService.getBaseIndex(verticeArr),
-        }),
-      drawDataArr:
-        drawDataArr
-        |> ArrayService.push({
-             drawType: FontTexture,
-             customTexture: None,
-             verticeArr,
-             colorArr,
-             texCoordArr,
-             indexArr,
-           }),
+      drawData: {
+        ...record.drawData,
+        fontTextureDrawData: {
+          ...record.drawData.fontTextureDrawData,
+          verticeArr,
+          colorArr,
+          texCoordArr,
+          indexArr,
+        },
+      },
     };
   };
 };

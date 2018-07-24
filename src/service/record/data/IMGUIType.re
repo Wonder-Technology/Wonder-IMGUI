@@ -130,6 +130,11 @@ type groupData = {
 
 type layoutData = {groupData};
 
+type drawData = {
+  fontTextureDrawData: DrawDataType.drawData,
+  customTextureDrawDataArr: DrawDataType.drawDataArr,
+};
+
 type customDataForIMGUIFunc;
 
 type apiJsObj;
@@ -186,7 +191,7 @@ and imguiRecord = {
   assetData,
   fontData: option(fontData),
   webglData: option(webglData),
-  drawDataArr: DrawDataArrType.drawDataArr,
+  drawData,
   imguiFuncData,
   radioButtonData,
   checkboxData,

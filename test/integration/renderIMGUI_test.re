@@ -159,6 +159,17 @@ let _ =
       };
 
       test("clear drawDataArr", () => {
+        open DrawDataType;
+
+        let (
+          (
+            (labelX1, labelY1, labelWidth1, labelHeight1),
+            labelStr1,
+            labelAlign1,
+          ),
+          _,
+        ) =
+          RenderIMGUITool.buildLabelData();
         let (
           (
             (imageX1, imageY1, imageWidth1, imageHeight1),
@@ -169,20 +180,30 @@ let _ =
           _,
         ) =
           RenderIMGUITool.buildImageData();
+        let record = RenderIMGUITool.prepareFntData(record^);
         let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
         let gl =
           FakeGlTool.buildFakeGl(~sandbox, ~getExtension, ()) |> Obj.magic;
         let canvasWidth = 1000;
         let canvasHeight = 500;
         let record =
-          record^
+          record
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
                (. _, apiJsObj, record) => {
                  let apiJsObj = Obj.magic(apiJsObj);
-                 let imageFunc = apiJsObj##image;
+                 let label = apiJsObj##label;
+                 let image = apiJsObj##image;
+
                  let record =
-                   imageFunc(.
+                   label(.
+                     (labelX1, labelY1, labelWidth1, labelHeight1),
+                     labelStr1,
+                     labelAlign1,
+                     record,
+                   );
+                 let record =
+                   image(.
                      (imageX1, imageY1, imageWidth1, imageHeight1),
                      (imageS01, imageT01, imageS11, imageT11),
                      textureId1,
@@ -200,7 +221,13 @@ let _ =
         let record =
           ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
-        record.drawDataArr |> Js.Array.length |> expect == 1;
+        let {fontTextureDrawData, customTextureDrawDataArr} = record.drawData;
+
+        (
+          fontTextureDrawData.verticeArr |> Js.Array.length,
+          customTextureDrawDataArr |> Js.Array.length,
+        )
+        |> expect == (8, 1);
       });
 
       test("reset currentFontTextureDrawDataBaseIndex", () => {
@@ -722,7 +749,7 @@ let _ =
                 sandbox,
                 record^,
                 (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
                     image(.
@@ -770,7 +797,7 @@ let _ =
                 sandbox,
                 record,
                 (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
                     label(.
@@ -824,7 +851,7 @@ let _ =
                 sandbox,
                 record,
                 (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let image = apiJsObj##image;
                   let record =
@@ -873,7 +900,7 @@ let _ =
                 sandbox,
                 record,
                 (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
                     image(.
@@ -925,7 +952,7 @@ let _ =
                 sandbox,
                 record,
                 (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                  let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
                     image(.
@@ -992,7 +1019,7 @@ let _ =
               sandbox,
               record,
               (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                let apiJsObj = Obj.magic(apiJsObj);
                 let radioButton = apiJsObj##radioButton;
                 let button = apiJsObj##button;
                 let (record, _) =
@@ -1613,7 +1640,7 @@ let _ =
                 |> ManageIMGUIAPI.setIMGUIFunc(
                      RenderIMGUITool.buildCustomData(),
                      (. _, apiJsObj, record) => {
-              let apiJsObj = Obj.magic(apiJsObj);
+                       let apiJsObj = Obj.magic(apiJsObj);
                        let image = apiJsObj##image;
                        let record =
                          image(.

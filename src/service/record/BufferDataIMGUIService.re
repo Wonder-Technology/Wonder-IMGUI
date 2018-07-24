@@ -1,4 +1,4 @@
-open DrawDataArrType;
+open DrawDataType;
 
 open IMGUIType;
 
@@ -34,29 +34,6 @@ let _bufferElementArrayBufferData = (buffer, pointArr, gl) => {
   gl;
 };
 
-let _addCustomTextureDrawDataBaseIndex = ({verticeArr, indexArr} as drawData) => {
-  let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
-
-  {
-    ...drawData,
-    indexArr:
-      indexArr
-      |> ArrayService.chunk(6)
-      |> WonderCommonlib.ArrayService.reduceOneParam(
-           (. resultArr, singleDrawDataIndexArr) => {
-             let totalIndexCount = (resultArr |> Js.Array.length) / 6 * 4;
-
-             resultArr
-             |> Js.Array.concat(
-                  singleDrawDataIndexArr
-                  |> Js.Array.map(index => index + totalIndexCount),
-                );
-           },
-           [||],
-         ),
-  };
-};
-
 let bufferAllData = (gl, groupedDrawDataArr, record) => {
   let {
     program,
@@ -79,12 +56,6 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
     totalIndexArr,
   ) =
     groupedDrawDataArr
-    |> Js.Array.map((({drawType}: drawData) as drawData) =>
-         switch (drawType) {
-         | CustomTexture => _addCustomTextureDrawDataBaseIndex(drawData)
-         | _ => drawData
-         }
-       )
     |> WonderCommonlib.ArrayService.reduceOneParam(
          (.
            (
@@ -102,28 +73,35 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
              colorArr,
              texCoordArr,
              indexArr,
-           }: drawData,
+           }: DrawDataType.drawData,
          ) => {
            let count = indexArr |> Js.Array.length;
 
-           let baseIndex = DrawDataArrayService.getBaseIndex(totalVerticeArr);
+           switch (count) {
+           | 0 => (
+               drawElementsDataArr,
+               0,
+               totalVerticeArr,
+               totalColorArr,
+               totalTexCoordArr,
+               totalIndexArr,
+             )
+           | count =>
+             let newCountOffset = countOffset + count * 2;
 
-           let newCountOffset = countOffset + count * 2;
-
-           (
-             drawElementsDataArr
-             |> ArrayService.push(
-                  {drawType, customTexture, count, countOffset}: drawElementsData,
-                ),
-             newCountOffset,
-             totalVerticeArr |> Js.Array.concat(verticeArr),
-             totalColorArr |> Js.Array.concat(colorArr),
-             totalTexCoordArr |> Js.Array.concat(texCoordArr),
-             totalIndexArr
-             |> Js.Array.concat(
-                  indexArr |> Js.Array.map(index => index + baseIndex),
-                ),
-           );
+             (
+               drawElementsDataArr
+               |> ArrayService.push(
+                    {drawType, customTexture, count, countOffset}: drawElementsData,
+                  ),
+               newCountOffset,
+               /* TODO optimize */
+               totalVerticeArr |> Js.Array.concat(verticeArr),
+               totalColorArr |> Js.Array.concat(colorArr),
+               totalTexCoordArr |> Js.Array.concat(texCoordArr),
+               totalIndexArr |> Js.Array.concat(indexArr),
+             );
+           };
          },
          ([||], 0, [||], [||], [||], [||]),
        );

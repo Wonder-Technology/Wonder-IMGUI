@@ -1,6 +1,6 @@
 open IMGUIType;
 
-open DrawDataArrType;
+open DrawDataType;
 
 let _unitCircle = (centerX, centerY, theta, radius) => [|
   centerX +. radius *. Js.Math.cos(theta),
@@ -40,10 +40,10 @@ let rec _drawCircle =
           indexArr
           |> Js.Array.concat([|
                /* baseIndex + curIndex + 0,
-               baseIndex + curIndex - 1, */
-                curIndex + 0,
-                curIndex - 1,
-                centerVertexIndex,
+                  baseIndex + curIndex - 1, */
+               curIndex + 0,
+               curIndex - 1,
+               centerVertexIndex,
              |]) :
           indexArr;
 
@@ -69,22 +69,22 @@ let rec _drawCircle =
  Render a circle, where the top-left corner of the circle is `position`
  Where `segments` is how many triangle segments the triangle is rendered with.
  */
-let draw = ((x, y, width, height), color, segments, {drawDataArr} as record) => {
-  let {currentFontTextureDrawDataBaseIndex} as webglData =
-    RecordIMGUIService.unsafeGetWebglData(record);
+let draw = ((x, y, width, height), color, segments, record) => {
+  /* let {currentFontTextureDrawDataBaseIndex} as webglData =
+     RecordIMGUIService.unsafeGetWebglData(record); */
   let {fontTexUvForWhite} = RecordIMGUIService.getSetting(record);
 
-  let baseIndex = currentFontTextureDrawDataBaseIndex;
 
   let centerX = x +. 0.5 *. width;
   let centerY = y +. 0.5 *. height;
 
   let radius = width /. 2.;
 
-  let verticeArr = [||];
-  let colorArr = [||];
-  let texCoordArr = [||];
-  let indexArr = [||];
+  let {verticeArr, colorArr, texCoordArr, indexArr} =
+    RecordIMGUIService.getFontTextureDrawData(record);
+
+  /* let baseIndex = currentFontTextureDrawDataBaseIndex; */
+  let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
 
   /* add center vertex. */
   let (verticeArr, colorArr, texCoordArr) =
@@ -116,22 +116,15 @@ let draw = ((x, y, width, height), color, segments, {drawDataArr} as record) => 
 
   {
     ...record,
-    webglData:
-      Some({
-        ...webglData,
-        currentFontTextureDrawDataBaseIndex:
-          currentFontTextureDrawDataBaseIndex
-          + DrawDataArrayService.getBaseIndex(verticeArr),
-      }),
-    drawDataArr:
-      drawDataArr
-      |> ArrayService.push({
-           drawType: FontTexture,
-           customTexture: None,
-           verticeArr,
-           colorArr,
-           texCoordArr,
-           indexArr,
-         }),
+    drawData: {
+      ...record.drawData,
+      fontTextureDrawData: {
+        ...record.drawData.fontTextureDrawData,
+        verticeArr,
+        colorArr,
+        texCoordArr,
+        indexArr,
+      },
+    },
   };
 };
