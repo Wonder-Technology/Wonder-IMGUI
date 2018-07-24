@@ -17,7 +17,7 @@ let load = (fetchFunc, {assetData} as record) => {
 
   FetchService.createFetchBlobStream(bitmapFilePath, fetchFunc)
   |> flatMap(blob =>
-ImageService.       loadImageByBlobPromise(blob |> Blob.createObjectURL)
+       ImageService.loadImageByBlobPromise(blob |> Blob.createObjectURL)
        |> tap(image => Blob.revokeObjectURL(blob))
      )
   |> map(image => {

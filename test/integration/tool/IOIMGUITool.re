@@ -50,7 +50,7 @@ let buildFakeURL = [%raw
 
 let buildFakeLoadImage = [%bs.raw
   () => {|
-            window.loadImageBlob_wonder = function(objectUrl, resolve, reject){
+            window.loadImageBlob_wonder_imgui = function(objectUrl, resolve, reject){
                 resolve(objectUrl)
             }
 

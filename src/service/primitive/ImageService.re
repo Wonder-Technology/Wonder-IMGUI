@@ -23,8 +23,8 @@ let getType = src =>
 
 let _loadBlobImage = [%raw
   (objectUrl, resolve, reject) => {|
-          if (typeof window.loadImageBlob_wonder === "undefined") {
-  window.loadImageBlob_wonder = function(objectUrl, resolve, reject){
+          if (typeof window.loadImageBlob_wonder_imgui === "undefined") {
+  window.loadImageBlob_wonder_imgui = function(objectUrl, resolve, reject){
                       var image = new Image();
 
                       image.src = objectUrl;
@@ -40,7 +40,7 @@ let _loadBlobImage = [%raw
   };
           }
 
-  window.loadImageBlob_wonder(objectUrl, resolve, reject)
+  window.loadImageBlob_wonder_imgui(objectUrl, resolve, reject)
     |}
 ];
 
