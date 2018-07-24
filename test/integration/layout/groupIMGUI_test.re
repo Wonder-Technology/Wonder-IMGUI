@@ -31,7 +31,7 @@ let _ =
               bufferData,
               (
                 testBufferDataFunc,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let (
                     (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
                     str1,
@@ -102,7 +102,7 @@ let _ =
                 bufferData,
                 (
                   testBufferDataFunc,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let (
                       (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
                       str2,

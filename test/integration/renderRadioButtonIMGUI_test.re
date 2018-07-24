@@ -46,7 +46,7 @@ let _ =
           bufferData,
           (
             testBufferDataFunc,
-            (_, apiJsObj, record) => {
+            (. _, apiJsObj, record) => {
               let (
                 (
                   radioButtonX1,
@@ -322,7 +322,7 @@ let _ =
                 |],
                 (
                   RenderIMGUITool.testIndexBufferData,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let (
                       (
                         radioButtonX1,
@@ -860,7 +860,7 @@ let _ =
               record^
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
-                   (_, apiJsObj, record) => {
+                   (. _, apiJsObj, record) => {
                      let apiJsObj = Obj.magic(apiJsObj);
                      let radioButtonFunc = apiJsObj##radioButton;
                      let (record, clickRadioButtonIndex) =
@@ -978,7 +978,7 @@ let _ =
               record^
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
-                   (_, apiJsObj, record) => {
+                   (. _, apiJsObj, record) => {
                      let apiJsObj = Obj.magic(apiJsObj);
                      let radioButtonFunc = apiJsObj##radioButton;
                      let (record, clickRadioButtonIndex) =

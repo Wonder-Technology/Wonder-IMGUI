@@ -46,7 +46,7 @@ let _ =
           bufferData,
           (
             testBufferDataFunc,
-            (_, apiJsObj, record) => {
+            (. _, apiJsObj, record) => {
               let (
                 (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
                 str1,
@@ -81,7 +81,7 @@ let _ =
           record^
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
-               (_, apiJsObj, record) => {
+               (. _, apiJsObj, record) => {
                  let apiJsObj = Obj.magic(apiJsObj);
                  let checkboxFunc = apiJsObj##checkbox;
                  let (record, isCheckboxClick) =
@@ -238,7 +238,7 @@ let _ =
                 |],
                 (
                   RenderIMGUITool.testIndexBufferData,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let (
                       (
                         checkboxX1,
@@ -631,7 +631,7 @@ let _ =
               record^
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
-                   (_, apiJsObj, record) => {
+                   (. _, apiJsObj, record) => {
                      let apiJsObj = Obj.magic(apiJsObj);
                      let checkboxFunc = apiJsObj##checkbox;
                      let (record, isCheckboxClick) =
@@ -721,7 +721,7 @@ let _ =
               record^
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
-                   (_, apiJsObj, record) => {
+                   (. _, apiJsObj, record) => {
                      let apiJsObj = Obj.magic(apiJsObj);
                      let checkboxFunc = apiJsObj##checkbox;
                      let (record, isCheckboxClick) =

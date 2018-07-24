@@ -68,7 +68,7 @@ let _ =
           record
           |> ManageIMGUIAPI.setIMGUIFunc(
                Obj.magic(1),
-               (_, apiJsObj, record) => {
+               (. _, apiJsObj, record) => {
                  let apiJsObj = Obj.magic(apiJsObj);
                  let label = apiJsObj##label;
                  let image = apiJsObj##image;
@@ -146,7 +146,7 @@ let _ =
         let record =
           record^
           |> ManageIMGUIAPI.setIMGUIFunc(
-               RenderIMGUITool.buildCustomData(), (_, _, record) =>
+               RenderIMGUITool.buildCustomData(), (. _, _, record) =>
                record
              );
 
@@ -178,7 +178,7 @@ let _ =
           record^
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
-               (_, apiJsObj, record) => {
+               (. _, apiJsObj, record) => {
                  let apiJsObj = Obj.magic(apiJsObj);
                  let imageFunc = apiJsObj##image;
                  let record =
@@ -237,7 +237,7 @@ let _ =
           record^
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
-               (_, apiJsObj, record) => {
+               (. _, apiJsObj, record) => {
                  let apiJsObj = Obj.magic(apiJsObj);
                  let label = apiJsObj##label;
                  let record =
@@ -309,7 +309,7 @@ let _ =
         let record =
           record
           |> ManageIMGUIAPI.setIMGUIFunc(
-               RenderIMGUITool.buildCustomData(), (_, apiJsObj, record) =>
+               RenderIMGUITool.buildCustomData(), (. _, apiJsObj, record) =>
                record
              );
         let record =
@@ -364,7 +364,7 @@ let _ =
             record^
             |> ManageIMGUIAPI.setIMGUIFunc(
                  RenderIMGUITool.buildCustomData(),
-                 (_, apiJsObj, record) => {
+                 (. _, apiJsObj, record) => {
                    let apiJsObj = Obj.magic(apiJsObj);
                    let label = apiJsObj##label;
                    let record =
@@ -425,7 +425,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -464,7 +464,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -520,7 +520,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -601,7 +601,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let image = apiJsObj##image;
@@ -679,7 +679,7 @@ let _ =
               RenderIMGUITool.testColorBufferData(
                 sandbox,
                 record^,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -721,7 +721,7 @@ let _ =
               RenderIMGUITool.testTexCoordBufferData(
                 sandbox,
                 record^,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -769,7 +769,7 @@ let _ =
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
@@ -823,7 +823,7 @@ let _ =
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let image = apiJsObj##image;
@@ -872,7 +872,7 @@ let _ =
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -924,7 +924,7 @@ let _ =
               RenderIMGUITool.testIndexBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                   let image = apiJsObj##image;
                   let record =
@@ -991,7 +991,7 @@ let _ =
             RenderIMGUITool.testIndexBufferData(
               sandbox,
               record,
-              (_, apiJsObj, record) => {
+              (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                 let radioButton = apiJsObj##radioButton;
                 let button = apiJsObj##button;
@@ -1612,7 +1612,7 @@ let _ =
                 record
                 |> ManageIMGUIAPI.setIMGUIFunc(
                      RenderIMGUITool.buildCustomData(),
-                     (_, apiJsObj, record) => {
+                     (. _, apiJsObj, record) => {
               let apiJsObj = Obj.magic(apiJsObj);
                        let image = apiJsObj##image;
                        let record =
@@ -1915,7 +1915,7 @@ let _ =
           let {radioButtonData, checkboxData, sliderData, layoutData} =
             record
             |> ManageIMGUIAPI.setIMGUIFunc(
-                 RenderIMGUITool.buildCustomData(), (_, apiJsObj, record) =>
+                 RenderIMGUITool.buildCustomData(), (. _, apiJsObj, record) =>
                  record
                );
 

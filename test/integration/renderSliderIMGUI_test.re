@@ -45,7 +45,7 @@ let _ =
             bufferData,
             (
               testBufferDataFunc,
-              (_, apiJsObj, record) => {
+              (. _, apiJsObj, record) => {
                 let (
                   ((x1, y1, width1, height1), textWidth1),
                   (min1, max1, numDecimalDigits1),
@@ -86,7 +86,7 @@ let _ =
             record^
             |> ManageIMGUIAPI.setIMGUIFunc(
                  RenderIMGUITool.buildCustomData(),
-                 (_, apiJsObj, record) => {
+                 (. _, apiJsObj, record) => {
                    let apiJsObj = Obj.magic(apiJsObj);
                    let sliderFunc = apiJsObj##sliderFloat;
                    let (record, isSelected, value) =
@@ -680,7 +680,7 @@ let _ =
               record^
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
-                   (_, apiJsObj, record) => {
+                   (. _, apiJsObj, record) => {
                      let apiJsObj = Obj.magic(apiJsObj);
                      let sliderFunc = apiJsObj##sliderFloat;
                      let (record, isSelected, value) =
@@ -727,7 +727,7 @@ let _ =
                 record^
                 |> ManageIMGUIAPI.setIMGUIFunc(
                      RenderIMGUITool.buildCustomData(),
-                     (_, apiJsObj, record) => {
+                     (. _, apiJsObj, record) => {
                        let apiJsObj = Obj.magic(apiJsObj);
                        let sliderFunc = apiJsObj##sliderFloat;
                        let (record, isSelected, value) =
@@ -802,7 +802,7 @@ let _ =
                 record^
                 |> ManageIMGUIAPI.setIMGUIFunc(
                      RenderIMGUITool.buildCustomData(),
-                     (_, apiJsObj, record) => {
+                     (. _, apiJsObj, record) => {
                        let apiJsObj = Obj.magic(apiJsObj);
                        let sliderFunc = apiJsObj##sliderFloat;
                        let (record, _, value1) =
@@ -900,7 +900,7 @@ let _ =
               record^
               |> ManageIMGUIAPI.setIMGUIFunc(
                    RenderIMGUITool.buildCustomData(),
-                   (_, apiJsObj, record) => {
+                   (. _, apiJsObj, record) => {
                      let apiJsObj = Obj.magic(apiJsObj);
                      let sliderFunc = apiJsObj##sliderInt;
                      let (record, isSelected, value) =
@@ -947,7 +947,7 @@ let _ =
                 record^
                 |> ManageIMGUIAPI.setIMGUIFunc(
                      RenderIMGUITool.buildCustomData(),
-                     (_, apiJsObj, record) => {
+                     (. _, apiJsObj, record) => {
                        let apiJsObj = Obj.magic(apiJsObj);
                        let sliderFunc = apiJsObj##sliderInt;
                        let (record, isSelected, value) =
@@ -1032,7 +1032,7 @@ let _ =
                 record^
                 |> ManageIMGUIAPI.setIMGUIFunc(
                      RenderIMGUITool.buildCustomData(),
-                     (_, apiJsObj, record) => {
+                     (. _, apiJsObj, record) => {
                        let apiJsObj = Obj.magic(apiJsObj);
                        let sliderFunc = apiJsObj##sliderInt;
                        let (record, _, value1) =

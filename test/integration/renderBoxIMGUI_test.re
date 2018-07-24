@@ -34,7 +34,7 @@ let _ =
           bufferData,
           (
             testBufferDataFunc,
-            (_, apiJsObj, record) => {
+            (. _, apiJsObj, record) => {
               let ((boxX1, boxY1, boxWidth1, boxHeight1), color) =
                 BoxIMGUITool.buildBoxData1();
 

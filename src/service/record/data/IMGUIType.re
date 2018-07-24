@@ -174,7 +174,8 @@ type apiJsObj;
      "beginGroup": (. (int, int), imguiRecord) => imguiRecord,
      "endGroup": (. imguiRecord) => imguiRecord,
    } */
-type imguiFunc = (customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
+type imguiFunc =
+  (. customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
 and imguiFuncData = {
   imguiFunc: option(imguiFunc),
   customDataForIMGUIFunc: option(customDataForIMGUIFunc),

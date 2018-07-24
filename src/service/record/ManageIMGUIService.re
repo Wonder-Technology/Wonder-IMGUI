@@ -476,6 +476,7 @@ let _exec = (apiJsObj, getRecordFunc, data) => {
   | None => data
   | Some(func) =>
     func(
+      .
       imguiFuncData.customDataForIMGUIFunc |> OptionService.unsafeGet,
       /* getAPIJsObj(record), */
       apiJsObj,

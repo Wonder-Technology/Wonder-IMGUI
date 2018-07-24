@@ -38,7 +38,7 @@ let _ =
               testBufferDataFunc(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
@@ -186,7 +186,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
@@ -215,7 +215,7 @@ let _ =
               RenderIMGUITool.testPositionBufferData(
                 sandbox,
                 record,
-                (_, apiJsObj, record) => {
+                (. _, apiJsObj, record) => {
                   let apiJsObj = Obj.magic(apiJsObj);
                   let label = apiJsObj##label;
                   let record =
@@ -265,7 +265,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
@@ -327,7 +327,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
@@ -378,7 +378,7 @@ let _ =
                   RenderIMGUITool.testPositionBufferData(
                     sandbox,
                     record,
-                    (_, apiJsObj, record) => {
+                    (. _, apiJsObj, record) => {
                       let apiJsObj = Obj.magic(apiJsObj);
                       let label = apiJsObj##label;
                       let record =
@@ -436,7 +436,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
@@ -482,7 +482,7 @@ let _ =
                 RenderIMGUITool.testPositionBufferData(
                   sandbox,
                   record,
-                  (_, apiJsObj, record) => {
+                  (. _, apiJsObj, record) => {
                     let apiJsObj = Obj.magic(apiJsObj);
                     let label = apiJsObj##label;
                     let record =
