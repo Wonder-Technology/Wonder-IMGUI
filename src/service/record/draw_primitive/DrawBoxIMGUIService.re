@@ -33,18 +33,22 @@ let draw = ((x, y, width, height), color, record) => {
         colorArr:
           colorArr
           |> DrawDataArrayService.addPoints(
-               color
-               |> DrawDataArrayService.addPoints(color)
-               |> DrawDataArrayService.addPoints(color)
-               |> DrawDataArrayService.addPoints(color),
+               DrawDataArrayService.concatArrays([|
+                 color,
+                 color,
+                 color,
+                 color,
+               |]),
              ),
         texCoordArr:
           texCoordArr
           |> DrawDataArrayService.addPoints(
-               fontTexUvForWhite
-               |> DrawDataArrayService.addPoints(fontTexUvForWhite)
-               |> DrawDataArrayService.addPoints(fontTexUvForWhite)
-               |> DrawDataArrayService.addPoints(fontTexUvForWhite),
+               DrawDataArrayService.concatArrays([|
+                 fontTexUvForWhite,
+                 fontTexUvForWhite,
+                 fontTexUvForWhite,
+                 fontTexUvForWhite,
+               |]),
              ),
         indexArr:
           indexArr

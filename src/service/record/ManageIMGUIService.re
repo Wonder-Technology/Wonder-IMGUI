@@ -299,7 +299,6 @@ let _groupByDrawTypeAndCustomTexture = ({drawData} as record) => {
                      totalCustomTextureDrawDataArr,
                      {
                        ...oneGroupDrawData,
-                       /* TODO optimize */
                        verticeArr:
                          oneGroupDrawData.verticeArr
                          |> Js.Array.concat(verticeArr),

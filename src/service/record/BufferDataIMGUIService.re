@@ -95,7 +95,6 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
                     {drawType, customTexture, count, countOffset}: drawElementsData,
                   ),
                newCountOffset,
-               /* TODO optimize */
                totalVerticeArr |> Js.Array.concat(verticeArr),
                totalColorArr |> Js.Array.concat(colorArr),
                totalTexCoordArr |> Js.Array.concat(texCoordArr),
@@ -127,8 +126,14 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
 };
 
 let coloredVertex =
-    (position, color, (verticeArr, colorArr, texCoordArr), fontTexUvForWhite) => (
-  verticeArr |> Js.Array.concat(position),
-  colorArr |> Js.Array.concat(color),
-  texCoordArr |> Js.Array.concat(fontTexUvForWhite),
+    (
+      positionX,
+      positionY,
+      color,
+      (verticeArr, colorArr, texCoordArr),
+      fontTexUvForWhite,
+    ) => (
+  verticeArr |> ArrayService.push(positionX) |> ArrayService.push(positionY),
+  colorArr |> DrawDataArrayService.addPoints(color),
+  texCoordArr |> DrawDataArrayService.addPoints(fontTexUvForWhite),
 );

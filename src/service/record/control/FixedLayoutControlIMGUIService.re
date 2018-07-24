@@ -30,7 +30,7 @@ let button =
     );
 
 let box =
-  (. rect, color, record) =>
+  (. rect, color: array(float), record) =>
     DrawBoxIMGUIService.draw(
       GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
       |> StructureService.convertIntRectToFloatRect,

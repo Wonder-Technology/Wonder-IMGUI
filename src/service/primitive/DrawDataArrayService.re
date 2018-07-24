@@ -1,6 +1,16 @@
 open DrawDataType;
 
-/* TODO optimize */
-let addPoints = (points, pointArr) => pointArr |> Js.Array.concat(points);
+let addPoints = (points, pointArr) =>
+  points
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. arr, point) => arr |> ArrayService.push(point),
+       pointArr,
+     );
+
+
+let concatArrays = [%raw arrays => {|
+  return [].concat.apply([], arrays);  
+  |}];
+
 
 let getBaseIndex = verticeArr => (verticeArr |> Js.Array.length) / 2;

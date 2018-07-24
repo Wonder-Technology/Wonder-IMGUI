@@ -27,12 +27,8 @@ let _generateVertices =
      |]);
 };
 
-let _generateColor = (textColor, colorArr) =>
-  colorArr
-  |> DrawDataArrayService.addPoints(textColor)
-  |> DrawDataArrayService.addPoints(textColor)
-  |> DrawDataArrayService.addPoints(textColor)
-  |> DrawDataArrayService.addPoints(textColor);
+let _generateColor = (textColorArrPerPoint, colorArr) =>
+  colorArr |> DrawDataArrayService.addPoints(textColorArrPerPoint);
 
 let _generateTexCoords =
     ({position, data, index, line}, textureWidth, textureHeight, texCoordArr) => {
@@ -76,6 +72,14 @@ let _generateIndices = (baseIndex, indexArr) =>
 let draw = ((x, y, width, _), str, align, record) => {
   let {textColor} = RecordIMGUIService.getSetting(record);
 
+  let textColorArrPerPoint =
+    DrawDataArrayService.concatArrays([|
+      textColor,
+      textColor,
+      textColor,
+      textColor,
+    |]);
+
   switch (AssetIMGUIService.getFntData(record)) {
   | None =>
     WonderLog.Log.fatal(
@@ -96,7 +100,7 @@ let draw = ((x, y, width, _), str, align, record) => {
         record,
       );
 
-      /* TODO remove currentFontTextureDrawDataBaseIndex */
+    /* TODO remove currentFontTextureDrawDataBaseIndex */
     /* let {currentFontTextureDrawDataBaseIndex} as webglData =
        RecordIMGUIService.unsafeGetWebglData(record); */
     let {verticeArr, colorArr, texCoordArr, indexArr} =
@@ -111,7 +115,7 @@ let draw = ((x, y, width, _), str, align, record) => {
 
              (
                verticeArr |> _generateVertices(x, y, layoutData),
-               colorArr |> _generateColor(textColor),
+               colorArr |> _generateColor(textColorArrPerPoint),
                texCoordArr
                |> _generateTexCoords(
                     layoutData,
