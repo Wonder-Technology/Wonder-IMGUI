@@ -2,14 +2,25 @@ open IMGUIType;
 
 open FontType;
 
+let _computeYForCenterYAlignment = (totalHeight, lineHeight, lines) => {
+  let linesHeight = (lines |> Js.Array.length) * lineHeight;
+
+  (totalHeight - linesHeight) / 2;
+};
+
 /* TODO add tabSize, letterSpacing to setting */
 
 let getLayoutData =
-    (text: string, (width, tabSize, letterSpacing, align), fntData, record) => {
+    (
+      text: string,
+      (width, height, tabSize, letterSpacing, align),
+      fntData,
+      record,
+    ) => {
   let fallbackGlyphTuple =
     BitmapFontSearchGlyphIMGUIService.setupSpaceGlyphs(fntData, tabSize);
 
-    /* WonderLog.Log.print("getLines...") |> ignore; */
+  /* WonderLog.Log.print("getLines...") |> ignore; */
   let lines =
     BitmapFontWordWrapperIMGUIService.getLines(
       fntData,
@@ -17,8 +28,6 @@ let getLayoutData =
       (letterSpacing, width, 0, text |> Js.String.length),
       fallbackGlyphTuple,
     );
-
-    /* WonderLog.Log.print(("lines: ", lines )) |> ignore; */
 
   let lineHeight = fntData.commonHeight;
 
@@ -31,8 +40,6 @@ let getLayoutData =
            Js.Math.maxMany_int([|width, curWidth, minWidth|]),
          0,
        );
-
-       /* WonderLog.Log.print(("max lineWidth: ", maxLineWidth)) |> ignore; */
 
   let (layoutDataArr, x, y, lastGlyph) =
     lines
@@ -96,11 +103,16 @@ let getLayoutData =
 
            (layoutDataArr, 0, y^ + lineHeight, lastGlyph^);
          },
-         ([||], 0, 0, None),
+         (
+           [||],
+           0,
+           _computeYForCenterYAlignment(height, lineHeight, lines),
+           None,
+         ),
        );
 
-       /* WonderLog.Log.print(("layoutDataArr: ")) |> ignore;
-       WonderLog.Log.printJson(layoutDataArr) |> ignore; */
+  /* WonderLog.Log.print(("layoutDataArr: ")) |> ignore;
+     WonderLog.Log.printJson(layoutDataArr) |> ignore; */
 
   layoutDataArr;
 };

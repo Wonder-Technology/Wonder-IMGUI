@@ -69,7 +69,7 @@ let _generateIndices = (baseIndex, indexArr) =>
        baseIndex + 1,
      |]);
 
-let draw = ((x, y, width, _), str, align, record) => {
+let draw = ((x, y, width, height), str, align, record) => {
   let {textColor} = RecordIMGUIService.getSetting(record);
 
   let textColorArrPerPoint =
@@ -95,7 +95,7 @@ let draw = ((x, y, width, _), str, align, record) => {
     let layoutDataArr =
       BitmapFontLayoutIMGUIService.getLayoutData(
         str,
-        (width |> NumberType.floatToInt, 4, 0, align),
+        (width |> NumberType.floatToInt, height|> NumberType.floatToInt, 4, 0, align),
         fntData,
         record,
       );
