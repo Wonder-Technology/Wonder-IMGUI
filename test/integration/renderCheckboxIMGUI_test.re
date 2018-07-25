@@ -58,6 +58,7 @@ let _ =
               let (record, isCheckboxClick) =
                 checkboxFunc(.
                   (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+                  false,
                   str1,
                   record,
                 );
@@ -92,6 +93,7 @@ let _ =
                        checkboxWidth1,
                        checkboxHeight1,
                      ),
+                     false,
                      str1,
                      record,
                    );
@@ -271,6 +273,7 @@ let _ =
                           checkboxWidth1,
                           checkboxHeight1,
                         ),
+                        false,
                         str1,
                         record,
                       );
@@ -282,6 +285,7 @@ let _ =
                           checkboxWidth2,
                           checkboxHeight2,
                         ),
+                        false,
                         str2,
                         record,
                       );
@@ -609,6 +613,170 @@ let _ =
       );
 
       describe("test select", () => {
+        describe("test defaultIsSelected", () =>
+          describe("test is select", () => {
+            let _prepare = record => {
+              let (
+                (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+                str1,
+              ) =
+                CheckboxIMGUITool.buildCheckboxData1();
+              let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
+              let bufferData = createEmptyStubWithJsObjSandbox(sandbox);
+              let gl =
+                FakeGlTool.buildFakeGl(
+                  ~sandbox,
+                  ~getExtension,
+                  ~bufferData,
+                  (),
+                )
+                |> Obj.magic;
+              let record = RenderIMGUITool.prepareFntData(record^);
+
+              (
+                record,
+                gl,
+                (
+                  (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+                  str1,
+                ),
+              );
+            };
+
+            test(
+              "if mouse not select it before, result should be defaultIsSelected",
+              () => {
+              let (
+                record,
+                gl,
+                (
+                  (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+                  str1,
+                ),
+              ) =
+                _prepare(record);
+              let isClick = ref(false);
+              let record =
+                record
+                |> ManageIMGUIAPI.setIMGUIFunc(
+                     RenderIMGUITool.buildCustomData(),
+                     (. _, apiJsObj, record) => {
+                       let apiJsObj = Obj.magic(apiJsObj);
+                       let checkboxFunc = apiJsObj##checkbox;
+                       let (record, isCheckboxClick) =
+                         checkboxFunc(.
+                           (
+                             checkboxX1,
+                             checkboxY1,
+                             checkboxWidth1,
+                             checkboxHeight1,
+                           ),
+                           true,
+                           str1,
+                           record,
+                         );
+
+                       isClick := isCheckboxClick;
+
+                       record;
+                     },
+                   );
+              let record =
+                ManageIMGUIAPI.init(
+                  gl,
+                  RenderIMGUITool.buildCanvasSize(),
+                  record,
+                );
+
+              let record =
+                ManageIMGUIAPI.render(
+                  gl,
+                  RenderIMGUITool.buildIOData(
+                    ~pointUp=true,
+                    ~pointDown=true,
+                    ~pointPosition=
+                      _buildNotHitPosition(
+                        checkboxX1,
+                        checkboxY1,
+                        checkboxWidth1,
+                        checkboxHeight1,
+                      ),
+                    (),
+                  ),
+                  record,
+                );
+
+              isClick^ |> expect == true;
+            });
+
+            test(
+              "if mouse select it in the first time, result should be !defaultIsSelected",
+              () => {
+              let (
+                record,
+                gl,
+                (
+                  (checkboxX1, checkboxY1, checkboxWidth1, checkboxHeight1),
+                  str1,
+                ),
+              ) =
+                _prepare(record);
+              let isClick = ref(false);
+              let record =
+                record
+                |> ManageIMGUIAPI.setIMGUIFunc(
+                     RenderIMGUITool.buildCustomData(),
+                     (. _, apiJsObj, record) => {
+                       let apiJsObj = Obj.magic(apiJsObj);
+                       let checkboxFunc = apiJsObj##checkbox;
+                       let (record, isCheckboxClick) =
+                         checkboxFunc(.
+                           (
+                             checkboxX1,
+                             checkboxY1,
+                             checkboxWidth1,
+                             checkboxHeight1,
+                           ),
+                           true,
+                           str1,
+                           record,
+                         );
+
+                       isClick := isCheckboxClick;
+
+                       record;
+                     },
+                   );
+              let record =
+                ManageIMGUIAPI.init(
+                  gl,
+                  RenderIMGUITool.buildCanvasSize(),
+                  record,
+                );
+
+              let record =
+                ManageIMGUIAPI.render(
+                  gl,
+                  RenderIMGUITool.buildIOData(
+                    ~pointUp=true,
+                    ~pointDown=true,
+                    ~pointPosition=
+                      _buildHitPosition(
+                        checkboxX1,
+                        checkboxY1,
+                        checkboxWidth1,
+                        checkboxHeight1,
+                      ),
+                    (),
+                  ),
+                  record,
+                );
+
+              isClick^ |> expect == false;
+            });
+          })
+        );
+
         test(
           {|test first frame select it;
    second frame not select it;
@@ -642,6 +810,7 @@ let _ =
                            checkboxWidth1,
                            checkboxHeight1,
                          ),
+                         false,
                          str1,
                          record,
                        );
@@ -732,6 +901,7 @@ let _ =
                            checkboxWidth1,
                            checkboxHeight1,
                          ),
+                         false,
                          str1,
                          record,
                        );

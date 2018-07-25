@@ -13,12 +13,12 @@ let _addIndex = record => {
   },
 };
 
-let _getIsSlected = (index, record) =>
+let _getIsSelectedByDefaultAndMap = (index, defaultIsSelected, record) =>
   switch (
     record.controlData.checkboxData.isSelectedMap
     |> WonderCommonlib.SparseMapService.get(index)
   ) {
-  | None => false
+  | None => defaultIsSelected
   | Some(isSelected) => isSelected
   };
 
@@ -30,7 +30,8 @@ let _setIsSlected = (index, value, record) => {
   record;
 };
 
-let checkbox = ((x, y, width, height) as rect, str, record) => {
+let checkbox =
+    ((x, y, width, height) as rect, defaultIsSelected: bool, str, record) => {
   let {
     checkboxOuterColor,
     checkboxInnerColor,
@@ -49,20 +50,25 @@ let checkbox = ((x, y, width, height) as rect, str, record) => {
 
   let index = _getIndex(record);
 
-  let (isSelected, innerColor, outerColor) =
+  let isSelectedByDefaultAndMap =
+    _getIsSelectedByDefaultAndMap(index, defaultIsSelected, record);
+
+  let isInBox =
     HitService.isInBox(
       outerBoxRect,
       pointPosition |> StructureService.convertIntPositionToFloatPosition,
-    ) ?
-      IOIMGUIService.isClick(record) ?
-        (true, checkboxInnerColorHover, checkboxOuterColorHover) :
-        (false, checkboxInnerColorHover, checkboxOuterColorHover) :
-      (false, checkboxInnerColor, checkboxOuterColor);
+    );
 
   let isSelected =
-    ! isSelected ?
-      _getIsSlected(index, record) :
-      _getIsSlected(index, record) ? false : true;
+    isInBox && IOIMGUIService.isClick(record) ?
+      isSelectedByDefaultAndMap ? false : true : isSelectedByDefaultAndMap;
+
+  let (innerColor, outerColor) =
+    isSelected ?
+      (checkboxInnerColorHover, checkboxOuterColorHover) :
+      isInBox ?
+        (checkboxInnerColorHover, checkboxOuterColorHover) :
+        (checkboxInnerColor, checkboxOuterColor);
 
   let record = _setIsSlected(index, isSelected, record);
 

@@ -49,10 +49,11 @@ let radioButton =
     );
 
 let checkbox =
-  (. rect, str, record) =>
+  (. rect, defaultSelected, str, record) =>
     CheckboxControlIMGUIService.checkbox(
       GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
       |> StructureService.convertIntRectToFloatRect,
+      defaultSelected,
       str,
       record,
     );
