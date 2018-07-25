@@ -17,4 +17,4 @@ let getRadioButtonData = record => record.radioButtonData;
 
 let getFontTextureDrawData = (record) => record.drawData.fontTextureDrawData;
 
-let getCustomTextureDrawDataArr = (record) => record.drawData.customTextureDrawDataArr;
+let getCustomTextureDrawDataMap = (record) => record.drawData.customTextureDrawDataMap;

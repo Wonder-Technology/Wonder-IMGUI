@@ -3,13 +3,10 @@ open IMGUIType;
 open DrawDataType;
 
 let draw = ((x, y, width, height), color, record) => {
-  let {currentFontTextureDrawDataBaseIndex} as webglData =
-    RecordIMGUIService.unsafeGetWebglData(record);
   let {fontTexUvForWhite} = RecordIMGUIService.getSetting(record);
-
   let {verticeArr, colorArr, texCoordArr, indexArr} =
     RecordIMGUIService.getFontTextureDrawData(record);
-  /* let baseIndex = currentFontTextureDrawDataBaseIndex; */
+
   let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
 
   {

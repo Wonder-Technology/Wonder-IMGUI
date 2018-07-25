@@ -132,7 +132,6 @@ let init = (gl, canvasSize, record) =>
             aColorLocation: gl |> getAttribLocation(program, "a_color"),
             aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
             lastWebglData: None,
-            currentFontTextureDrawDataBaseIndex: 0,
           }),
       };
     };
@@ -146,7 +145,7 @@ let _createEmptyDrawData = () => {
     texCoordArr: [||],
     indexArr: [||],
   },
-  customTextureDrawDataArr: [||],
+  customTextureDrawDataMap: WonderCommonlib.HashMapService.createEmpty(),
 };
 
 let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
@@ -164,11 +163,11 @@ let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
       index: 0,
     },
     drawData: _createEmptyDrawData(),
-    webglData:
-      Some({
-        ...RecordIMGUIService.unsafeGetWebglData(record),
-        currentFontTextureDrawDataBaseIndex: 0,
-      }),
+    /* webglData:
+       Some({
+         ...RecordIMGUIService.unsafeGetWebglData(record),
+         currentFontTextureDrawDataBaseIndex: 0,
+       }), */
   }
   |. setRecordFunc(data);
 };
@@ -213,123 +212,6 @@ let _backupGlState = (gl, record) => {
 let _getLastWebglData = record =>
   RecordIMGUIService.unsafeGetWebglData(record).lastWebglData
   |> OptionService.unsafeGet;
-
-let _groupByDrawTypeAndCustomTexture = ({drawData} as record) => {
-  /* let fontTextureDrawData =
-     drawDataArr
-     |> Js.Array.filter((value: drawData) =>
-          value.drawType === DrawDataType.FontTexture
-        ); */
-
-  let {fontTextureDrawData, customTextureDrawDataArr} = drawData;
-
-  /* let drawData =
-     drawDataArr
-     |> Js.Array.filter((value: drawData) =>
-          value.drawType === DrawDataType.CustomTexture
-        ); */
-
-  let sortedCustomTextureDrawDataArr =
-    customTextureDrawDataArr
-    |> Js.Array.sortInPlaceWith(
-         (valueA: DrawDataType.drawData, valueB: DrawDataType.drawData) =>
-         switch (valueA.customTexture, valueB.customTexture) {
-         | (Some(customTextureA), Some(customTextureB))
-             when customTextureA !== customTextureB => 1
-         | _ => 0
-         }
-       );
-
-  /* let totalResultArr =
-     fontTextureDrawData |> Js.Array.length === 0 ?
-       [||] :
-       {
-         let oneGroupDrawData =
-           fontTextureDrawData
-           |> Js.Array.sliceFrom(1)
-           |> WonderCommonlib.ArrayService.reduceOneParam(
-                (.
-                  oneGroupDrawData: drawData,
-                  (
-                    {verticeArr, colorArr, texCoordArr, indexArr}: drawData
-                  ) as drawData,
-                ) => {
-                  ...oneGroupDrawData,
-                  verticeArr:
-                    oneGroupDrawData.verticeArr |> Js.Array.concat(verticeArr),
-                  colorArr:
-                    oneGroupDrawData.colorArr |> Js.Array.concat(colorArr),
-                  texCoordArr:
-                    oneGroupDrawData.texCoordArr
-                    |> Js.Array.concat(texCoordArr),
-                  indexArr:
-                    oneGroupDrawData.indexArr |> Js.Array.concat(indexArr),
-                },
-                fontTextureDrawData[0],
-              );
-
-         [|oneGroupDrawData|];
-       }; */
-  let totalCustomTextureDrawDataArr = [|fontTextureDrawData|];
-
-  let totalCustomTextureDrawDataArr =
-    sortedCustomTextureDrawDataArr |> Js.Array.length === 0 ?
-      totalCustomTextureDrawDataArr :
-      {
-        let (totalCustomTextureDrawDataArr, oneGroupDrawData) =
-          sortedCustomTextureDrawDataArr
-          |> Js.Array.sliceFrom(1)
-          |> WonderCommonlib.ArrayService.reduceOneParam(
-               (.
-                 (
-                   totalCustomTextureDrawDataArr,
-                   oneGroupDrawData: DrawDataType.drawData,
-                 ),
-                 (
-                   {verticeArr, colorArr, texCoordArr, indexArr}: DrawDataType.drawData
-                 ) as drawData,
-               ) => {
-                 let currentCustomTexture =
-                   drawData.customTexture |> OptionService.unsafeGet;
-                 let lastCustomTexture =
-                   oneGroupDrawData.customTexture |> OptionService.unsafeGet;
-
-                 currentCustomTexture === lastCustomTexture ?
-                   (
-                     totalCustomTextureDrawDataArr,
-                     {
-                       ...oneGroupDrawData,
-                       verticeArr:
-                         oneGroupDrawData.verticeArr
-                         |> Js.Array.concat(verticeArr),
-                       colorArr:
-                         oneGroupDrawData.colorArr
-                         |> Js.Array.concat(colorArr),
-                       texCoordArr:
-                         oneGroupDrawData.texCoordArr
-                         |> Js.Array.concat(texCoordArr),
-                       indexArr:
-                         oneGroupDrawData.indexArr
-                         |> Js.Array.concat(indexArr),
-                     },
-                   ) :
-                   (
-                     totalCustomTextureDrawDataArr
-                     |> ArrayService.push(oneGroupDrawData),
-                     drawData,
-                   );
-               },
-               (
-                 totalCustomTextureDrawDataArr,
-                 sortedCustomTextureDrawDataArr[0],
-               ),
-             );
-
-        totalCustomTextureDrawDataArr |> ArrayService.push(oneGroupDrawData);
-      };
-
-  (totalCustomTextureDrawDataArr, record);
-};
 
 let _setGlState = gl => {
   /* no depth testing; we handle this by manually placing out widgets in the order we wish them to be rendered.  */
@@ -409,28 +291,43 @@ let _restoreGlState = (gl, record) => {
   record;
 };
 
-let _addCustomTextureDrawDataIndex = record => {
+let _buildGroupedDrawDataArr = record => {
   let fontTextureDrawData = RecordIMGUIService.getFontTextureDrawData(record);
-  let customTextureDrawDataArr =
-    RecordIMGUIService.getCustomTextureDrawDataArr(record);
+  let customTextureDrawDataMap =
+    RecordIMGUIService.getCustomTextureDrawDataMap(record);
 
-  let baseIndex =
-    DrawDataArrayService.getBaseIndex(fontTextureDrawData.verticeArr);
+  let (_, _, customTextureDrawDataArr) =
+    customTextureDrawDataMap
+    |> Js.Dict.values
+    |> WonderCommonlib.ArrayService.reduceOneParam(
+         (.
+           (lastVerticeArr, baseIndex, resultDrawDataArr),
+           ({verticeArr, indexArr}: DrawDataType.drawData) as drawData,
+         ) => {
+           let baseIndex =
+             DrawDataArrayService.getBaseIndex(lastVerticeArr) + baseIndex;
 
-  {
-    ...record,
-    drawData: {
-      ...record.drawData,
-      customTextureDrawDataArr:
-        customTextureDrawDataArr
-        |> Js.Array.map((({indexArr}: DrawDataType.drawData) as drawData) =>
-             {
-               ...drawData,
-               indexArr: indexArr |> Js.Array.map(index => index + baseIndex),
-             }
-           ),
-    },
-  };
+           (
+             verticeArr,
+             baseIndex,
+             resultDrawDataArr
+             |> ArrayService.push({
+                  ...drawData,
+                  indexArr:
+                    indexArr |> Js.Array.map(index => index + baseIndex),
+                }),
+           );
+         },
+         (fontTextureDrawData.verticeArr, 0, [||]),
+       );
+
+  (
+    record,
+    DrawDataArrayService.concatArrays([|
+      [|fontTextureDrawData|],
+      customTextureDrawDataArr,
+    |]),
+  );
 };
 
 let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
@@ -449,10 +346,7 @@ let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
    */
   let record = _backupGlState(gl, record);
 
-  let record = record |> _addCustomTextureDrawDataIndex;
-
-  let (groupedDrawDataArr, record) =
-    record |> _groupByDrawTypeAndCustomTexture;
+  let (record, groupedDrawDataArr) = record |> _buildGroupedDrawDataArr;
 
   let (record, drawElementsDataArr) =
     BufferDataIMGUIService.bufferAllData(gl, groupedDrawDataArr, record);

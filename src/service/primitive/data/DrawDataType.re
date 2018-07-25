@@ -11,7 +11,7 @@ type drawData = {
   indexArr: array(int),
 };
 
-type drawDataArr = array(drawData);
+/* type drawDataArr = array(drawData); */
 
 type drawElementsData = {
   drawType,

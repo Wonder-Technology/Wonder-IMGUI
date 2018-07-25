@@ -221,11 +221,11 @@ let _ =
         let record =
           ManageIMGUIAPI.render(gl, RenderIMGUITool.buildIOData(), record);
 
-        let {fontTextureDrawData, customTextureDrawDataArr} = record.drawData;
+        let {fontTextureDrawData, customTextureDrawDataMap} = record.drawData;
 
         (
           fontTextureDrawData.verticeArr |> Js.Array.length,
-          customTextureDrawDataArr |> Js.Array.length,
+          customTextureDrawDataMap |> WonderCommonlib.HashMapService.length,
         )
         |> expect == (8, 1);
       });
@@ -574,9 +574,9 @@ let _ =
 
                   record;
                 },
-                image2Data
-                |> Js.Array.concat(image1Data)
-                |> Js.Array.concat(image3Data),
+                image1Data
+                |> Js.Array.concat(image3Data)
+                |> Js.Array.concat(image2Data),
               );
             });
 
@@ -672,9 +672,9 @@ let _ =
                 },
                 label1Data
                 |> Js.Array.concat(label2Data)
-                |> Js.Array.concat(image2Data)
                 |> Js.Array.concat(image1Data)
-                |> Js.Array.concat(image3Data),
+                |> Js.Array.concat(image3Data)
+                |> Js.Array.concat(image2Data),
               );
             });
           })
@@ -1679,10 +1679,10 @@ let _ =
 
               (
                 drawElements
-                |> withFourArgs(triangles, 6 * 1, unsigned_short, 0)
+                |> withFourArgs(triangles, 6 * 2, unsigned_short, 0)
                 |> getCallCount,
                 drawElements
-                |> withFourArgs(triangles, 6 * 2, unsigned_short, 6 * 2)
+                |> withFourArgs(triangles, 6, unsigned_short, 6 * 2 * 2)
                 |> getCallCount,
               )
               |> expect == (1, 1);

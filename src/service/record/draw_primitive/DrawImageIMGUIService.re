@@ -4,57 +4,87 @@ open IMGUIType;
 
 open DrawDataType;
 
-let _getBaseIndex = drawDataArr =>
-  drawDataArr
-  /* |> Js.Array.filter(({drawType}: drawData) => drawType === CustomTexture) */
-  |> WonderCommonlib.ArrayService.reduceOneParam(
-       (. baseIndex, {verticeArr}: drawData) =>
-         baseIndex + DrawDataArrayService.getBaseIndex(verticeArr),
-       0,
-     );
+let _getOrCreateCustomTextureDrawData = (id, record) : drawData =>
+  switch (
+    RecordIMGUIService.getCustomTextureDrawDataMap(record)
+    |> WonderCommonlib.HashMapService.get(id)
+  ) {
+  | None => {
+      drawType: CustomTexture,
+      customTexture:
+        AssetIMGUIService.unsafeGetCustomTexture(id, record) |. Some,
+      verticeArr: [||],
+      colorArr: [||],
+      texCoordArr: [||],
+      indexArr: [||],
+    }
+  | Some(drawData) => drawData
+  };
 
 let draw =
     (
       (x, y, width, height),
-      /* ((s0, t0), (s0, t1), (s1, t0), (s1, t1)), */
-      /* (topLeftUv, bottomLeftUv, topRightUv, bottomRightUv), */
       (s0, t0, s1, t1),
-      texture,
+      id,
       record,
     ) => {
-  let baseIndex =
-    _getBaseIndex(RecordIMGUIService.getCustomTextureDrawDataArr(record));
+  let ({verticeArr, colorArr, texCoordArr, indexArr}: drawData) as drawData =
+    _getOrCreateCustomTextureDrawData(id, record);
+
+  let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
+
+  let drawData = {
+    ...drawData,
+    verticeArr:
+      verticeArr
+      |> DrawDataArrayService.addPoints([|
+           x,
+           y,
+           x,
+           y +. height,
+           x +. width,
+           y,
+           x +. width,
+           y +. height,
+         |]),
+    colorArr:
+      colorArr
+      |> DrawDataArrayService.addPoints([|
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+           1.,
+         |]),
+    texCoordArr:
+      texCoordArr
+      |> DrawDataArrayService.addPoints([|s0, t0, s0, t1, s1, t0, s1, t1|]),
+    indexArr:
+      indexArr
+      |> DrawDataArrayService.addPoints([|
+           baseIndex,
+           baseIndex + 1,
+           baseIndex + 2,
+           baseIndex + 3,
+           baseIndex + 2,
+           baseIndex + 1,
+         |]),
+  };
 
   {
     ...record,
     drawData: {
       ...record.drawData,
-      customTextureDrawDataArr:
-        record.drawData.customTextureDrawDataArr
-        |> ArrayService.push({
-             drawType: CustomTexture,
-             customTexture: Some(texture),
-             verticeArr: [|
-               x,
-               y,
-               x,
-               y +. height,
-               x +. width,
-               y,
-               x +. width,
-               y +. height,
-             |],
-             colorArr: [|1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.|],
-             texCoordArr: [|s0, t0, s0, t1, s1, t0, s1, t1|],
-             indexArr: [|
-               baseIndex,
-               baseIndex + 1,
-               baseIndex + 2,
-               baseIndex + 3,
-               baseIndex + 2,
-               baseIndex + 1,
-             |],
-           }),
+      customTextureDrawDataMap:
+        record.drawData.customTextureDrawDataMap
+        |> WonderCommonlib.HashMapService.set(id, drawData),
     },
   };
 };

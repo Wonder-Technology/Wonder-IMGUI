@@ -17,7 +17,8 @@ let image =
          GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
          |> StructureService.convertIntRectToFloatRect,
          uv,
-         AssetIMGUIService.unsafeGetCustomTexture(id, record),
+         /* AssetIMGUIService.unsafeGetCustomTexture(id, record), */
+         id
        );
 
 let button =
