@@ -1044,6 +1044,7 @@ let _ =
                         str2,
                       ),
                     |],
+                    0,
                     group1,
                     record,
                   );
@@ -1070,6 +1071,7 @@ let _ =
                         str2,
                       ),
                     |],
+                    0,
                     group1,
                     record,
                   );
@@ -1091,180 +1093,7 @@ let _ =
                 record;
               },
               [|
-                2,
-                1,
-                0,
-                3,
-                2,
-                0,
-                4,
-                3,
-                0,
-                5,
-                4,
-                0,
-                6,
-                5,
-                0,
-                7,
-                6,
-                0,
-                8,
-                7,
-                0,
-                9,
-                8,
-                0,
-                10,
-                9,
-                0,
-                11,
-                12,
-                13,
-                14,
-                13,
-                12,
-                15,
-                16,
-                17,
-                18,
-                17,
-                16,
-                21,
-                20,
-                19,
-                22,
-                21,
-                19,
-                23,
-                22,
-                19,
-                24,
-                23,
-                19,
-                25,
-                24,
-                19,
-                26,
-                25,
-                19,
-                27,
-                26,
-                19,
-                28,
-                27,
-                19,
-                29,
-                28,
-                19,
-                30,
-                31,
-                32,
-                33,
-                32,
-                31,
-                36,
-                35,
-                34,
-                37,
-                36,
-                34,
-                38,
-                37,
-                34,
-                39,
-                38,
-                34,
-                40,
-                39,
-                34,
-                41,
-                40,
-                34,
-                42,
-                41,
-                34,
-                43,
-                42,
-                34,
-                44,
-                43,
-                34,
-                45,
-                46,
-                47,
-                48,
-                47,
-                46,
-                49,
-                50,
-                51,
-                52,
-                51,
-                50,
-                55,
-                54,
-                53,
-                56,
-                55,
-                53,
-                57,
-                56,
-                53,
-                58,
-                57,
-                53,
-                59,
-                58,
-                53,
-                60,
-                59,
-                53,
-                61,
-                60,
-                53,
-                62,
-                61,
-                53,
-                63,
-                62,
-                53,
-                64,
-                65,
-                66,
-                67,
-                66,
-                65,
-                68,
-                69,
-                70,
-                71,
-                70,
-                69,
-                72,
-                73,
-                74,
-                75,
-                74,
-                73,
-                76,
-                77,
-                78,
-                79,
-                78,
-                77,
-                80,
-                81,
-                82,
-                83,
-                82,
-                81,
-                84,
-                85,
-                86,
-                87,
-                86,
-                85,
+2,1,0,3,2,0,4,3,0,5,4,0,6,5,0,7,6,0,8,7,0,9,8,0,10,9,0,13,12,11,14,13,11,15,14,11,16,15,11,17,16,11,18,17,11,19,18,11,20,19,11,21,20,11,22,23,24,25,24,23,26,27,28,29,28,27,32,31,30,33,32,30,34,33,30,35,34,30,36,35,30,37,36,30,38,37,30,39,38,30,40,39,30,41,42,43,44,43,42,47,46,45,48,47,45,49,48,45,50,49,45,51,50,45,52,51,45,53,52,45,54,53,45,55,54,45,58,57,56,59,58,56,60,59,56,61,60,56,62,61,56,63,62,56,64,63,56,65,64,56,66,65,56,67,68,69,70,69,68,71,72,73,74,73,72,77,76,75,78,77,75,79,78,75,80,79,75,81,80,75,82,81,75,83,82,75,84,83,75,85,84,75,86,87,88,89,88,87,90,91,92,93,92,91,94,95,96,97,96,95,98,99,100,101,100,99,102,103,104,105,104,103,106,107,108,109,108,107
               |],
             );
           })
@@ -1910,26 +1739,29 @@ let _ =
     describe("fix bug", () =>
       describe("setIMGUIFunc", () =>
         test("clear all controls data and layout data", () => {
-          let {radioButtonData, checkboxData, sliderData, layoutData} as record =
-            record^;
+          let {controlData, layoutData} as record = record^;
+          let {radioButtonData, checkboxData, sliderData} = controlData;
+
           let record = {
             ...record,
-            radioButtonData: {
-              isSelectedMap:
-                radioButtonData.isSelectedMap
-                |> WonderCommonlib.HashMapService.set("aaa", 1),
-            },
-            checkboxData: {
-              index: 3,
-              isSelectedMap:
-                checkboxData.isSelectedMap
-                |> WonderCommonlib.SparseMapService.set(2, true),
-            },
-            sliderData: {
-              index: 4,
-              valueMap:
-                sliderData.valueMap
-                |> WonderCommonlib.SparseMapService.set(1, 1.5),
+            controlData: {
+              radioButtonData: {
+                isSelectedMap:
+                  radioButtonData.isSelectedMap
+                  |> WonderCommonlib.HashMapService.set("aaa", 1),
+              },
+              checkboxData: {
+                index: 3,
+                isSelectedMap:
+                  checkboxData.isSelectedMap
+                  |> WonderCommonlib.SparseMapService.set(2, true),
+              },
+              sliderData: {
+                index: 4,
+                valueMap:
+                  sliderData.valueMap
+                  |> WonderCommonlib.SparseMapService.set(1, 1.5),
+              },
             },
             layoutData: {
               groupData: {
@@ -1939,12 +1771,13 @@ let _ =
             },
           };
 
-          let {radioButtonData, checkboxData, sliderData, layoutData} =
+          let {controlData, layoutData} =
             record
             |> ManageIMGUIAPI.setIMGUIFunc(
                  RenderIMGUITool.buildCustomData(), (. _, apiJsObj, record) =>
                  record
                );
+          let {radioButtonData, checkboxData, sliderData} = controlData;
 
           (
             radioButtonData.isSelectedMap

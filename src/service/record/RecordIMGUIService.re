@@ -13,8 +13,13 @@ let setSetting = (setting, record) => {...record, setting};
 
 let getIOData = record => record.ioData;
 
-let getRadioButtonData = record => record.radioButtonData;
+let getRadioButtonData = record => record.controlData.radioButtonData;
 
-let getFontTextureDrawData = (record) => record.drawData.fontTextureDrawData;
+let getFontTextureDrawData = record => record.drawData.fontTextureDrawData;
 
-let getCustomTextureDrawDataMap = (record) => record.drawData.customTextureDrawDataMap;
+let getCustomTextureDrawDataMap = record =>
+  record.drawData.customTextureDrawDataMap;
+
+let getControlData = record => record.controlData;
+
+let setControlData = (controlData, record) => {...record, controlData};

@@ -2,24 +2,28 @@ open IMGUIType;
 
 let _addIndex = record => {
   ...record,
-  sliderData: {
-    ...record.sliderData,
-    index: record.sliderData.index |> succ,
+  controlData: {
+    ...record.controlData,
+    sliderData: {
+      ...record.controlData.sliderData,
+      index: record.controlData.sliderData.index |> succ,
+    },
   },
 };
 
-let _getIndex = record => record.sliderData.index;
+let _getIndex = record => record.controlData.sliderData.index;
 
 let _getValue = (index, defaultValue, record) =>
   switch (
-    record.sliderData.valueMap |> WonderCommonlib.SparseMapService.get(index)
+    record.controlData.sliderData.valueMap
+    |> WonderCommonlib.SparseMapService.get(index)
   ) {
   | None => defaultValue
   | Some(value) => value
   };
 
 let _setValue = (index, value, record) => {
-  record.sliderData.valueMap
+  record.controlData.sliderData.valueMap
   |> WonderCommonlib.SparseMapService.set(index, value)
   |> ignore;
 

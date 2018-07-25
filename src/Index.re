@@ -10,9 +10,21 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let radioButton = FixedLayoutControlIMGUIAPI.radioButton;
+
+let box = FixedLayoutControlIMGUIAPI.box;
+
+let button = FixedLayoutControlIMGUIAPI.button;
+
 let image = FixedLayoutControlIMGUIAPI.image;
 
 let label = FixedLayoutControlIMGUIAPI.label;
+
+let endGroup = GroupLayoutIMGUIAPI.endGroup;
+
+let beginGroup = GroupLayoutIMGUIAPI.beginGroup;
+
+let buildIOData = IOIMGUIAPI.buildIOData;
 
 let addFont = IOIMGUIAPI.addFont;
 
@@ -46,9 +58,21 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let radioButton = FixedLayoutControlIMGUIAPI.radioButton;
+
+let box = FixedLayoutControlIMGUIAPI.box;
+
+let button = FixedLayoutControlIMGUIAPI.button;
+
 let image = FixedLayoutControlIMGUIAPI.image;
 
 let label = FixedLayoutControlIMGUIAPI.label;
+
+let endGroup = GroupLayoutIMGUIAPI.endGroup;
+
+let beginGroup = GroupLayoutIMGUIAPI.beginGroup;
+
+let buildIOData = IOIMGUIAPI.buildIOData;
 
 let addFont = IOIMGUIAPI.addFont;
 

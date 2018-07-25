@@ -136,6 +136,12 @@ type drawData = {
     WonderCommonlib.HashMapService.t(DrawDataType.drawData),
 };
 
+type controlData = {
+  radioButtonData,
+  checkboxData,
+  sliderData,
+};
+
 type customDataForIMGUIFunc;
 
 type apiJsObj;
@@ -154,9 +160,7 @@ and imguiRecord = {
   webglData: option(webglData),
   drawData,
   imguiFuncData,
-  radioButtonData,
-  checkboxData,
-  sliderData,
+  controlData,
   ioData,
   layoutData,
 };

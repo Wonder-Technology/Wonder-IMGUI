@@ -18,7 +18,7 @@ let image =
          |> StructureService.convertIntRectToFloatRect,
          uv,
          /* AssetIMGUIService.unsafeGetCustomTexture(id, record), */
-         id
+         id,
        );
 
 let button =
@@ -40,8 +40,13 @@ let box =
     );
 
 let radioButton =
-  (. groupDataArr, group, record) =>
-    RadioButtonControlIMGUIService.radioButton(groupDataArr, group, record);
+  (. groupDataArr, defaultSelectIndex, group, record) =>
+    RadioButtonControlIMGUIService.radioButton(
+      groupDataArr,
+      defaultSelectIndex,
+      group,
+      record,
+    );
 
 let checkbox =
   (. rect, str, record) =>

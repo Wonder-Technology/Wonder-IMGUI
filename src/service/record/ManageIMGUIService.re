@@ -154,20 +154,18 @@ let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
   {
     ...record,
     ioData,
-    sliderData: {
-      ...record.sliderData,
-      index: 0,
-    },
-    checkboxData: {
-      ...record.checkboxData,
-      index: 0,
+    controlData: {
+      ...record.controlData,
+      sliderData: {
+        ...record.controlData.sliderData,
+        index: 0,
+      },
+      checkboxData: {
+        ...record.controlData.checkboxData,
+        index: 0,
+      },
     },
     drawData: _createEmptyDrawData(),
-    /* webglData:
-       Some({
-         ...RecordIMGUIService.unsafeGetWebglData(record),
-         currentFontTextureDrawDataBaseIndex: 0,
-       }), */
   }
   |. setRecordFunc(data);
 };
@@ -368,16 +366,19 @@ let getCustomData = ({imguiFuncData}) =>
 
 let _clearData = record => {
   ...record,
-  radioButtonData: {
-    isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
-  },
-  checkboxData: {
-    index: 0,
-    isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
-  },
-  sliderData: {
-    index: 0,
-    valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+  controlData: {
+    ...record.controlData,
+    radioButtonData: {
+      isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+    },
+    checkboxData: {
+      index: 0,
+      isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
+    },
+    sliderData: {
+      index: 0,
+      valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+    },
   },
   layoutData: {
     groupData: {
@@ -486,16 +487,18 @@ let createRecord = () => {
   fontData: None,
   webglData: None,
   drawData: _createEmptyDrawData(),
-  radioButtonData: {
-    isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
-  },
-  checkboxData: {
-    index: 0,
-    isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
-  },
-  sliderData: {
-    index: 0,
-    valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+  controlData: {
+    radioButtonData: {
+      isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+    },
+    checkboxData: {
+      index: 0,
+      isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
+    },
+    sliderData: {
+      index: 0,
+      valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+    },
   },
   ioData: {
     pointUp: false,

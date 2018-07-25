@@ -1,18 +1,21 @@
 open IMGUIType;
 
-let _getIndex = record => record.checkboxData.index;
+let _getIndex = record => record.controlData.checkboxData.index;
 
 let _addIndex = record => {
   ...record,
-  checkboxData: {
-    ...record.checkboxData,
-    index: record.checkboxData.index |> succ,
+  controlData: {
+    ...record.controlData,
+    checkboxData: {
+      ...record.controlData.checkboxData,
+      index: record.controlData.checkboxData.index |> succ,
+    },
   },
 };
 
 let _getIsSlected = (index, record) =>
   switch (
-    record.checkboxData.isSelectedMap
+    record.controlData.checkboxData.isSelectedMap
     |> WonderCommonlib.SparseMapService.get(index)
   ) {
   | None => false
@@ -20,7 +23,7 @@ let _getIsSlected = (index, record) =>
   };
 
 let _setIsSlected = (index, value, record) => {
-  record.checkboxData.isSelectedMap
+  record.controlData.checkboxData.isSelectedMap
   |> WonderCommonlib.SparseMapService.set(index, value)
   |> ignore;
 
