@@ -98,6 +98,20 @@ let _parseChar = (fntStr: string) => {
   fontDefDictionary;
 };
 
+let buildKerningHashMapKey = (first, second) => first * 1000 + second;
+
+let _changeKerningArrayToHashMap = kerningArray =>
+  kerningArray
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. map, {first, second, amount}) =>
+         map
+         |> WonderCommonlib.SparseMapService.set(
+              buildKerningHashMapKey(first, second),
+              amount,
+            ),
+       WonderCommonlib.SparseMapService.createEmpty(),
+     );
+
 let _parseKerning = (fntStr: string) => {
   let kerningArray = [||];
 
@@ -132,7 +146,7 @@ let _parseKerning = (fntStr: string) => {
     };
   };
 
-  kerningArray;
+  kerningArray |> _changeKerningArrayToHashMap;
 };
 
 let parse = (fntStr, url) => {
@@ -207,6 +221,6 @@ let parse = (fntStr, url) => {
     scaleW: commonObj |> WonderCommonlib.HashMapService.unsafeGet("scaleW"),
     scaleH: commonObj |> WonderCommonlib.HashMapService.unsafeGet("scaleH"),
     fontDefDictionary: _parseChar(fntStr),
-    kerningArray: _parseKerning(fntStr),
+    kerningMap: _parseKerning(fntStr),
   };
 };

@@ -64,9 +64,7 @@ let _ =
           record^
           |> IOIMGUIAPI.addFont(fntFilePath, bitmapFilePath)
           |> IOIMGUITool.load(customTextureSourceDataArr, fetch)
-          |> then_(record =>
-               testFunc(bitmap, customImageArr, record)
-             );
+          |> then_(record => testFunc(bitmap, customImageArr, record));
         };
 
         testPromise("load bitmap image", () =>
@@ -97,7 +95,7 @@ let _ =
                   scaleW,
                   scaleH,
                   fontDefDictionary,
-                  kerningArray,
+                  kerningMap,
                 } =
                   AssetTool.unsafeGetFntData(record);
 
@@ -108,8 +106,9 @@ let _ =
                   scaleH,
                   fontDefDictionary |> SparseMapService.length,
                   (fontDefDictionary |> SparseMapService.getValidValues)[0],
-                  kerningArray |> Js.Array.length,
-                  kerningArray[0],
+                  kerningMap
+                  |> SparseMapService.getValidValues
+                  |> SparseMapService.length,
                 )
                 |>
                 expect == (
@@ -126,7 +125,6 @@ let _ =
                               xAdvance: 21,
                             },
                             241,
-                            {first: 89, second: 112, amount: (-3)},
                           )
                 |> resolve;
               })
