@@ -65,7 +65,33 @@ let _buildOrthoProjectionMat4TypeArr = ((canvasWidth, canvasHeight)) =>
     WonderWebgl.Matrix4Service.createIdentityMatrix4(),
   );
 
+let _sendUniformProjectionMatData = (gl, program, canvasSize) =>
+  uniformMatrix4fv(
+    gl |> getUniformLocation(program, "u_projectionMat"),
+    false,
+    _buildOrthoProjectionMat4TypeArr(canvasSize),
+    gl,
+  );
+
+let _getProgram = record => {
+  let {program} = record.webglData |> OptionService.unsafeGet;
+
+  program;
+};
+
 let _sendUniformData = (gl, program, canvasSize) => {
+  useProgram(program, gl);
+
+  _sendUniformProjectionMatData(gl, program, canvasSize);
+
+  uniform1i(gl |> getUniformLocation(program, "u_sampler2D"), 0, gl);
+
+  ();
+};
+
+let sendUniformProjectionMatData = (gl, canvasSize, record) => {
+  let program = _getProgram(record);
+
   useProgram(program, gl);
 
   uniformMatrix4fv(
@@ -75,9 +101,7 @@ let _sendUniformData = (gl, program, canvasSize) => {
     gl,
   );
 
-  uniform1i(gl |> getUniformLocation(program, "u_sampler2D"), 0, gl);
-
-  ();
+  record;
 };
 
 let init = (gl, canvasSize, record) =>

@@ -130,3 +130,6 @@ let getCustomData = ManageIMGUIService.getCustomData;
 let getIMGUIFunc = ManageIMGUIService.getIMGUIFunc;
 
 let setIMGUIFunc = ManageIMGUIService.setIMGUIFunc;
+
+let sendUniformProjectionMatData = (gl, canvasSize, record) =>
+  ManageIMGUIService.sendUniformProjectionMatData(gl, canvasSize, record);
