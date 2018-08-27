@@ -1,20 +1,49 @@
-let load = (customTextureSourceDataArr, fetchFunc, record) =>
-  record |> AssetIMGUIService.load(customTextureSourceDataArr, fetchFunc);
+let load =
+    (customTextureSourceDataArr, (fetchFunc, handleWhenLoadingFunc), record) =>
+  record
+  |> AssetIMGUIService.load(
+       customTextureSourceDataArr,
+       (fetchFunc, handleWhenLoadingFunc),
+     );
 
 let parseFnt = (fntStr, fntFilePath) =>
   ParseFntIMGUIService.parse(fntStr, fntFilePath);
 
-let buildFakeFetchTextResponse = text =>
-  {"text": () => text} |> Js.Promise.resolve;
+let buildFakeFetchTextResponse = (sandbox, contentLength, text) =>
+  {
+    "headers": {
+      "get":
+        Sinon.createEmptyStubWithJsObjSandbox(sandbox)
+        |> Sinon.withOneArg("content-length")
+        |> Sinon.returns(contentLength),
+    },
+    "text": () => text,
+  }
+  |> Js.Promise.resolve;
 
-let buildFakeFetchBlobResponse = blob =>
-  {"blob": () => blob} |> Js.Promise.resolve;
+let buildFakeFetchBlobResponse = (sandbox, contentLength, blob) =>
+  {
+    "headers": {
+      "get":
+        Sinon.createEmptyStubWithJsObjSandbox(sandbox)
+        |> Sinon.withOneArg("content-length")
+        |> Sinon.returns(contentLength),
+    },
+    "blob": () => blob,
+  }
+  |> Js.Promise.resolve;
 
 let buildFakeFetch =
     (
       sandbox,
       fntFilePath,
       bitmapFilePath,
+      (
+        customTextureSource1ContentLength,
+        customTextureSource2ContentLength,
+        bitmapFileContentLength,
+        fntFileContentLength,
+      ),
       customTextureSourceSrc1,
       customTextureSourceSrc2,
     ) => {
@@ -24,14 +53,36 @@ let buildFakeFetch =
 
   fetch
   |> onCall(3)
-  |> returns(buildFakeFetchBlobResponse(customTextureSourceSrc2))
+  |> returns(
+       buildFakeFetchBlobResponse(
+         sandbox,
+         customTextureSource2ContentLength,
+         customTextureSourceSrc2,
+       ),
+     )
   |> onCall(2)
-  |> returns(buildFakeFetchBlobResponse(customTextureSourceSrc1))
+  |> returns(
+       buildFakeFetchBlobResponse(
+         sandbox,
+         customTextureSource1ContentLength,
+         customTextureSourceSrc1,
+       ),
+     )
   |> onCall(1)
-  |> returns(buildFakeFetchBlobResponse(bitmapFilePath))
+  |> returns(
+       buildFakeFetchBlobResponse(
+         sandbox,
+         bitmapFileContentLength,
+         bitmapFilePath,
+       ),
+     )
   |> onCall(0)
   |> returns(
-       buildFakeFetchTextResponse(Node.Fs.readFileAsUtf8Sync(fntFilePath)),
+       buildFakeFetchTextResponse(
+         sandbox,
+         fntFileContentLength,
+         Node.Fs.readFileAsUtf8Sync(fntFilePath),
+       ),
      );
 
   fetch;

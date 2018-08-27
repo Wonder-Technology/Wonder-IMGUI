@@ -9,13 +9,24 @@ let addFont = ((fntFilePath, bitmapFilePath), record) => {
   fontData: Some({fntFilePath, bitmapFilePath}),
 };
 
-let load = (fetchFunc, {assetData} as record) => {
+let load = (fetchFunc, handleWhenLoadingFunc, {assetData} as record) => {
   let {fntId, bitmapId} = assetData;
   let {fntFilePath, bitmapFilePath} =
     RecordIMGUIService.unsafeGetFontData(record);
   let {fntDataMap, bitmapMap} = assetData;
 
-  FetchService.createFetchBlobStream(bitmapFilePath, fetchFunc)
+  fromPromise(
+    fetchFunc(. bitmapFilePath)
+    |> then_(response => {
+         handleWhenLoadingFunc(
+           FetchService.getContentLength(response),
+           bitmapFilePath,
+         );
+
+         response |> resolve;
+       })
+    |> then_(Fetch.Response.blob),
+  )
   |> flatMap(blob =>
        ImageService.loadImageByBlobPromise(blob |> Blob.createObjectURL)
        |> tap(image => Blob.revokeObjectURL(blob))
@@ -27,7 +38,18 @@ let load = (fetchFunc, {assetData} as record) => {
        ();
      })
   |> merge(
-       FetchService.createFetchTextStream(fntFilePath, fetchFunc)
+       fromPromise(
+         fetchFunc(. fntFilePath)
+         |> then_(response => {
+              handleWhenLoadingFunc(
+                FetchService.getContentLength(response),
+                fntFilePath,
+              );
+
+              response |> resolve;
+            })
+         |> then_(Fetch.Response.text),
+       )
        |> map(fntStr => ParseFntIMGUIService.parse(fntStr, fntFilePath))
        |> map(fntData => {
             fntDataMap

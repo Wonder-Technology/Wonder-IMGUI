@@ -46,13 +46,18 @@ let isLoadAsset = record =>
      |> Js.Option.isSome */
   getBitmap(record) |> Js.Option.isSome;
 
-let load = (customTextureSourceDataArr, fetchFunc, {assetData} as record) => {
+let load =
+    (
+      customTextureSourceDataArr,
+      (fetchFunc, handleWhenLoadingFunc),
+      {assetData} as record,
+    ) => {
   let customImageArr = assetData.customImageArr;
   let imguiRecord = ref(Obj.magic(1));
 
   Most.mergeArray(
     [|
-      FontIMGUIService.load(fetchFunc, record)
+      FontIMGUIService.load(fetchFunc, handleWhenLoadingFunc, record)
       |> then_(record => {
            imguiRecord := record;
            () |> resolve;
@@ -62,7 +67,18 @@ let load = (customTextureSourceDataArr, fetchFunc, {assetData} as record) => {
     |> Js.Array.concat(
          customTextureSourceDataArr
          |> Js.Array.map(((imagePath, imageId)) =>
-              FetchService.createFetchBlobStream(imagePath, fetchFunc)
+              Most.fromPromise(
+                fetchFunc(. imagePath)
+                |> then_(response => {
+                     handleWhenLoadingFunc(
+                       FetchService.getContentLength(response),
+                       imagePath,
+                     );
+
+                     response |> resolve;
+                   })
+                |> then_(Fetch.Response.blob),
+              )
               |> Most.flatMap(blob =>
                    ImageService.loadImageByBlobPromise(
                      blob |> Blob.createObjectURL,
@@ -145,7 +161,6 @@ let createCustomTextures = (gl, customImageArr, customTextureMap) => {
        customTextureMap,
      );
 };
-
 
 let unsafeGetCustomTexture = (id, {assetData}) =>
   assetData.customTextureMap |> WonderCommonlib.HashMapService.unsafeGet(id);
