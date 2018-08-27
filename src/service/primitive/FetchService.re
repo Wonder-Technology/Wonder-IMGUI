@@ -28,5 +28,5 @@ let getContentLength = response =>
         ~params={j||j},
       ),
     )
-  | Some(contentLength) => contentLength |> NumberType.stringToInt
+  | Some(contentLength) => contentLength |> NumberService.convertStringToInt
   };
