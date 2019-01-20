@@ -16,7 +16,7 @@ let _addIndex = record => {
 let _getIsSelectedByDefaultAndMap = (index, defaultIsSelected, record) =>
   switch (
     record.controlData.checkboxData.isSelectedMap
-    |> WonderCommonlib.SparseMapService.get(index)
+    |> WonderCommonlib.MutableSparseMapService.get(index)
   ) {
   | None => defaultIsSelected
   | Some(isSelected) => isSelected
@@ -24,7 +24,7 @@ let _getIsSelectedByDefaultAndMap = (index, defaultIsSelected, record) =>
 
 let _setIsSlected = (index, value, record) => {
   record.controlData.checkboxData.isSelectedMap
-  |> WonderCommonlib.SparseMapService.set(index, value)
+  |> WonderCommonlib.MutableSparseMapService.set(index, value)
   |> ignore;
 
   record;

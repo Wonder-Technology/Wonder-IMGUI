@@ -397,11 +397,11 @@ let _clearData = record => {
     },
     checkboxData: {
       index: 0,
-      isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
+      isSelectedMap: WonderCommonlib.MutableSparseMapService.createEmpty(),
     },
     sliderData: {
       index: 0,
-      valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+      valueMap: WonderCommonlib.MutableSparseMapService.createEmpty(),
     },
   },
   layoutData: {
@@ -517,11 +517,11 @@ let createRecord = () => {
     },
     checkboxData: {
       index: 0,
-      isSelectedMap: WonderCommonlib.SparseMapService.createEmpty(),
+      isSelectedMap: WonderCommonlib.MutableSparseMapService.createEmpty(),
     },
     sliderData: {
       index: 0,
-      valueMap: WonderCommonlib.SparseMapService.createEmpty(),
+      valueMap: WonderCommonlib.MutableSparseMapService.createEmpty(),
     },
   },
   ioData: {

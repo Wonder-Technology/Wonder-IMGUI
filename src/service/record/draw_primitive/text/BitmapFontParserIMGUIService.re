@@ -5,7 +5,7 @@ open FontType;
 let getKerning = (fntData, left, right) =>
   switch (
     fntData.kerningMap
-    |> WonderCommonlib.SparseMapService.get(
+    |> WonderCommonlib.MutableSparseMapService.get(
          ParseFntIMGUIService.buildKerningHashMapKey(left, right),
        )
   ) {

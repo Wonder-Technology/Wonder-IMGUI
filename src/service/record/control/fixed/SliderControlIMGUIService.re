@@ -16,7 +16,7 @@ let _getIndex = record => record.controlData.sliderData.index;
 let _getValue = (index, defaultValue, record) =>
   switch (
     record.controlData.sliderData.valueMap
-    |> WonderCommonlib.SparseMapService.get(index)
+    |> WonderCommonlib.MutableSparseMapService.get(index)
   ) {
   | None => defaultValue
   | Some(value) => value
@@ -24,7 +24,7 @@ let _getValue = (index, defaultValue, record) =>
 
 let _setValue = (index, value, record) => {
   record.controlData.sliderData.valueMap
-  |> WonderCommonlib.SparseMapService.set(index, value)
+  |> WonderCommonlib.MutableSparseMapService.set(index, value)
   |> ignore;
 
   record;

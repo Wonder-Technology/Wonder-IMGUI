@@ -1981,13 +1981,13 @@ let _ =
                 index: 3,
                 isSelectedMap:
                   checkboxData.isSelectedMap
-                  |> WonderCommonlib.SparseMapService.set(2, true),
+                  |> WonderCommonlib.MutableSparseMapService.set(2, true),
               },
               sliderData: {
                 index: 4,
                 valueMap:
                   sliderData.valueMap
-                  |> WonderCommonlib.SparseMapService.set(1, 1.5),
+                  |> WonderCommonlib.MutableSparseMapService.set(1, 1.5),
               },
             },
             layoutData: {
@@ -2009,8 +2009,8 @@ let _ =
           (
             radioButtonData.isSelectedMap
             |> WonderCommonlib.HashMapService.length,
-            checkboxData.isSelectedMap |> SparseMapService.length,
-            sliderData.valueMap |> SparseMapService.length,
+            checkboxData.isSelectedMap |> WonderCommonlib.MutableSparseMapService.length,
+            sliderData.valueMap |> WonderCommonlib.MutableSparseMapService.length,
             layoutData.groupData.positionArr |> Js.Array.length,
           )
           |> expect == (0, 0, 0, 0);

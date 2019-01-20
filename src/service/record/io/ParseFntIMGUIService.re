@@ -47,7 +47,7 @@ let _parseStrToObj = str => {
 };
 
 let _parseChar = (fntStr: string) => {
-  let fontDefDictionary = WonderCommonlib.SparseMapService.createEmpty();
+  let fontDefDictionary = WonderCommonlib.MutableSparseMapService.createEmpty();
 
   let char_exp = [%re {|/char [^\n]*(\n|$)/gi|}];
 
@@ -65,7 +65,7 @@ let _parseChar = (fntStr: string) => {
             charObj |> WonderCommonlib.HashMapService.unsafeGet("id");
 
           fontDefDictionary
-          |> WonderCommonlib.SparseMapService.set(
+          |> WonderCommonlib.MutableSparseMapService.set(
                charId,
                {
                  id: charId,
@@ -105,11 +105,11 @@ let _changeKerningArrayToHashMap = kerningArray =>
   |> WonderCommonlib.ArrayService.reduceOneParam(
        (. map, {first, second, amount}) =>
          map
-         |> WonderCommonlib.SparseMapService.set(
+         |> WonderCommonlib.MutableSparseMapService.set(
               buildKerningHashMapKey(first, second),
               amount,
             ),
-       WonderCommonlib.SparseMapService.createEmpty(),
+       WonderCommonlib.MutableSparseMapService.createEmpty(),
      );
 
 let _parseKerning = (fntStr: string) => {

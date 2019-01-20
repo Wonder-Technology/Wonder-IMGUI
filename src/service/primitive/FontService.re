@@ -1,4 +1,4 @@
 open FontType;
 
 let hasFontDefDictionaryData = ({fontDefDictionary}) =>
-  fontDefDictionary |> SparseMapService.length > 0;
+  fontDefDictionary |> WonderCommonlib.MutableSparseMapService.length > 0;

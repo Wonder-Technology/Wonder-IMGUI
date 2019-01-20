@@ -26,8 +26,8 @@ type fntData = {
   scaleW: int,
   scaleH: int,
   /* atlasName: string, */
-  fontDefDictionary: WonderCommonlib.SparseMapService.t(fntCharData),
-  kerningMap: WonderCommonlib.SparseMapService.t(int),
+  fontDefDictionary: WonderCommonlib.MutableSparseMapService.t(fntCharData),
+  kerningMap: WonderCommonlib.MutableSparseMapService.t(int),
   /* isMultiPages: bool, */
 };
 

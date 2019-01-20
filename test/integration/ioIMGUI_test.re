@@ -163,11 +163,16 @@ let _ =
                     commonBase,
                     scaleW,
                     scaleH,
-                    fontDefDictionary |> SparseMapService.length,
-                    (fontDefDictionary |> SparseMapService.getValidValues)[0],
+                    fontDefDictionary
+                    |> WonderCommonlib.MutableSparseMapService.length,
+                    Array.unsafe_get(
+                      fontDefDictionary
+                      |> WonderCommonlib.MutableSparseMapService.getValidValues,
+                      0,
+                    ),
                     kerningMap
-                    |> SparseMapService.getValidValues
-                    |> SparseMapService.length,
+                    |> WonderCommonlib.MutableSparseMapService.getValidValues
+                    |> WonderCommonlib.MutableSparseMapService.length,
                   )
                   |>
                   expect == (

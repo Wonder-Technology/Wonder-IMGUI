@@ -115,12 +115,12 @@ type radioButtonData = {
 
 type checkboxData = {
   index: int,
-  isSelectedMap: WonderCommonlib.SparseMapService.t(bool),
+  isSelectedMap: WonderCommonlib.MutableSparseMapService.t(bool),
 };
 
 type sliderData = {
   index: int,
-  valueMap: WonderCommonlib.SparseMapService.t(float),
+  valueMap: WonderCommonlib.MutableSparseMapService.t(float),
 };
 
 type groupData = {

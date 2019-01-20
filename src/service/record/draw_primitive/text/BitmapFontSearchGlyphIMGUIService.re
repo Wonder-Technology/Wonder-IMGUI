@@ -13,7 +13,7 @@ let _getFontDefDictionary = fntData => fntData.fontDefDictionary;
 let _getGlyphById = (fntData, id) => {
   let dict = _getFontDefDictionary(fntData);
 
-  dict |> WonderCommonlib.SparseMapService.get(id);
+  dict |> WonderCommonlib.MutableSparseMapService.get(id);
 };
 
 let getGlyph = ((fallbackSpaceGlyph, fallbackTabGlyph), fntData, id) => {
@@ -48,7 +48,8 @@ let _getMGlyph = fntData => {
 
 let _getFirstGlyph = fntData =>
   Array.unsafe_get(
-    _getFontDefDictionary(fntData) |> SparseMapService.getValidValues,
+    _getFontDefDictionary(fntData)
+    |> WonderCommonlib.MutableSparseMapService.getValidValues,
     0,
   );
 
