@@ -7,7 +7,7 @@ open DrawDataType;
 let _getOrCreateCustomTextureDrawData = (id, record) : drawData =>
   switch (
     RecordIMGUIService.getCustomTextureDrawDataMap(record)
-    |> WonderCommonlib.HashMapService.get(id)
+    |> WonderCommonlib.MutableHashMapService.get(id)
   ) {
   | None => {
       drawType: CustomTexture,
@@ -84,7 +84,7 @@ let draw =
       ...record.drawData,
       customTextureDrawDataMap:
         record.drawData.customTextureDrawDataMap
-        |> WonderCommonlib.HashMapService.set(id, drawData),
+        |> WonderCommonlib.MutableHashMapService.set(id, drawData),
     },
   };
 };

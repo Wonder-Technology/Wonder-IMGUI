@@ -6,7 +6,7 @@ let _parseStrToObj = str => {
   let item_exp = [%re {|/\w+=[^ \r\n]+/gi|}];
   let int_exp = [%re {|/^[\-]?\d+$/|}];
 
-  let obj = WonderCommonlib.HashMapService.createEmpty();
+  let obj = WonderCommonlib.MutableHashMapService.createEmpty();
 
   let break = ref(false);
 
@@ -33,7 +33,7 @@ let _parseStrToObj = str => {
                 value;
 
           obj
-          |> WonderCommonlib.HashMapService.set(
+          |> WonderCommonlib.MutableHashMapService.set(
                key,
                value |> StringService.toInt,
              )
@@ -62,7 +62,7 @@ let _parseChar = (fntStr: string) => {
         (. char) => {
           let charObj = _parseStrToObj(char);
           let charId =
-            charObj |> WonderCommonlib.HashMapService.unsafeGet("id");
+            charObj |> WonderCommonlib.MutableHashMapService.unsafeGet("id");
 
           fontDefDictionary
           |> WonderCommonlib.MutableSparseMapService.set(
@@ -70,23 +70,23 @@ let _parseChar = (fntStr: string) => {
                {
                  id: charId,
                  rect: (
-                   charObj |> WonderCommonlib.HashMapService.unsafeGet("x"),
-                   charObj |> WonderCommonlib.HashMapService.unsafeGet("y"),
+                   charObj |> WonderCommonlib.MutableHashMapService.unsafeGet("x"),
+                   charObj |> WonderCommonlib.MutableHashMapService.unsafeGet("y"),
                    charObj
-                   |> WonderCommonlib.HashMapService.unsafeGet("width"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("width"),
                    charObj
-                   |> WonderCommonlib.HashMapService.unsafeGet("height"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("height"),
                  ),
                  xOffset:
                    charObj
-                   |> WonderCommonlib.HashMapService.unsafeGet("xoffset"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("xoffset"),
                  yOffset:
                    charObj
-                   |> WonderCommonlib.HashMapService.unsafeGet("yoffset"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("yoffset"),
                  /* xAdvance equal width of char texture */
                  xAdvance:
                    charObj
-                   |> WonderCommonlib.HashMapService.unsafeGet("xadvance"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("xadvance"),
                },
              )
           |> ignore;
@@ -132,13 +132,13 @@ let _parseKerning = (fntStr: string) => {
           |> ArrayService.push({
                first:
                  kerningObj
-                 |> WonderCommonlib.HashMapService.unsafeGet("first"),
+                 |> WonderCommonlib.MutableHashMapService.unsafeGet("first"),
                second:
                  kerningObj
-                 |> WonderCommonlib.HashMapService.unsafeGet("second"),
+                 |> WonderCommonlib.MutableHashMapService.unsafeGet("second"),
                amount:
                  kerningObj
-                 |> WonderCommonlib.HashMapService.unsafeGet("amount"),
+                 |> WonderCommonlib.MutableHashMapService.unsafeGet("amount"),
              })
           |> ignore;
         },
@@ -199,7 +199,7 @@ let parse = (fntStr, url) => {
       },
     );
 
-  switch (pageObj |> WonderCommonlib.HashMapService.get("id")) {
+  switch (pageObj |> WonderCommonlib.MutableHashMapService.get("id")) {
   | None =>
     WonderLog.Log.fatal(
       WonderLog.Log.buildFatalMessage(
@@ -216,10 +216,10 @@ let parse = (fntStr, url) => {
   /* TODO support multi pages */
   {
     commonHeight:
-      commonObj |> WonderCommonlib.HashMapService.unsafeGet("lineHeight"),
-    commonBase: commonObj |> WonderCommonlib.HashMapService.unsafeGet("base"),
-    scaleW: commonObj |> WonderCommonlib.HashMapService.unsafeGet("scaleW"),
-    scaleH: commonObj |> WonderCommonlib.HashMapService.unsafeGet("scaleH"),
+      commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("lineHeight"),
+    commonBase: commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("base"),
+    scaleW: commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("scaleW"),
+    scaleH: commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("scaleH"),
     fontDefDictionary: _parseChar(fntStr),
     kerningMap: _parseKerning(fntStr),
   };

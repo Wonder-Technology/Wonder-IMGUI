@@ -298,7 +298,7 @@ let prepareFntData = record => {
       ...record.assetData,
       fntDataMap:
         record.assetData.fntDataMap
-        |> WonderCommonlib.HashMapService.set(record.assetData.fntId, fntData),
+        |> WonderCommonlib.MutableHashMapService.set(record.assetData.fntId, fntData),
     },
   };
 };

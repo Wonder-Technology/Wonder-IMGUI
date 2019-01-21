@@ -17,7 +17,7 @@ let _getSelectedRadioButtonIndex = dataArr =>
 
 let _getSelectIndex = (defaultSelectIndex, group, record) =>
   switch (
-    _getIsSelectedMap(record) |> WonderCommonlib.HashMapService.get(group)
+    _getIsSelectedMap(record) |> WonderCommonlib.MutableHashMapService.get(group)
   ) {
   | None => defaultSelectIndex
   | Some(index) => index
@@ -139,7 +139,7 @@ let radioButton =
     _buildDrawData(defaultSelectIndex, groupDataArr, group, record);
 
   _getIsSelectedMap(record)
-  |> WonderCommonlib.HashMapService.set(group, selectIndex)
+  |> WonderCommonlib.MutableHashMapService.set(group, selectIndex)
   |> ignore;
 
   let record =

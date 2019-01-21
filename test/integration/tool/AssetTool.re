@@ -13,7 +13,7 @@ let prepareFontAsset = record => {
       ...record.assetData,
       bitmapMap:
         record.assetData.bitmapMap
-        |> WonderCommonlib.HashMapService.set(
+        |> WonderCommonlib.MutableHashMapService.set(
              record.assetData.bitmapId,
              bitmap,
            ),

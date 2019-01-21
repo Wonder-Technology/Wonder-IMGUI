@@ -225,7 +225,7 @@ let _ =
 
         (
           fontTextureDrawData.verticeArr |> Js.Array.length,
-          customTextureDrawDataMap |> WonderCommonlib.HashMapService.length,
+          customTextureDrawDataMap |> WonderCommonlib.MutableHashMapService.length,
         )
         |> expect == (8, 1);
       });
@@ -1975,7 +1975,7 @@ let _ =
               radioButtonData: {
                 isSelectedMap:
                   radioButtonData.isSelectedMap
-                  |> WonderCommonlib.HashMapService.set("aaa", 1),
+                  |> WonderCommonlib.MutableHashMapService.set("aaa", 1),
               },
               checkboxData: {
                 index: 3,
@@ -2008,7 +2008,7 @@ let _ =
 
           (
             radioButtonData.isSelectedMap
-            |> WonderCommonlib.HashMapService.length,
+            |> WonderCommonlib.MutableHashMapService.length,
             checkboxData.isSelectedMap |> WonderCommonlib.MutableSparseMapService.length,
             sliderData.valueMap |> WonderCommonlib.MutableSparseMapService.length,
             layoutData.groupData.positionArr |> Js.Array.length,

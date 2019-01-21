@@ -98,19 +98,19 @@ type fontData = {
 type assetData = {
   fntId: string,
   bitmapId: string,
-  fntDataMap: WonderCommonlib.HashMapService.t(fntData),
+  fntDataMap: WonderCommonlib.MutableHashMapService.t(fntData),
   bitmapMap:
-    WonderCommonlib.HashMapService.t(WonderWebgl.DomExtendType.imageElement),
+    WonderCommonlib.MutableHashMapService.t(WonderWebgl.DomExtendType.imageElement),
   customImageArr:
     array(
       (WonderWebgl.DomExtendType.imageElement, string, ImageType.imageType),
     ),
   customTextureMap:
-    WonderCommonlib.HashMapService.t(WonderWebgl.GlType.texture),
+    WonderCommonlib.MutableHashMapService.t(WonderWebgl.GlType.texture),
 };
 
 type radioButtonData = {
-  isSelectedMap: WonderCommonlib.HashMapService.t(int),
+  isSelectedMap: WonderCommonlib.MutableHashMapService.t(int),
 };
 
 type checkboxData = {
@@ -133,7 +133,7 @@ type layoutData = {groupData};
 type drawData = {
   fontTextureDrawData: DrawDataType.drawData,
   customTextureDrawDataMap:
-    WonderCommonlib.HashMapService.t(DrawDataType.drawData),
+    WonderCommonlib.MutableHashMapService.t(DrawDataType.drawData),
 };
 
 type controlData = {

@@ -33,7 +33,7 @@ let load = (fetchFunc, handleWhenLoadingFunc, {assetData} as record) => {
      )
   |> map(image => {
        bitmapMap
-       |> WonderCommonlib.HashMapService.set(bitmapId, image)
+       |> WonderCommonlib.MutableHashMapService.set(bitmapId, image)
        |> ignore;
        ();
      })
@@ -53,7 +53,7 @@ let load = (fetchFunc, handleWhenLoadingFunc, {assetData} as record) => {
        |> map(fntStr => ParseFntIMGUIService.parse(fntStr, fntFilePath))
        |> map(fntData => {
             fntDataMap
-            |> WonderCommonlib.HashMapService.set(fntId, fntData)
+            |> WonderCommonlib.MutableHashMapService.set(fntId, fntData)
             |> ignore;
             ();
           }),

@@ -169,7 +169,7 @@ let _createEmptyDrawData = () => {
     texCoordArr: [||],
     indexArr: [||],
   },
-  customTextureDrawDataMap: WonderCommonlib.HashMapService.createEmpty(),
+  customTextureDrawDataMap: WonderCommonlib.MutableHashMapService.createEmpty(),
 };
 
 let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
@@ -393,7 +393,7 @@ let _clearData = record => {
   controlData: {
     ...record.controlData,
     radioButtonData: {
-      isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+      isSelectedMap: WonderCommonlib.MutableHashMapService.createEmpty(),
     },
     checkboxData: {
       index: 0,
@@ -503,17 +503,17 @@ let createRecord = () => {
   assetData: {
     fntId: "fnt",
     bitmapId: "bitmap",
-    fntDataMap: WonderCommonlib.HashMapService.createEmpty(),
-    bitmapMap: WonderCommonlib.HashMapService.createEmpty(),
+    fntDataMap: WonderCommonlib.MutableHashMapService.createEmpty(),
+    bitmapMap: WonderCommonlib.MutableHashMapService.createEmpty(),
     customImageArr: [||],
-    customTextureMap: WonderCommonlib.HashMapService.createEmpty(),
+    customTextureMap: WonderCommonlib.MutableHashMapService.createEmpty(),
   },
   fontData: None,
   webglData: None,
   drawData: _createEmptyDrawData(),
   controlData: {
     radioButtonData: {
-      isSelectedMap: WonderCommonlib.HashMapService.createEmpty(),
+      isSelectedMap: WonderCommonlib.MutableHashMapService.createEmpty(),
     },
     checkboxData: {
       index: 0,

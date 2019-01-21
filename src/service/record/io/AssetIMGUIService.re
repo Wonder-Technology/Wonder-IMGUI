@@ -7,7 +7,7 @@ open WonderBsMost;
 let getFntData = ({assetData} as record) => {
   let {fntDataMap} = assetData;
 
-  fntDataMap |> WonderCommonlib.HashMapService.get(assetData.fntId);
+  fntDataMap |> WonderCommonlib.MutableHashMapService.get(assetData.fntId);
 };
 
 let unsafeGetFntData = record =>
@@ -17,7 +17,7 @@ let setFntData = (fntData, {assetData} as record) => {
   let {fntDataMap} = assetData;
 
   fntDataMap
-  |> WonderCommonlib.HashMapService.set(assetData.fntId, fntData)
+  |> WonderCommonlib.MutableHashMapService.set(assetData.fntId, fntData)
   |> ignore;
 
   record;
@@ -26,7 +26,7 @@ let setFntData = (fntData, {assetData} as record) => {
 let getBitmap = ({assetData} as record) => {
   let {bitmapMap} = assetData;
 
-  bitmapMap |> WonderCommonlib.HashMapService.get(assetData.bitmapId);
+  bitmapMap |> WonderCommonlib.MutableHashMapService.get(assetData.bitmapId);
 };
 
 let unsafeGetBitmap = record => getBitmap(record) |> OptionService.unsafeGet;
@@ -35,7 +35,7 @@ let setBitmap = (bitmap, {assetData} as record) => {
   let {bitmapMap} = assetData;
 
   bitmapMap
-  |> WonderCommonlib.HashMapService.set(assetData.bitmapId, bitmap)
+  |> WonderCommonlib.MutableHashMapService.set(assetData.bitmapId, bitmap)
   |> ignore;
 
   record;
@@ -156,14 +156,14 @@ let createCustomTextures = (gl, customImageArr, customTextureMap) => {
            gl,
          );
 
-         customTextureMap |> WonderCommonlib.HashMapService.set(id, texture);
+         customTextureMap |> WonderCommonlib.MutableHashMapService.set(id, texture);
        },
        customTextureMap,
      );
 };
 
 let unsafeGetCustomTexture = (id, {assetData}) =>
-  assetData.customTextureMap |> WonderCommonlib.HashMapService.unsafeGet(id);
+  assetData.customTextureMap |> WonderCommonlib.MutableHashMapService.unsafeGet(id);
 
 let getCustomImageArr = ({assetData}) => assetData.customImageArr;
 
