@@ -1,6 +1,6 @@
 {
   "name": "wonder-imgui",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "",
   "homepage": "https://github.com/Wonder-Technology/Wonder-IMGUI",
   "license": "MIT",
@@ -12,10 +12,9 @@
     "buildAll": "gulp generateIndex && npm run build && gulp rollup"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "bs-platform": "4.0.0",
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-jest": "^24.1.0",
     "express": "^4.16.1",
     "gulp": "^3.9.1",
     "gulp-git": "^2.5.0",
@@ -24,15 +23,16 @@
     "rollup": "^0.51.5",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^2.0.0",
-    "wonder-bs-jest": "^0.2.17",
-    "wonder-bs-sinon": "^0.1.7",
+    "bs-platform": "^4.0.18",
+    "wonder-bs-jest": "latest",
+    "wonder-bs-sinon": "latest",
     "wonder-generate-index": "latest"
   },
   "dependencies": {
     "wonder-webgl": "^0.0.2",
     "bs-fetch": "^0.3.0",
     "wonder-bs-most": "^0.0.3",
-    "wonder-commonlib": "^0.2.26",
+    "wonder-commonlib": "^0.2.27",
     "wonder-log": "^0.2.2"
   }
 }
