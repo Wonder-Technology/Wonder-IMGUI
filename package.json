@@ -15,6 +15,7 @@
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "babel-jest": "^24.1.0",
+    "jest": "^24.1.0",
     "express": "^4.16.1",
     "gulp": "^3.9.1",
     "gulp-git": "^2.5.0",

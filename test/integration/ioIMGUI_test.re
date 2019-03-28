@@ -102,25 +102,24 @@ let _ =
                 contentLengthArr,
                 filePathArr,
               )
-              |>
-              expect == (
-                          bitmap,
-                          [|4, 3, 1, 2|],
-                          [|
-                            "/Users/y/Github/Wonder-IMGUI/test/res/font/myFont.fnt",
-                            "/Users/y/Github/Wonder-IMGUI/test/res/font/myFont.png",
-                            "./test/res/image/1.jpg",
-                            "./test/res/image/2.png",
-                          |],
-                        )
+              |> expect
+              == (
+                   bitmap,
+                   [|4, 3, 1, 2|],
+                   [|
+                     "/Users/y/Github/Wonder-IMGUI/test/res/font/myFont.fnt",
+                     "/Users/y/Github/Wonder-IMGUI/test/res/font/myFont.png",
+                     "./test/res/image/1.jpg",
+                     "./test/res/image/2.png",
+                   |],
+                 )
               |> resolve,
           );
         });
-
         testPromise("load bitmap image", () =>
           _test(
             (1, 2, 3, 4),
-            (contentLength, filePath) => {},
+            (contentLength, filePath) => (),
             (bitmap, _, record) =>
               AssetTool.unsafeGetBitmap(record)
               |> Obj.magic
@@ -132,7 +131,7 @@ let _ =
         testPromise("load custom texture sources", () =>
           _test(
             (1, 2, 3, 4),
-            (contentLength, filePath) => {},
+            (contentLength, filePath) => (),
             (bitmap, customImageArr, record) =>
               AssetIMGUIAPI.getCustomImageArr(record)
               |> Obj.magic
@@ -146,7 +145,7 @@ let _ =
             testPromise("test", () =>
               _test(
                 (1, 2, 3, 4),
-                (contentLength, filePath) => {},
+                (contentLength, filePath) => (),
                 (_bitmap, _, record) => {
                   let {
                     commonHeight,
@@ -174,22 +173,22 @@ let _ =
                     |> WonderCommonlib.MutableSparseMapService.getValidValues
                     |> WonderCommonlib.MutableSparseMapService.length,
                   )
-                  |>
-                  expect == (
-                              90,
-                              70,
-                              490,
-                              547,
-                              127,
-                              {
-                                id: 32,
-                                rect: (486, 459, 0, 0),
-                                xOffset: 0,
-                                yOffset: 71,
-                                xAdvance: 21,
-                              },
-                              241,
-                            )
+                  |> expect
+                  == (
+                       90,
+                       70,
+                       490,
+                       547,
+                       127,
+                       {
+                         id: 32,
+                         rect: (486, 459, 0, 0),
+                         xOffset: 0,
+                         yOffset: 71,
+                         xAdvance: 21,
+                       },
+                       241,
+                     )
                   |> resolve;
                 },
               )
