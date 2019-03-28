@@ -105,7 +105,7 @@ let sendUniformProjectionMatData = (gl, canvasSize, record) => {
 };
 
 let init = (gl, canvasSize, record) =>
-  ! AssetIMGUIService.isLoadAsset(record) ?
+  !AssetIMGUIService.isLoadAsset(record) ?
     record :
     {
       let program =
@@ -169,7 +169,8 @@ let _createEmptyDrawData = () => {
     texCoordArr: [||],
     indexArr: [||],
   },
-  customTextureDrawDataMap: WonderCommonlib.MutableHashMapService.createEmpty(),
+  customTextureDrawDataMap:
+    WonderCommonlib.MutableHashMapService.createEmpty(),
 };
 
 let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
@@ -191,7 +192,7 @@ let _prepare = (ioData, (getRecordFunc, setRecordFunc), data) => {
     },
     drawData: _createEmptyDrawData(),
   }
-  |. setRecordFunc(data);
+  ->(setRecordFunc(data));
 };
 
 let _unbindVAO = gl =>
@@ -320,7 +321,7 @@ let _buildGroupedDrawDataArr = record => {
 
   let (_, _, customTextureDrawDataArr) =
     customTextureDrawDataMap
-    |> Js.Dict.values
+    |> WonderCommonlib.MutableHashMapService.getValidValues
     |> WonderCommonlib.ArrayService.reduceOneParam(
          (.
            (lastVerticeArr, baseIndex, resultDrawDataArr),
@@ -379,10 +380,8 @@ let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
 
   _setGlState(gl);
 
-  record
-  |> _draw(gl, drawElementsDataArr)
-  |> _restoreGlState(gl)
-  |. setRecordFunc(data);
+  (record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl))
+  ->(setRecordFunc(data));
 };
 
 let getCustomData = ({imguiFuncData}) =>
@@ -459,7 +458,7 @@ let _exec = (apiJsObj, getRecordFunc, data) => {
 let render = (gl, ioData, apiJsObj, (getRecordFunc, setRecordFunc), data) => {
   let record = getRecordFunc(data);
 
-  ! AssetIMGUIService.isLoadAsset(record) ?
+  !AssetIMGUIService.isLoadAsset(record) ?
     data :
     data
     |> _prepare(ioData, (getRecordFunc, setRecordFunc))
