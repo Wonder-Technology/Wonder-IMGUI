@@ -4599,9 +4599,9 @@ wonder-bs-sinon@latest:
     sinon "^4.1.2"
     wonder-bs-jest "0.2.23"
 
-wonder-commonlib@^0.2.27:
-  version "0.2.27"
-  resolved "http://registry.npm.taobao.org/wonder-commonlib/download/wonder-commonlib-0.2.27.tgz#fe858a98c426ffc84613a1a2018c25535d919aea"
+wonder-commonlib@^0.2.30:
+  version "0.2.30"
+  resolved "http://registry.npm.taobao.org/wonder-commonlib/download/wonder-commonlib-0.2.30.tgz#612551f6323d6933dc9416f97310884490f5008c"
 
 wonder-commonlib@0.2.13:
   version "0.2.13"
