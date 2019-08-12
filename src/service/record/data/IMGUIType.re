@@ -4,7 +4,7 @@ open StructureType;
 
 open FontType;
 
-type radioButtonSetting = {
+/* type radioButtonSetting = {
   radioButtonOuterColor: colorArr,
   radioButtonInnerColor: colorArr,
   radioButtonOuterColorHover: colorArr,
@@ -34,15 +34,15 @@ type sliderSetting = {
   sliderFillColor: colorArr,
   sliderBackgroundColorHover: colorArr,
   sliderFillColorHover: colorArr,
-};
+}; */
 
 type setting = {
   textColor: colorArr,
   fontTexUvForWhite: array(float),
-  buttonSetting,
+  /* buttonSetting,
   radioButtonSetting,
   checkboxSetting,
-  sliderSetting,
+  sliderSetting, */
 };
 
 type point('a) = ('a, 'a);
@@ -109,7 +109,7 @@ type assetData = {
     WonderCommonlib.MutableHashMapService.t(WonderWebgl.GlType.texture),
 };
 
-type radioButtonData = {
+/* type radioButtonData = {
   isSelectedMap: WonderCommonlib.MutableHashMapService.t(int),
 };
 
@@ -121,7 +121,7 @@ type checkboxData = {
 type sliderData = {
   index: int,
   valueMap: WonderCommonlib.MutableSparseMapService.t(float),
-};
+}; */
 
 type groupData = {
   positionArr: array(position),
@@ -136,11 +136,11 @@ type drawData = {
     WonderCommonlib.MutableHashMapService.t(DrawDataType.drawData),
 };
 
-type controlData = {
+/* type controlData = {
   radioButtonData,
   checkboxData,
   sliderData,
-};
+}; */
 
 type customDataForIMGUIFunc;
 
@@ -160,7 +160,7 @@ and imguiRecord = {
   webglData: option(webglData),
   drawData,
   imguiFuncData,
-  controlData,
+  /* controlData, */
   ioData,
   layoutData,
 };

@@ -4,10 +4,6 @@
     {
       "dir": "src",
       "subdirs": true
-    },
-    {
-      "dir": "test",
-      "subdirs": true
     }
   ],
   "bs-dev-dependencies": [

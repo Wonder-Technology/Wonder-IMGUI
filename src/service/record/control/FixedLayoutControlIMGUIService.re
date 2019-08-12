@@ -21,14 +21,14 @@ let image =
          id,
        );
 
-let button =
+/* let button =
   (. rect, str, record) =>
     ButtonControlIMGUIService.button(
       GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
       |> StructureService.convertIntRectToFloatRect,
       str,
       record,
-    );
+    ); */
 
 let box =
   (. rect, color: array(float), record) =>
@@ -39,7 +39,7 @@ let box =
       record,
     );
 
-let radioButton =
+/* let radioButton =
   (. groupDataArr, defaultSelectIndex, group, record) =>
     RadioButtonControlIMGUIService.radioButton(
       groupDataArr,
@@ -87,4 +87,4 @@ let sliderFloat =
       (min, max, numDecimalDigits),
       (defaultValue, str),
       record,
-    );
+    ); */

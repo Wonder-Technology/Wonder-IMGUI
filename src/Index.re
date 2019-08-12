@@ -10,11 +10,7 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
-let radioButton = FixedLayoutControlIMGUIAPI.radioButton;
-
 let box = FixedLayoutControlIMGUIAPI.box;
-
-let button = FixedLayoutControlIMGUIAPI.button;
 
 let image = FixedLayoutControlIMGUIAPI.image;
 
@@ -29,6 +25,8 @@ let buildIOData = IOIMGUIAPI.buildIOData;
 let addFont = IOIMGUIAPI.addFont;
 
 let load = IOIMGUIAPI.load;
+
+let sendUniformProjectionMatData = ManageIMGUIAPI.sendUniformProjectionMatData;
 
 let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
 
@@ -58,11 +56,7 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
-let radioButton = FixedLayoutControlIMGUIAPI.radioButton;
-
 let box = FixedLayoutControlIMGUIAPI.box;
-
-let button = FixedLayoutControlIMGUIAPI.button;
 
 let image = FixedLayoutControlIMGUIAPI.image;
 
@@ -77,6 +71,8 @@ let buildIOData = IOIMGUIAPI.buildIOData;
 let addFont = IOIMGUIAPI.addFont;
 
 let load = IOIMGUIAPI.load;
+
+let sendUniformProjectionMatData = ManageIMGUIAPI.sendUniformProjectionMatData;
 
 let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
 

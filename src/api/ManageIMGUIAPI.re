@@ -25,105 +25,102 @@ let render = (gl, ioDataJsObj, record) =>
 let getSetting = record => {
   let {
     textColor,
-    buttonSetting,
-    radioButtonSetting,
-    checkboxSetting,
-    sliderSetting,
+    /* buttonSetting,
+       radioButtonSetting,
+          checkboxSetting,
+          sliderSetting, */
     fontTexUvForWhite,
   } =
     RecordIMGUIService.getSetting(record);
 
-  let buttonSettingJsObj = {
-    "buttonColor": buttonSetting.buttonColor,
-    "hoverButtonColor": buttonSetting.hoverButtonColor,
-    "clickButtonColor": buttonSetting.clickButtonColor,
-  };
-  let radioButtonSettingJsObj = {
-    "radioButtonOuterColor": radioButtonSetting.radioButtonOuterColor,
-    "radioButtonInnerColor": radioButtonSetting.radioButtonInnerColor,
-    "radioButtonOuterColorHover":
-      radioButtonSetting.radioButtonOuterColorHover,
-    "radioButtonInnerColorHover":
-      radioButtonSetting.radioButtonInnerColorHover,
-    "radioButtonCircleSegments": radioButtonSetting.radioButtonCircleSegments,
-    "radioButtonInnerRadius": radioButtonSetting.radioButtonInnerRadius,
-    "radioButtonOuterRadius": radioButtonSetting.radioButtonOuterRadius,
-  };
-  let checkboxSettingJsObj = {
-    "checkboxOuterColor": checkboxSetting.checkboxOuterColor,
-    "checkboxInnerColor": checkboxSetting.checkboxInnerColor,
-    "checkboxOuterColorHover": checkboxSetting.checkboxOuterColorHover,
-    "checkboxInnerColorHover": checkboxSetting.checkboxInnerColorHover,
-    "checkboxInnerSizeRatio": checkboxSetting.checkboxInnerSizeRatio,
-    "checkboxOuterSizeRatio": checkboxSetting.checkboxOuterSizeRatio,
-  };
-  let sliderSettingJsObj = {
-    "sliderBackgroundColor": sliderSetting.sliderBackgroundColor,
-    "sliderFillColor": sliderSetting.sliderFillColor,
-    "sliderBackgroundColorHover": sliderSetting.sliderBackgroundColorHover,
-    "sliderFillColorHover": sliderSetting.sliderFillColorHover,
-  };
+  /* let buttonSettingJsObj = {
+       "buttonColor": buttonSetting.buttonColor,
+       "hoverButtonColor": buttonSetting.hoverButtonColor,
+       "clickButtonColor": buttonSetting.clickButtonColor,
+     };
+     let radioButtonSettingJsObj = {
+       "radioButtonOuterColor": radioButtonSetting.radioButtonOuterColor,
+       "radioButtonInnerColor": radioButtonSetting.radioButtonInnerColor,
+       "radioButtonOuterColorHover":
+         radioButtonSetting.radioButtonOuterColorHover,
+       "radioButtonInnerColorHover":
+         radioButtonSetting.radioButtonInnerColorHover,
+       "radioButtonCircleSegments": radioButtonSetting.radioButtonCircleSegments,
+       "radioButtonInnerRadius": radioButtonSetting.radioButtonInnerRadius,
+       "radioButtonOuterRadius": radioButtonSetting.radioButtonOuterRadius,
+     };
+     let checkboxSettingJsObj = {
+       "checkboxOuterColor": checkboxSetting.checkboxOuterColor,
+       "checkboxInnerColor": checkboxSetting.checkboxInnerColor,
+       "checkboxOuterColorHover": checkboxSetting.checkboxOuterColorHover,
+       "checkboxInnerColorHover": checkboxSetting.checkboxInnerColorHover,
+       "checkboxInnerSizeRatio": checkboxSetting.checkboxInnerSizeRatio,
+       "checkboxOuterSizeRatio": checkboxSetting.checkboxOuterSizeRatio,
+     };
+     let sliderSettingJsObj = {
+       "sliderBackgroundColor": sliderSetting.sliderBackgroundColor,
+       "sliderFillColor": sliderSetting.sliderFillColor,
+       "sliderBackgroundColorHover": sliderSetting.sliderBackgroundColorHover,
+       "sliderFillColorHover": sliderSetting.sliderFillColorHover,
+     }; */
 
   {
     "textColor": textColor,
-    "buttonSetting": buttonSettingJsObj,
-    "radioButtonSetting": radioButtonSettingJsObj,
-    "checkboxSetting": checkboxSettingJsObj,
-    "sliderSetting": sliderSettingJsObj,
+    /* "buttonSetting": buttonSettingJsObj, */
+    /* "radioButtonSetting": radioButtonSettingJsObj,
+       "checkboxSetting": checkboxSettingJsObj,
+       "sliderSetting": sliderSettingJsObj, */
     "fontTexUvForWhite": fontTexUvForWhite,
   };
 };
 
-let setSetting = (settingJsObj, record) => {
-  let buttonSettingJsObj = settingJsObj##buttonSetting;
-  let radioButtonSettingJsObj = settingJsObj##radioButtonSetting;
-  let checkboxSettingJsObj = settingJsObj##checkboxSetting;
-  let sliderSettingJsObj = settingJsObj##sliderSetting;
+let setSetting = (settingJsObj, record) =>
+  /* let buttonSettingJsObj = settingJsObj##buttonSetting;
+     let radioButtonSettingJsObj = settingJsObj##radioButtonSetting;
+     let checkboxSettingJsObj = settingJsObj##checkboxSetting;
+     let sliderSettingJsObj = settingJsObj##sliderSetting; */
+  /* let buttonSetting = {
+       buttonColor: buttonSettingJsObj##buttonColor,
+       hoverButtonColor: buttonSettingJsObj##hoverButtonColor,
+       clickButtonColor: buttonSettingJsObj##clickButtonColor,
+     };
 
-  let buttonSetting = {
-    buttonColor: buttonSettingJsObj##buttonColor,
-    hoverButtonColor: buttonSettingJsObj##hoverButtonColor,
-    clickButtonColor: buttonSettingJsObj##clickButtonColor,
-  };
+     let radioButtonSetting = {
+       radioButtonOuterColor: radioButtonSettingJsObj##radioButtonOuterColor,
+       radioButtonInnerColor: radioButtonSettingJsObj##radioButtonInnerColor,
+       radioButtonOuterColorHover: radioButtonSettingJsObj##radioButtonOuterColorHover,
+       radioButtonInnerColorHover: radioButtonSettingJsObj##radioButtonInnerColorHover,
+       radioButtonCircleSegments: radioButtonSettingJsObj##radioButtonCircleSegments,
+       radioButtonInnerRadius: radioButtonSettingJsObj##radioButtonInnerRadius,
+       radioButtonOuterRadius: radioButtonSettingJsObj##radioButtonOuterRadius,
+     };
 
-  let radioButtonSetting = {
-    radioButtonOuterColor: radioButtonSettingJsObj##radioButtonOuterColor,
-    radioButtonInnerColor: radioButtonSettingJsObj##radioButtonInnerColor,
-    radioButtonOuterColorHover: radioButtonSettingJsObj##radioButtonOuterColorHover,
-    radioButtonInnerColorHover: radioButtonSettingJsObj##radioButtonInnerColorHover,
-    radioButtonCircleSegments: radioButtonSettingJsObj##radioButtonCircleSegments,
-    radioButtonInnerRadius: radioButtonSettingJsObj##radioButtonInnerRadius,
-    radioButtonOuterRadius: radioButtonSettingJsObj##radioButtonOuterRadius,
-  };
+     let checkboxSetting = {
+       checkboxOuterColor: checkboxSettingJsObj##checkboxOuterColor,
+       checkboxInnerColor: checkboxSettingJsObj##checkboxInnerColor,
+       checkboxOuterColorHover: checkboxSettingJsObj##checkboxOuterColorHover,
+       checkboxInnerColorHover: checkboxSettingJsObj##checkboxInnerColorHover,
+       checkboxInnerSizeRatio: checkboxSettingJsObj##checkboxInnerSizeRatio,
+       checkboxOuterSizeRatio: checkboxSettingJsObj##checkboxOuterSizeRatio,
+     };
 
-  let checkboxSetting = {
-    checkboxOuterColor: checkboxSettingJsObj##checkboxOuterColor,
-    checkboxInnerColor: checkboxSettingJsObj##checkboxInnerColor,
-    checkboxOuterColorHover: checkboxSettingJsObj##checkboxOuterColorHover,
-    checkboxInnerColorHover: checkboxSettingJsObj##checkboxInnerColorHover,
-    checkboxInnerSizeRatio: checkboxSettingJsObj##checkboxInnerSizeRatio,
-    checkboxOuterSizeRatio: checkboxSettingJsObj##checkboxOuterSizeRatio,
-  };
-
-  let sliderSetting = {
-    sliderBackgroundColor: sliderSettingJsObj##sliderBackgroundColor,
-    sliderFillColor: sliderSettingJsObj##sliderFillColor,
-    sliderBackgroundColorHover: sliderSettingJsObj##sliderBackgroundColorHover,
-    sliderFillColorHover: sliderSettingJsObj##sliderFillColorHover,
-  };
-
+     let sliderSetting = {
+       sliderBackgroundColor: sliderSettingJsObj##sliderBackgroundColor,
+       sliderFillColor: sliderSettingJsObj##sliderFillColor,
+       sliderBackgroundColorHover: sliderSettingJsObj##sliderBackgroundColorHover,
+       sliderFillColorHover: sliderSettingJsObj##sliderFillColorHover,
+     }; */
   RecordIMGUIService.setSetting(
     {
       textColor: settingJsObj##textColor,
-      buttonSetting,
-      radioButtonSetting,
-      checkboxSetting,
-      sliderSetting,
+      /* buttonSetting,
+         radioButtonSetting,
+         checkboxSetting,
+         sliderSetting, */
       fontTexUvForWhite: settingJsObj##fontTexUvForWhite,
     },
     record,
   );
-};
 
 let getCustomData = ManageIMGUIService.getCustomData;
 
