@@ -116,28 +116,18 @@ let _ =
               );
 
             let buttonColor =
-              unsafeGetCustomStyleData(
+              unsafeGetCustomStyleData(.
                 "buttonColor",
                 singleCustomStyleDataMap,
               );
 
-            /* WonderLog.Log.print(
-               ( singleCustomStyleDataMap,
-               buttonColor,
-               isClick(. record),
-               pointDown, pointUp,
-               isInBox(rect, convertIntPositionToFloatPosition(pointPosition))
-
-               )
-               ) |> ignore; */
-
             let hoverButtonColor =
-              unsafeGetCustomStyleData(
+              unsafeGetCustomStyleData(.
                 "hoverButtonColor",
                 singleCustomStyleDataMap,
               );
             let clickButtonColor =
-              unsafeGetCustomStyleData(
+              unsafeGetCustomStyleData(.
                 "clickButtonColor",
                 singleCustomStyleDataMap,
               );

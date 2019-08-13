@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>benchmark</title>
+</head>
+
+<body>
+
+    <canvas id="aaa" width=900 height=500></canvas>
+
+    <script src="../../dist/wdimgui.js"></script>
+
+    <script src="./SettingTool.js"></script>
+
+
+    <script>
+
+        var _initSkin = function (record, buttonColor, hoverButtonColor, clickButtonColor) {
+            var buttonColor = buttonColor !== undefined ? buttonColor : /* array */[
+                0.35,
+                0.1,
+                0.1
+            ];
+            var hoverButtonColor = hoverButtonColor !== undefined ? hoverButtonColor : /* array */[
+                0.35,
+                0.1,
+                0.1
+            ];
+            var clickButtonColor = clickButtonColor !== undefined ? clickButtonColor : /* array */[
+                0.35,
+                0.1,
+                0.1
+            ];
+            var allCustomStyleData = wdimgui.createAllCustomStyleData(/* () */0);
+            var singleCustomStyleData = wdimgui.createSingleCustomStyleData(/* () */0);
+            var singleCustomStyleData$1 = wdimgui.addCustomStyleData("clickButtonColor", clickButtonColor, wdimgui.addCustomStyleData("hoverButtonColor", hoverButtonColor, wdimgui.addCustomStyleData("buttonColor", buttonColor, singleCustomStyleData)));
+            var allCustomStyleData$1 = wdimgui.addSingleCustomStyleData("CustomStyle1", singleCustomStyleData$1, allCustomStyleData);
+            var skinData = wdimgui.createSkinData(allCustomStyleData$1);
+
+
+            return wdimgui.addSkinData("Skin1", skinData, wdimgui.addDefaultSkinData(wdimgui.clearAllSkins(record)));
+        };
+
+
+
+        window.onload = function () {
+            var canvas = document.querySelector("#aaa");
+
+            var gl = canvas.getContext("webgl");
+
+            var image1 = new Image();
+
+            image1.src = "./1.jpg";
+            image1.onload = () => {
+                var image2 = new Image();
+
+                image2.src = "./1.png";
+                image2.onload = () => {
+
+
+                    var record = wdimgui.createRecord();
+
+
+
+
+                    var record =
+                        wdimgui.addFont(
+                            "../res/font/myFont.fnt",
+                            "../res/font/myFont.png",
+                            record
+                        );
+
+                    var buttonX = 200;
+                    var buttonY = 20;
+                    var buttonWidth = 100;
+                    var buttonHeight = 300;
+
+
+                    var recordForLoop = null;
+
+                    function step(timestamp) {
+                        var record = recordForLoop;
+
+                        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+                        recordForLoop = wdimgui.render(gl,
+                            {
+                                pointUp: false,
+                                pointDown: false,
+                                pointPosition: [buttonX, buttonY + buttonHeight],
+                                pointMovementDelta: [0, 0],
+                            },
+                            record);
+
+
+                        window.requestAnimationFrame(step);
+                    }
+
+                    wdimgui.load(
+                        [
+                            ["./1.jpg", "a1"],
+                            ["./1.png", "a2"],
+                        ],
+                        (contentLength, filePath) => {
+                        },
+                        record)
+                        .then((record) => {
+                            var record = _initSkin(
+                                record,
+                                [0.35, 0.1, 0.1],
+                                [0.40, 0.5, 0.1],
+                                [0.50, 0.1, 0.5],
+                            );
+
+
+                            var record = wdimgui.registerCustomControl("Wonder_Button", (function (customControlFuncData, showData, apiJsObj, record) {
+                                var rect = customControlFuncData[0];
+                                var isInBox = function (param, param$1) {
+                                    var x = param[0];
+                                    var y = param[1];
+                                    var posY = param$1[1];
+                                    var posX = param$1[0];
+                                    var maxX = x + param[2];
+                                    var maxY = y + param[3];
+                                    if (x <= posX && posX <= maxX && y <= posY) {
+                                        return posY <= maxY;
+                                    } else {
+                                        return false;
+                                    }
+                                };
+                                var convertIntPositionToFloatPosition = function (param) {
+                                    return /* tuple */[
+                                        param[0],
+                                        param[1]
+                                    ];
+                                };
+                                var getIOData = apiJsObj.getIOData;
+                                var getPointUp = apiJsObj.getPointUp;
+                                var getPointDown = apiJsObj.getPointDown;
+                                var getPointPosition = apiJsObj.getPointPosition;
+                                var isClick = apiJsObj.isClick;
+                                var drawBox = apiJsObj.drawBox;
+                                var drawText = apiJsObj.drawText;
+                                var ioData = getIOData(record);
+                                getPointUp(ioData);
+                                var pointDown = getPointDown(ioData);
+                                var pointPosition = getPointPosition(ioData);
+                                var parseShowData = apiJsObj.parseShowData;
+                                var unsafeGetSkinData = apiJsObj.unsafeGetSkinData;
+                                var unsafeGetSingleCustomStyleDataMap = apiJsObj.unsafeGetSingleCustomStyleDataMap;
+                                var unsafeGetCustomStyleData = apiJsObj.unsafeGetCustomStyleData;
+                                var match = parseShowData(showData);
+                                var singleCustomStyleDataMap = unsafeGetSingleCustomStyleDataMap(match[1], unsafeGetSkinData(match[0], record));
+
+
+                                var buttonColor = unsafeGetCustomStyleData("buttonColor", singleCustomStyleDataMap);
+                                var hoverButtonColor = unsafeGetCustomStyleData("hoverButtonColor", singleCustomStyleDataMap);
+                                var clickButtonColor = unsafeGetCustomStyleData("clickButtonColor", singleCustomStyleDataMap);
+
+
+                                var match$1 = isInBox(rect, convertIntPositionToFloatPosition(pointPosition));
+                                var match$2;
+                                if (match$1) {
+                                    var match$3 = isClick(record);
+                                    match$2 = match$3 ? /* tuple */[
+                                        true,
+                                        clickButtonColor
+                                    ] : (
+                                            pointDown ? /* tuple */[
+                                                false,
+                                                clickButtonColor
+                                            ] : /* tuple */[
+                                                    false,
+                                                    hoverButtonColor
+                                                ]
+                                        );
+                                } else {
+                                    match$2 = /* tuple */[
+                                        false,
+                                        buttonColor
+                                    ];
+                                }
+
+
+                                var record$1 = drawBox(rect, match$2[1], record);
+                                var record$2 = drawText(rect, customControlFuncData[1], /* Center */1, record$1);
+                                return /* tuple */[
+                                    record$2,
+                                    match$2[0]
+                                ];
+                            }), record);
+
+
+
+
+
+
+                            var record = wdimgui.setIMGUIFunc(null, (_, apiJsObj, record) => {
+                                var label = apiJsObj.label;
+                                var image = apiJsObj.image;
+                                // var button = apiJsObj.button;
+                                let unsafeGetCustomControl = apiJsObj.unsafeGetCustomControl;
+
+                                var button = unsafeGetCustomControl("Wonder_Button", record);
+
+
+                                var [record, isButtonClick] =
+                                    button(
+                                        [
+                                            [buttonX, buttonY, buttonWidth, buttonHeight],
+                                            "ab"
+                                        ],
+                                        ["Skin1", "CustomStyle1"],
+                                        record
+                                    );
+
+
+
+                                console.log("isButtonClick: ", isButtonClick);
+
+                                return record
+                            }, record);
+
+                            var record = setSetting(record);
+
+
+                            var record = wdimgui.init(gl, [canvas.width, canvas.height], record);
+
+
+                            gl.clearColor(0, 1, 1, 1);
+
+                            recordForLoop = record;
+
+
+                            window.requestAnimationFrame(step);
+                        })
+                };
+            }
+        };
+    </script>
+</body>
+
+</html>

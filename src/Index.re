@@ -10,6 +10,30 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let addDefaultSkinData = ExtendIMGUIAPI.addDefaultSkinData;
+
+let clearAllSkins = ExtendIMGUIAPI.clearAllSkins;
+
+let createSkinData = ExtendIMGUIAPI.createSkinData;
+
+let removeSkinData = ExtendIMGUIAPI.removeSkinData;
+
+let addSkinData = ExtendIMGUIAPI.addSkinData;
+
+let removeSingleCustomStyleData = ExtendIMGUIAPI.removeSingleCustomStyleData;
+
+let addSingleCustomStyleData = ExtendIMGUIAPI.addSingleCustomStyleData;
+
+let removeCustomStyleData = ExtendIMGUIAPI.removeCustomStyleData;
+
+let addCustomStyleData = ExtendIMGUIAPI.addCustomStyleData;
+
+let createSingleCustomStyleData = ExtendIMGUIAPI.createSingleCustomStyleData;
+
+let createAllCustomStyleData = ExtendIMGUIAPI.createAllCustomStyleData;
+
+let registerCustomControl = ExtendIMGUIAPI.registerCustomControl;
+
 let box = FixedLayoutControlIMGUIAPI.box;
 
 let image = FixedLayoutControlIMGUIAPI.image;
@@ -55,6 +79,30 @@ let getBitmap = AssetIMGUIAPI.getBitmap;
 let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
+
+let addDefaultSkinData = ExtendIMGUIAPI.addDefaultSkinData;
+
+let clearAllSkins = ExtendIMGUIAPI.clearAllSkins;
+
+let createSkinData = ExtendIMGUIAPI.createSkinData;
+
+let removeSkinData = ExtendIMGUIAPI.removeSkinData;
+
+let addSkinData = ExtendIMGUIAPI.addSkinData;
+
+let removeSingleCustomStyleData = ExtendIMGUIAPI.removeSingleCustomStyleData;
+
+let addSingleCustomStyleData = ExtendIMGUIAPI.addSingleCustomStyleData;
+
+let removeCustomStyleData = ExtendIMGUIAPI.removeCustomStyleData;
+
+let addCustomStyleData = ExtendIMGUIAPI.addCustomStyleData;
+
+let createSingleCustomStyleData = ExtendIMGUIAPI.createSingleCustomStyleData;
+
+let createAllCustomStyleData = ExtendIMGUIAPI.createAllCustomStyleData;
+
+let registerCustomControl = ExtendIMGUIAPI.registerCustomControl;
 
 let box = FixedLayoutControlIMGUIAPI.box;
 
