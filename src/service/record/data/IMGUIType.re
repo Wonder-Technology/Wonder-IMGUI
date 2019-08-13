@@ -5,44 +5,44 @@ open StructureType;
 open FontType;
 
 /* type radioButtonSetting = {
-  radioButtonOuterColor: colorArr,
-  radioButtonInnerColor: colorArr,
-  radioButtonOuterColorHover: colorArr,
-  radioButtonInnerColorHover: colorArr,
-  radioButtonCircleSegments: int,
-  radioButtonInnerRadius: float,
-  radioButtonOuterRadius: float,
-};
+     radioButtonOuterColor: colorArr,
+     radioButtonInnerColor: colorArr,
+     radioButtonOuterColorHover: colorArr,
+     radioButtonInnerColorHover: colorArr,
+     radioButtonCircleSegments: int,
+     radioButtonInnerRadius: float,
+     radioButtonOuterRadius: float,
+   };
 
-type buttonSetting = {
-  buttonColor: colorArr,
-  hoverButtonColor: colorArr,
-  clickButtonColor: colorArr,
-};
+   type buttonSetting = {
+     buttonColor: colorArr,
+     hoverButtonColor: colorArr,
+     clickButtonColor: colorArr,
+   };
 
-type checkboxSetting = {
-  checkboxOuterColor: colorArr,
-  checkboxInnerColor: colorArr,
-  checkboxOuterColorHover: colorArr,
-  checkboxInnerColorHover: colorArr,
-  checkboxInnerSizeRatio: float,
-  checkboxOuterSizeRatio: float,
-};
+   type checkboxSetting = {
+     checkboxOuterColor: colorArr,
+     checkboxInnerColor: colorArr,
+     checkboxOuterColorHover: colorArr,
+     checkboxInnerColorHover: colorArr,
+     checkboxInnerSizeRatio: float,
+     checkboxOuterSizeRatio: float,
+   };
 
-type sliderSetting = {
-  sliderBackgroundColor: colorArr,
-  sliderFillColor: colorArr,
-  sliderBackgroundColorHover: colorArr,
-  sliderFillColorHover: colorArr,
-}; */
+   type sliderSetting = {
+     sliderBackgroundColor: colorArr,
+     sliderFillColor: colorArr,
+     sliderBackgroundColorHover: colorArr,
+     sliderFillColorHover: colorArr,
+   }; */
 
 type setting = {
   textColor: colorArr,
   fontTexUvForWhite: array(float),
   /* buttonSetting,
-  radioButtonSetting,
-  checkboxSetting,
-  sliderSetting, */
+     radioButtonSetting,
+     checkboxSetting,
+     sliderSetting, */
 };
 
 type point('a) = ('a, 'a);
@@ -100,7 +100,9 @@ type assetData = {
   bitmapId: string,
   fntDataMap: WonderCommonlib.MutableHashMapService.t(fntData),
   bitmapMap:
-    WonderCommonlib.MutableHashMapService.t(WonderWebgl.DomExtendType.imageElement),
+    WonderCommonlib.MutableHashMapService.t(
+      WonderWebgl.DomExtendType.imageElement,
+    ),
   customImageArr:
     array(
       (WonderWebgl.DomExtendType.imageElement, string, ImageType.imageType),
@@ -110,18 +112,18 @@ type assetData = {
 };
 
 /* type radioButtonData = {
-  isSelectedMap: WonderCommonlib.MutableHashMapService.t(int),
-};
+     isSelectedMap: WonderCommonlib.MutableHashMapService.t(int),
+   };
 
-type checkboxData = {
-  index: int,
-  isSelectedMap: WonderCommonlib.MutableSparseMapService.t(bool),
-};
+   type checkboxData = {
+     index: int,
+     isSelectedMap: WonderCommonlib.MutableSparseMapService.t(bool),
+   };
 
-type sliderData = {
-  index: int,
-  valueMap: WonderCommonlib.MutableSparseMapService.t(float),
-}; */
+   type sliderData = {
+     index: int,
+     valueMap: WonderCommonlib.MutableSparseMapService.t(float),
+   }; */
 
 type groupData = {
   positionArr: array(position),
@@ -137,10 +139,16 @@ type drawData = {
 };
 
 /* type controlData = {
-  radioButtonData,
-  checkboxData,
-  sliderData,
-}; */
+     radioButtonData,
+     checkboxData,
+     sliderData,
+   }; */
+
+type customControlAPIJsObj;
+
+type customControlFuncInputData;
+
+type customControlFuncOutputData;
 
 type customDataForIMGUIFunc;
 
@@ -153,6 +161,14 @@ and imguiFuncData = {
   customDataForIMGUIFunc: option(customDataForIMGUIFunc),
   apiJsObj,
 }
+and customControlFunc =
+  (. customControlFuncInputData, imguiRecord) =>
+  (imguiRecord, customControlFuncOutputData)
+and customControlData = {
+  apiJsObj: customControlAPIJsObj,
+  funcMap: WonderCommonlib.ImmutableHashMapService.t(customControlFunc),
+}
+and extendData = {customControlData}
 and imguiRecord = {
   setting,
   assetData,
@@ -163,4 +179,5 @@ and imguiRecord = {
   /* controlData, */
   ioData,
   layoutData,
+  extendData,
 };

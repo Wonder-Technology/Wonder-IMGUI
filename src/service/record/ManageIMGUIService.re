@@ -437,6 +437,7 @@ let _buildAPIJsObj = () => {
      "sliderFloat": FixedLayoutControlIMGUIService.sliderFloat, */
   "beginGroup": GroupLayoutIMGUIService.beginGroup,
   "endGroup": GroupLayoutIMGUIService.endGroup,
+  "unsafeGetCustomControl": ManageCustomControlIMGUIService.unsafeGetCustomControl,
 };
 
 let _exec = (apiJsObj, getRecordFunc, data) => {
@@ -539,6 +540,12 @@ let createRecord = () => {
     groupData: {
       positionArr: [||],
       index: 0,
+    },
+  },
+  extendData: {
+    customControlData: {
+      apiJsObj: ExtendAPIJsObjIMGUIService.createAPIJsObj() |> Obj.magic,
+      funcMap: WonderCommonlib.ImmutableHashMapService.createEmpty(),
     },
   },
 };
