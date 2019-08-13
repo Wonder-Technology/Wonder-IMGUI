@@ -7,10 +7,10 @@ let addPoints = (points, pointArr) =>
        pointArr,
      );
 
-
-let concatArrays = [%raw arrays => {|
-  return [].concat.apply([], arrays);  
-  |}];
-
+let concatArrays = [%raw
+  arrays => {|
+  return [].concat.apply([], arrays);
+  |}
+];
 
 let getBaseIndex = verticeArr => (verticeArr |> Js.Array.length) / 2;

@@ -11,6 +11,9 @@ let createAPIJsObj = () => {
   "drawText":
     (. rect, str, align, record) =>
       DrawTextIMGUIService.draw(rect, str, align, record),
+  "drawImage":
+    (. rect, uv, id, record) =>
+      DrawImageIMGUIService.draw(rect, uv, id, record),
   "parseShowData": ExtendAPIJsObjSkinIMGUIService.parseShowData,
   "unsafeGetSkinData":
     (. skinName, record) =>
@@ -24,6 +27,12 @@ let createAPIJsObj = () => {
   "unsafeGetCustomStyleData":
     (. customStyleName, singleCustomStyleDataMap) =>
       ManageSkinIMGUIService.unsafeGetCustomStyleData(
+        customStyleName,
+        singleCustomStyleDataMap,
+      ),
+  "hasCustomStyleData":
+    (. customStyleName, singleCustomStyleDataMap) =>
+      ManageSkinIMGUIService.hasCustomStyleData(
         customStyleName,
         singleCustomStyleDataMap,
       ),

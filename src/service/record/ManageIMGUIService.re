@@ -258,7 +258,7 @@ let _draw = (gl, drawElementsDataArr, record) => {
          | type_ =>
            WonderLog.Log.fatal(
              WonderLog.Log.buildFatalMessage(
-               ~title="_finish",
+               ~title="_draw",
                ~description={j|unknown type_: $type_|j},
                ~reason="",
                ~solution={j||j},
@@ -319,7 +319,7 @@ let _buildGroupedDrawDataArr = record => {
   let customTextureDrawDataMap =
     RecordIMGUIService.getCustomTextureDrawDataMap(record);
 
-  let (_, _, customTextureDrawDataArr) =
+  let (_, baseIndex, customTextureDrawDataArr) =
     customTextureDrawDataMap
     |> WonderCommonlib.MutableHashMapService.getValidValues
     |> WonderCommonlib.ArrayService.reduceOneParam(
@@ -341,14 +341,28 @@ let _buildGroupedDrawDataArr = record => {
                 }),
            );
          },
-         (fontTextureDrawData.verticeArr, 0, [||]),
+         ([||], 0, [||]),
        );
+
+  let newBaseIndex =
+    switch (ArrayService.getLast(customTextureDrawDataArr)) {
+    | None => baseIndex
+    | Some(({verticeArr}: DrawDataType.drawData)) =>
+      DrawDataArrayService.getBaseIndex(verticeArr) + baseIndex
+    };
+
+  let fontTextureDrawData = {
+    ...fontTextureDrawData,
+    indexArr:
+      fontTextureDrawData.indexArr
+      |> Js.Array.map(index => index + newBaseIndex),
+  };
 
   (
     record,
     DrawDataArrayService.concatArrays([|
-      [|fontTextureDrawData|],
       customTextureDrawDataArr,
+      [|fontTextureDrawData|],
     |]),
   );
 };

@@ -78,3 +78,7 @@ let unsafeGetSingleCustomStyleDataMap = (singleCustomStyleName, skinData) =>
 let unsafeGetCustomStyleData = (customStyleName, singleCustomStyleDataMap) =>
   singleCustomStyleDataMap
   |> WonderCommonlib.ImmutableHashMapService.unsafeGet(customStyleName);
+
+let hasCustomStyleData = (customStyleName, singleCustomStyleDataMap) =>
+  singleCustomStyleDataMap
+  |> WonderCommonlib.ImmutableHashMapService.has(customStyleName);

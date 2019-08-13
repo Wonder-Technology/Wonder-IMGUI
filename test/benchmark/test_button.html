@@ -17,7 +17,9 @@
 
     <script>
 
-        var _initSkin = function (record, buttonColor, hoverButtonColor, clickButtonColor) {
+        var _initSkin = function (record, buttonColor, hoverButtonColor, clickButtonColor,
+            buttonImage, hoverButtonImage, clickButtonImage
+        ) {
             var buttonColor = buttonColor !== undefined ? buttonColor : /* array */[
                 0.35,
                 0.1,
@@ -35,8 +37,18 @@
             ];
             var allCustomStyleData = wdimgui.createAllCustomStyleData(/* () */0);
             var singleCustomStyleData = wdimgui.createSingleCustomStyleData(/* () */0);
+
             var singleCustomStyleData$1 = wdimgui.addCustomStyleData("clickButtonColor", clickButtonColor, wdimgui.addCustomStyleData("hoverButtonColor", hoverButtonColor, wdimgui.addCustomStyleData("buttonColor", buttonColor, singleCustomStyleData)));
-            var allCustomStyleData$1 = wdimgui.addSingleCustomStyleData("CustomStyle1", singleCustomStyleData$1, allCustomStyleData);
+
+
+
+            var singleCustomStyleData$2 = (buttonImage == null) ? singleCustomStyleData$1 : wdimgui.addCustomStyleData("buttonImage", buttonImage, singleCustomStyleData$1);
+            var singleCustomStyleData$3 = (hoverButtonImage == null) ? singleCustomStyleData$2 : wdimgui.addCustomStyleData("hoverButtonImage", hoverButtonImage, singleCustomStyleData$2);
+            var singleCustomStyleData$4 = (clickButtonImage == null) ? singleCustomStyleData$3 : wdimgui.addCustomStyleData("clickButtonImage", clickButtonImage, singleCustomStyleData$3);
+
+
+            var allCustomStyleData$1 = wdimgui.addSingleCustomStyleData("CustomStyle1", singleCustomStyleData$4, allCustomStyleData);
+
             var skinData = wdimgui.createSkinData(allCustomStyleData$1);
 
 
@@ -90,7 +102,8 @@
                             {
                                 pointUp: false,
                                 pointDown: false,
-                                pointPosition: [buttonX, buttonY + buttonHeight],
+                                // pointPosition: [buttonX, buttonY + buttonHeight],
+                                pointPosition: [-buttonX, buttonY + buttonHeight],
                                 pointMovementDelta: [0, 0],
                             },
                             record);
@@ -113,6 +126,7 @@
                                 [0.35, 0.1, 0.1],
                                 [0.40, 0.5, 0.1],
                                 [0.50, 0.1, 0.5],
+                                "a2", "a1", "a2"
                             );
 
 
@@ -137,6 +151,34 @@
                                         param[1]
                                     ];
                                 };
+                                var judge = function (param, param$1, isClickFunc, record) {
+                                    var clickButtonData = param[0];
+                                    var match = isInBox(rect, convertIntPositionToFloatPosition(param$1[1]));
+                                    if (match) {
+                                        var match$1 = isClickFunc(record);
+                                        if (match$1) {
+                                            return /* tuple */[
+                                                true,
+                                                clickButtonData
+                                            ];
+                                        } else if (param$1[0]) {
+                                            return /* tuple */[
+                                                false,
+                                                clickButtonData
+                                            ];
+                                        } else {
+                                            return /* tuple */[
+                                                false,
+                                                param[1]
+                                            ];
+                                        }
+                                    } else {
+                                        return /* tuple */[
+                                            false,
+                                            param[2]
+                                        ];
+                                    }
+                                };
                                 var getIOData = apiJsObj.getIOData;
                                 var getPointUp = apiJsObj.getPointUp;
                                 var getPointDown = apiJsObj.getPointDown;
@@ -144,6 +186,7 @@
                                 var isClick = apiJsObj.isClick;
                                 var drawBox = apiJsObj.drawBox;
                                 var drawText = apiJsObj.drawText;
+                                var drawImage = apiJsObj.drawImage;
                                 var ioData = getIOData(record);
                                 getPointUp(ioData);
                                 var pointDown = getPointDown(ioData);
@@ -152,45 +195,63 @@
                                 var unsafeGetSkinData = apiJsObj.unsafeGetSkinData;
                                 var unsafeGetSingleCustomStyleDataMap = apiJsObj.unsafeGetSingleCustomStyleDataMap;
                                 var unsafeGetCustomStyleData = apiJsObj.unsafeGetCustomStyleData;
+                                var hasCustomStyleData = apiJsObj.hasCustomStyleData;
                                 var match = parseShowData(showData);
                                 var singleCustomStyleDataMap = unsafeGetSingleCustomStyleDataMap(match[1], unsafeGetSkinData(match[0], record));
-
-
+                                var match$1 = hasCustomStyleData("buttonImage", singleCustomStyleDataMap);
+                                var buttonImage = match$1 ? unsafeGetCustomStyleData("buttonImage", singleCustomStyleDataMap) : null;
                                 var buttonColor = unsafeGetCustomStyleData("buttonColor", singleCustomStyleDataMap);
+                                var match$2 = hasCustomStyleData("hoverButtonImage", singleCustomStyleDataMap);
+                                var hoverButtonImage = match$2 ? unsafeGetCustomStyleData("hoverButtonImage", singleCustomStyleDataMap) : null;
                                 var hoverButtonColor = unsafeGetCustomStyleData("hoverButtonColor", singleCustomStyleDataMap);
+                                var match$3 = hasCustomStyleData("clickButtonImage", singleCustomStyleDataMap);
+                                var clickButtonImage = match$3 ? unsafeGetCustomStyleData("clickButtonImage", singleCustomStyleDataMap) : null;
                                 var clickButtonColor = unsafeGetCustomStyleData("clickButtonColor", singleCustomStyleDataMap);
-
-
-                                var match$1 = isInBox(rect, convertIntPositionToFloatPosition(pointPosition));
-                                var match$2;
-                                if (match$1) {
-                                    var match$3 = isClick(record);
-                                    match$2 = match$3 ? /* tuple */[
-                                        true,
+                                var match$4 = judge(/* tuple */[
+                                            /* tuple */[
+                                        clickButtonImage,
                                         clickButtonColor
-                                    ] : (
-                                            pointDown ? /* tuple */[
-                                                false,
-                                                clickButtonColor
-                                            ] : /* tuple */[
-                                                    false,
-                                                    hoverButtonColor
-                                                ]
-                                        );
-                                } else {
-                                    match$2 = /* tuple */[
-                                        false,
+                                    ],
+                                            /* tuple */[
+                                        hoverButtonImage,
+                                        hoverButtonColor
+                                    ],
+                                            /* tuple */[
+                                        buttonImage,
                                         buttonColor
-                                    ];
-                                }
+                                    ]
+                                ], /* tuple */[
+                                        pointDown,
+                                        pointPosition
+                                    ], isClick, record);
+                                var match$5 = match$4[1];
+                                var color = match$5[1];
+                                var imageId = match$5[0];
+
+                                // var record$1 = (imageId == null) ? drawBox(rect, color, record) : drawImage(rect, /* tuple */[
+                                //     0,
+                                //     0,
+                                //     1,
+                                //     1
+                                // ], imageId, record);
 
 
-                                var record$1 = drawBox(rect, match$2[1], record);
+
+                                var record$1 = drawImage(rect, /* tuple */[
+                                    0,
+                                    0,
+                                    1,
+                                    1
+                                ], imageId, record);
+
+// var record$1 = record;
+
                                 var record$2 = drawText(rect, customControlFuncData[1], /* Center */1, record$1);
                                 return /* tuple */[
                                     record$2,
-                                    match$2[0]
+                                    match$4[0]
                                 ];
+
                             }), record);
 
 

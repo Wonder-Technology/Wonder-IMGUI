@@ -220,6 +220,17 @@ let testColorBufferDataWithIOData =
     targetBufferDataArr,
   );
 
+let testPositionBufferDataWithIOData =
+    (ioData, sandbox, record, imguiFunc, targetBufferDataArr) =>
+  testBufferDataWithIOData(
+    sandbox,
+    0,
+    ioData,
+    record,
+    imguiFunc,
+    targetBufferDataArr,
+  );
+
 let testBufferData =
     (sandbox, bufferDataIndex, record, imguiFunc, targetBufferDataArr) =>
   testBufferDataWithIOData(
@@ -298,7 +309,10 @@ let prepareFntData = record => {
       ...record.assetData,
       fntDataMap:
         record.assetData.fntDataMap
-        |> WonderCommonlib.MutableHashMapService.set(record.assetData.fntId, fntData),
+        |> WonderCommonlib.MutableHashMapService.set(
+             record.assetData.fntId,
+             fntData,
+           ),
     },
   };
 };
@@ -306,3 +320,5 @@ let prepareFntData = record => {
 let buildCustomData = () => Obj.magic(501);
 
 let getBufferDataCallCountPerRender = () => 4;
+
+let getDrawData = record => record.drawData;
