@@ -22,10 +22,48 @@ let _ =
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
     describe("test with io data", () => {
+      let _initSkin =
+          (
+            ~record,
+            ~buttonColor=[|0.35, 0.1, 0.1|],
+            ~hoverButtonColor=[|0.35, 0.1, 0.1|],
+            ~clickButtonColor=[|0.35, 0.1, 0.1|],
+            (),
+          ) => {
+        open ManageSkinIMGUIService;
+
+        let allCustomStyleData = createAllCustomStyleData();
+
+        let singleCustomStyleData = createSingleCustomStyleData();
+
+        let singleCustomStyleData =
+          singleCustomStyleData
+          |> addCustomStyleData("buttonColor", buttonColor |> Obj.magic)
+          |> addCustomStyleData(
+               "hoverButtonColor",
+               hoverButtonColor |> Obj.magic,
+             )
+          |> addCustomStyleData(
+               "clickButtonColor",
+               clickButtonColor |> Obj.magic,
+             );
+
+        let allCustomStyleData =
+          allCustomStyleData
+          |> addSingleCustomStyleData("CustomStyle1", singleCustomStyleData);
+
+        let skinData = createSkinData(allCustomStyleData);
+
+        record
+        |> clearAllSkins
+        |> DataSkinIMGUIService.addDefaultSkinData
+        |> addSkinData("Skin1", skinData);
+      };
+
       let _registerCustomControl = record =>
         ExtendIMGUIAPI.registerCustomControl(
-          "Wonder-Button",
-          (. customControlFuncData, apiJsObj, record) => {
+          "Wonder_Button",
+          (. customControlFuncData, showData, apiJsObj, record) => {
             let (rect, str) = customControlFuncData |> Obj.magic;
             /* TODO move to apiJsObj? */
             let isInBox =
@@ -45,11 +83,6 @@ let _ =
               y |> NumberType.intToFloat,
             );
 
-            /* TODO use skin */
-            let buttonColor = [|1., 0.5, 0.3|];
-            let hoverButtonColor = [|1., 0.5, 0.3|];
-            let clickButtonColor = [|1., 0.5, 0.3|];
-
             let apiJsObj = apiJsObj |> Obj.magic;
 
             let getIOData = apiJsObj##getIOData;
@@ -65,6 +98,49 @@ let _ =
             let pointUp = getPointUp(. ioData);
             let pointDown = getPointDown(. ioData);
             let pointPosition = getPointPosition(. ioData);
+
+            let parseShowData = apiJsObj##parseShowData;
+            let unsafeGetSkinData = apiJsObj##unsafeGetSkinData;
+            let unsafeGetSingleCustomStyleDataMap =
+              apiJsObj##unsafeGetSingleCustomStyleDataMap;
+
+            let unsafeGetCustomStyleData = apiJsObj##unsafeGetCustomStyleData;
+
+            let (skinName, singleCustomStyleName) =
+              parseShowData(. showData);
+
+            let singleCustomStyleDataMap =
+              unsafeGetSingleCustomStyleDataMap(.
+                singleCustomStyleName,
+                unsafeGetSkinData(. skinName, record),
+              );
+
+            let buttonColor =
+              unsafeGetCustomStyleData(
+                "buttonColor",
+                singleCustomStyleDataMap,
+              );
+
+            /* WonderLog.Log.print(
+               ( singleCustomStyleDataMap,
+               buttonColor,
+               isClick(. record),
+               pointDown, pointUp,
+               isInBox(rect, convertIntPositionToFloatPosition(pointPosition))
+
+               )
+               ) |> ignore; */
+
+            let hoverButtonColor =
+              unsafeGetCustomStyleData(
+                "hoverButtonColor",
+                singleCustomStyleDataMap,
+              );
+            let clickButtonColor =
+              unsafeGetCustomStyleData(
+                "clickButtonColor",
+                singleCustomStyleDataMap,
+              );
 
             let (isButtonClick, color) =
               isInBox(rect, convertIntPositionToFloatPosition(pointPosition)) ?
@@ -82,48 +158,89 @@ let _ =
           record,
         );
 
-      let _testWithIMGUIFunc =
-          (bufferData, (testBufferDataFunc, imguiFunc), record) => {
+      let _testWithIMGUIFuncAndSkinData =
+          (
+            bufferData,
+            (testBufferDataFunc, imguiFunc),
+            (buttonColor, hoverButtonColor, clickButtonColor),
+            record,
+          ) => {
         let record = RenderIMGUITool.prepareFntData(record);
 
-        let record = record |> _registerCustomControl;
+        let record =
+          record
+          |> _initSkin(
+               ~record=_,
+               ~buttonColor,
+               ~hoverButtonColor,
+               ~clickButtonColor,
+               (),
+             )
+          |> _registerCustomControl;
 
         testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
       };
 
+      let _testWithIMGUIFunc =
+          (bufferData, (testBufferDataFunc, imguiFunc), record) => {
+        let record = RenderIMGUITool.prepareFntData(record);
+
+        let record =
+          record |> _initSkin(~record=_, ()) |> _registerCustomControl;
+
+        testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
+      };
+
+      let _buildIMGUIFunc = () =>
+        (. _, apiJsObj, record) => {
+          let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+            ButtonIMGUITool.buildButtonData1();
+
+          let apiJsObj = Obj.magic(apiJsObj);
+
+          /* let buttonFunc = apiJsObj##button;
+             let (record, isButtonClick) =
+               buttonFunc(.
+                 (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                 str1,
+                 record,
+               ); */
+
+          let unsafeGetCustomControl = apiJsObj##unsafeGetCustomControl;
+
+          let buttonFunc = unsafeGetCustomControl(. "Wonder_Button", record);
+
+          let (record, isButtonClick) =
+            buttonFunc(.
+              ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1),
+              Js.Nullable.return(("Skin1", "CustomStyle1")),
+              record,
+            );
+
+          record;
+        };
+
       let _test = (bufferData, testBufferDataFunc, record) =>
         _testWithIMGUIFunc(
           bufferData,
+          (testBufferDataFunc, _buildIMGUIFunc()),
+          record,
+        );
+
+      let _testWithSkinData =
           (
-            testBufferDataFunc,
-            (. _, apiJsObj, record) => {
-              let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-                ButtonIMGUITool.buildButtonData1();
-
-              let apiJsObj = Obj.magic(apiJsObj);
-
-              /* let buttonFunc = apiJsObj##button;
-                 let (record, isButtonClick) =
-                   buttonFunc(.
-                     (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                     str1,
-                     record,
-                   ); */
-
-              let unsafeGetCustomControl = apiJsObj##unsafeGetCustomControl;
-
-              let buttonFunc =
-                unsafeGetCustomControl(. "Wonder-Button", record);
-
-              let (record, isButtonClick) =
-                buttonFunc(.
-                  ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1),
-                  record,
-                );
-
-              record;
-            },
-          ),
+            ~bufferData,
+            ~testBufferDataFunc,
+            ~record,
+            ~buttonColor=[|0.35, 0.1, 0.1|],
+            ~hoverButtonColor=[|0.35, 0.1, 0.1|],
+            ~clickButtonColor=[|0.35, 0.1, 0.1|],
+            (),
+          ) =>
+        _testWithIMGUIFuncAndSkinData(
+          bufferData,
+          (testBufferDataFunc, _buildIMGUIFunc()),
+          (buttonColor, hoverButtonColor, clickButtonColor),
           record,
         );
 
@@ -139,6 +256,7 @@ let _ =
 
         let record =
           record^
+          |> _initSkin(~record=_, ())
           |> _registerCustomControl
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
@@ -148,7 +266,7 @@ let _ =
                  let unsafeGetCustomControl = apiJsObj##unsafeGetCustomControl;
 
                  let buttonFunc =
-                   unsafeGetCustomControl(. "Wonder-Button", record);
+                   unsafeGetCustomControl(. "Wonder_Button", record);
 
                  let (record, isButtonClick) =
                    buttonFunc(.
@@ -156,6 +274,7 @@ let _ =
                        (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
                        str1,
                      ),
+                     Js.Nullable.return(("Skin1", "CustomStyle1")),
                      record,
                    );
 
@@ -260,109 +379,115 @@ let _ =
             })
           );
 
-          describe("test index buffer", () =>
+          describe("test index buffer", () => {
             test("test one button", () =>
               _test(
                 [|0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5, 8, 9, 10, 11, 10, 9|],
                 RenderIMGUITool.testIndexBufferData,
                 record^,
               )
-            )
-          );
-          /* test("test two buttons", () =>
-               _testWithIMGUIFunc(
-                 [|
-                   0,
-                   1,
-                   2,
-                   3,
-                   2,
-                   1,
-                   4,
-                   5,
-                   6,
-                   7,
-                   6,
-                   5,
-                   8,
-                   9,
-                   10,
-                   11,
-                   10,
-                   9,
-                   12,
-                   13,
-                   14,
-                   15,
-                   14,
-                   13,
-                   16,
-                   17,
-                   18,
-                   19,
-                   18,
-                   17,
-                   20,
-                   21,
-                   22,
-                   23,
-                   22,
-                   21,
-                 |],
-                 (
-                   RenderIMGUITool.testIndexBufferData,
-                   (. _, apiJsObj, record) => {
-                     let (
-                       (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                       str1,
-                     ) =
-                       ButtonIMGUITool.buildButtonData1();
-                     let (
-                       (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
-                       str2,
-                     ) =
-                       ButtonIMGUITool.buildButtonData1();
+            );
+            test("test two buttons", () =>
+              _testWithIMGUIFunc(
+                [|
+                  0,
+                  1,
+                  2,
+                  3,
+                  2,
+                  1,
+                  4,
+                  5,
+                  6,
+                  7,
+                  6,
+                  5,
+                  8,
+                  9,
+                  10,
+                  11,
+                  10,
+                  9,
+                  12,
+                  13,
+                  14,
+                  15,
+                  14,
+                  13,
+                  16,
+                  17,
+                  18,
+                  19,
+                  18,
+                  17,
+                  20,
+                  21,
+                  22,
+                  23,
+                  22,
+                  21,
+                |],
+                (
+                  RenderIMGUITool.testIndexBufferData,
+                  (. _, apiJsObj, record) => {
+                    let (
+                      (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                      str1,
+                    ) =
+                      ButtonIMGUITool.buildButtonData1();
+                    let (
+                      (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
+                      str2,
+                    ) =
+                      ButtonIMGUITool.buildButtonData1();
 
-                     let apiJsObj = Obj.magic(apiJsObj);
-                     let buttonFunc = apiJsObj##button;
-                     let (record, isButtonClick) =
-                       buttonFunc(.
-                         (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                         str1,
-                         record,
-                       );
-                     let (record, isButtonClick) =
-                       buttonFunc(.
-                         (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
-                         str2,
-                         record,
-                       );
+                    let apiJsObj = Obj.magic(apiJsObj);
 
-                     record;
-                   },
-                 ),
-                 record^,
-               )
-             ); */
+                    let unsafeGetCustomControl =
+                      apiJsObj##unsafeGetCustomControl;
+
+                    let buttonFunc =
+                      unsafeGetCustomControl(. "Wonder_Button", record);
+
+                    let (record, isButtonClick) =
+                      buttonFunc(.
+                        (
+                          (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                          str1,
+                        ),
+                        Js.Nullable.null,
+                        record,
+                      );
+
+                    let (record, isButtonClick) =
+                      buttonFunc(.
+                        (
+                          (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
+                          str2,
+                        ),
+                        Js.Nullable.null,
+                        record,
+                      );
+
+                    record;
+                  },
+                ),
+                record^,
+              )
+            );
+          });
         })
       );
 
       describe("if mouse hit button", () => {
         describe("if mouse not click or down", () => {
-          /* describe("test color buffer data", () =>
-            test("box color should be setting->hoverButtonColor", () => {
+          describe("test color buffer data", () =>
+            test("box color should be custom style->hoverButtonColor", () => {
               let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
                 ButtonIMGUITool.buildButtonData1();
 
-              let record =
-                SettingIMGUITool.setSetting(
-                  ~record=record^,
-                  ~hoverButtonColor=[|0.4, 0.2, 0.|],
-                  (),
-                );
-
-              _test(
-                [|
+              _testWithSkinData(
+                ~bufferData=[|
                   0.4,
                   0.2,
                   0.,
@@ -400,18 +525,21 @@ let _ =
                   1.,
                   1.,
                 |],
-                RenderIMGUITool.testColorBufferDataWithIOData(
-                  RenderIMGUITool.buildIOData(
-                    ~pointUp=false,
-                    ~pointDown=false,
-                    ~pointPosition=(buttonX1, buttonY1),
-                    (),
+                ~hoverButtonColor=[|0.4, 0.2, 0.|],
+                ~testBufferDataFunc=
+                  RenderIMGUITool.testColorBufferDataWithIOData(
+                    RenderIMGUITool.buildIOData(
+                      ~pointUp=false,
+                      ~pointDown=false,
+                      ~pointPosition=(buttonX1, buttonY1),
+                      (),
+                    ),
                   ),
-                ),
-                record,
+                ~record=record^,
+                (),
               );
             })
-          ); */
+          );
 
           test("test button is not click", () => {
             let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
@@ -430,20 +558,14 @@ let _ =
         });
 
         describe("if mouse down", () => {
-          /* describe("test buffer data", () =>
+          describe("test buffer data", () =>
             describe("test color buffer data", () =>
               test("box color should be setting->clickButtonColor", () => {
-                let record =
-                  SettingIMGUITool.setSetting(
-                    ~record=record^,
-                    ~clickButtonColor=[|0.1, 0.2, 0.5|],
-                    (),
-                  );
                 let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
                   ButtonIMGUITool.buildButtonData1();
 
-                _test(
-                  [|
+                _testWithSkinData(
+                  ~bufferData=[|
                     0.1,
                     0.2,
                     0.5,
@@ -481,19 +603,22 @@ let _ =
                     1.,
                     1.,
                   |],
-                  RenderIMGUITool.testColorBufferDataWithIOData(
-                    RenderIMGUITool.buildIOData(
-                      ~pointUp=false,
-                      ~pointDown=true,
-                      ~pointPosition=(buttonX1, buttonY1),
-                      (),
+                  ~clickButtonColor=[|0.1, 0.2, 0.5|],
+                  ~testBufferDataFunc=
+                    RenderIMGUITool.testColorBufferDataWithIOData(
+                      RenderIMGUITool.buildIOData(
+                        ~pointUp=false,
+                        ~pointDown=true,
+                        ~pointPosition=(buttonX1, buttonY1),
+                        (),
+                      ),
                     ),
-                  ),
-                  record,
+                  ~record=record^,
+                  (),
                 );
               })
             )
-          ); */
+          );
 
           test("test button is not click", () => {
             let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
@@ -512,20 +637,14 @@ let _ =
         });
 
         describe("if mouse click", () => {
-          /* describe("test buffer data", () =>
+          describe("test buffer data", () =>
             describe("test color buffer data", () =>
               test("box color should be setting->clickButtonColor", () => {
-                let record =
-                  SettingIMGUITool.setSetting(
-                    ~record=record^,
-                    ~clickButtonColor=[|0.1, 0.2, 0.5|],
-                    (),
-                  );
                 let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
                   ButtonIMGUITool.buildButtonData1();
 
-                _test(
-                  [|
+                _testWithSkinData(
+                  ~bufferData=[|
                     0.1,
                     0.2,
                     0.5,
@@ -563,19 +682,22 @@ let _ =
                     1.,
                     1.,
                   |],
-                  RenderIMGUITool.testColorBufferDataWithIOData(
-                    RenderIMGUITool.buildIOData(
-                      ~pointUp=true,
-                      ~pointDown=true,
-                      ~pointPosition=(buttonX1, buttonY1),
-                      (),
+                  ~clickButtonColor=[|0.1, 0.2, 0.5|],
+                  ~testBufferDataFunc=
+                    RenderIMGUITool.testColorBufferDataWithIOData(
+                      RenderIMGUITool.buildIOData(
+                        ~pointUp=true,
+                        ~pointDown=true,
+                        ~pointPosition=(buttonX1, buttonY1),
+                        (),
+                      ),
                     ),
-                  ),
-                  record,
+                  ~record=record^,
+                  (),
                 );
               })
             )
-          ); */
+          );
 
           test("test button is click", () => {
             let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
@@ -593,103 +715,98 @@ let _ =
           });
         });
       });
-      
 
-       describe("else", () => {
-         /* describe("test color buffer data", () =>
-           test("box color should be setting->buttonColor", () => {
-             let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-               ButtonIMGUITool.buildButtonData1();
+      describe("else", () => {
+        describe("test color buffer data", () =>
+          test("box color should be setting->buttonColor", () => {
+            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+              ButtonIMGUITool.buildButtonData1();
 
-             let record =
-               SettingIMGUITool.setSetting(
-                 ~record=record^,
-                 ~buttonColor=[|0.4, 0.2, 0.|],
-                 (),
-               );
+            _testWithSkinData(
+              ~bufferData=[|
+                0.4,
+                0.2,
+                0.,
+                0.4,
+                0.2,
+                0.,
+                0.4,
+                0.2,
+                0.,
+                0.4,
+                0.2,
+                0.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+                1.,
+              |],
+              ~buttonColor=[|0.4, 0.2, 0.|],
+              ~testBufferDataFunc=
+                RenderIMGUITool.testColorBufferDataWithIOData(
+                  RenderIMGUITool.buildIOData(
+                    ~pointUp=false,
+                    ~pointDown=false,
+                    ~pointPosition=(buttonX1 - 1, buttonY1),
+                    (),
+                  ),
+                ),
+              ~record=record^,
+              (),
+            );
+          })
+        );
 
-             _test(
-               [|
-                 0.4,
-                 0.2,
-                 0.,
-                 0.4,
-                 0.2,
-                 0.,
-                 0.4,
-                 0.2,
-                 0.,
-                 0.4,
-                 0.2,
-                 0.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-                 1.,
-               |],
-               RenderIMGUITool.testColorBufferDataWithIOData(
-                 RenderIMGUITool.buildIOData(
-                   ~pointUp=false,
-                   ~pointDown=false,
-                   ~pointPosition=(buttonX1 - 1, buttonY1),
-                   (),
-                 ),
-               ),
-               record,
-             );
-           })
-         ); */
+        describe("test button is not click", () => {
+          test("test1", () => {
+            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+              ButtonIMGUITool.buildButtonData1();
 
-         describe("test button is not click", () => {
-           test("test1", () => {
-             let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-               ButtonIMGUITool.buildButtonData1();
+            _testButtonClick(
+              RenderIMGUITool.buildIOData(
+                ~pointUp=true,
+                ~pointDown=false,
+                ~pointPosition=(buttonX1 - 1, buttonY1),
+                (),
+              ),
+              false,
+            );
+          });
+          test("test2", () => {
+            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+              ButtonIMGUITool.buildButtonData1();
 
-             _testButtonClick(
-               RenderIMGUITool.buildIOData(
-                 ~pointUp=true,
-                 ~pointDown=false,
-                 ~pointPosition=(buttonX1 - 1, buttonY1),
-                 (),
-               ),
-               false,
-             );
-           });
-           test("test2", () => {
-             let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-               ButtonIMGUITool.buildButtonData1();
-
-             _testButtonClick(
-               RenderIMGUITool.buildIOData(
-                 ~pointUp=true,
-                 ~pointDown=true,
-                 ~pointPosition=(buttonX1, buttonY1 + buttonHeight1 + 1),
-                 (),
-               ),
-               false,
-             );
-           });
-         });
-       });
+            _testButtonClick(
+              RenderIMGUITool.buildIOData(
+                ~pointUp=true,
+                ~pointDown=true,
+                ~pointPosition=(buttonX1, buttonY1 + buttonHeight1 + 1),
+                (),
+              ),
+              false,
+            );
+          });
+        });
+      });
     });
   });

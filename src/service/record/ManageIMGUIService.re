@@ -547,5 +547,8 @@ let createRecord = () => {
       apiJsObj: ExtendAPIJsObjIMGUIService.createAPIJsObj() |> Obj.magic,
       funcMap: WonderCommonlib.ImmutableHashMapService.createEmpty(),
     },
+    skinData: {
+      allSkinDataMap: WonderCommonlib.ImmutableHashMapService.createEmpty(),
+    },
   },
 };

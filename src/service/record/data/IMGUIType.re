@@ -144,11 +144,35 @@ type drawData = {
      sliderData,
    }; */
 
+type customStyleData;
+
+type singleCustomStyleData =
+  WonderCommonlib.ImmutableHashMapService.t(customStyleData);
+
+type allCustomStyleData =
+  WonderCommonlib.ImmutableHashMapService.t(singleCustomStyleData);
+
+type singleSkinData = {
+  /* TODO add build-in extend custom controls and its skins */
+  allCustomStyleData,
+};
+
+type skinData = {
+  allSkinDataMap: WonderCommonlib.ImmutableHashMapService.t(singleSkinData),
+};
+
 type customControlAPIJsObj;
 
 type customControlFuncInputData;
 
 type customControlFuncOutputData;
+
+type skinName = string;
+
+type customStyleName = string;
+
+type customControlFunctionShowData =
+  Js.Nullable.t((skinName, customStyleName));
 
 type customDataForIMGUIFunc;
 
@@ -162,13 +186,16 @@ and imguiFuncData = {
   apiJsObj,
 }
 and customControlFunc =
-  (. customControlFuncInputData, imguiRecord) =>
+  (. customControlFuncInputData, customControlFunctionShowData, imguiRecord) =>
   (imguiRecord, customControlFuncOutputData)
 and customControlData = {
   apiJsObj: customControlAPIJsObj,
   funcMap: WonderCommonlib.ImmutableHashMapService.t(customControlFunc),
 }
-and extendData = {customControlData}
+and extendData = {
+  customControlData,
+  skinData,
+}
 and imguiRecord = {
   setting,
   assetData,
