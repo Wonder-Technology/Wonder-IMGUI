@@ -131,6 +131,15 @@ let init = (gl, canvasSize, record) =>
 
       _sendUniformData(gl, program, canvasSize);
 
+      let record =
+        record
+        |> ManageSkinIMGUIService.clearAllSkins
+        |> DataSkinIMGUIService.addDefaultSkinData
+        |> ExtendIMGUIAPI.registerCustomControl(
+             ExtendButton.CustomControl.getCustomControlName(),
+             ExtendButton.CustomControl.buildCustomControl(),
+           );
+
       let {customImageArr, customTextureMap} = record.assetData;
 
       {
@@ -443,12 +452,8 @@ let getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
 let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
   "image": FixedLayoutControlIMGUIService.image,
-  /* "button": FixedLayoutControlIMGUIService.button, */
   "box": FixedLayoutControlIMGUIService.box,
-  /* "radioButton": FixedLayoutControlIMGUIService.radioButton,
-     "checkbox": FixedLayoutControlIMGUIService.checkbox,
-     "sliderInt": FixedLayoutControlIMGUIService.sliderInt,
-     "sliderFloat": FixedLayoutControlIMGUIService.sliderFloat, */
+  "button": ExtendButton.CustomControl.button,
   "beginGroup": GroupLayoutIMGUIService.beginGroup,
   "endGroup": GroupLayoutIMGUIService.endGroup,
   "unsafeGetCustomControl": ManageCustomControlIMGUIService.unsafeGetCustomControl,

@@ -17,7 +17,10 @@ let _createDefaultSkinData = () => {
          singleCustomStyleData,
        );
 
-  ManageSkinIMGUIService.createSkinData(allCustomStyleData);
+  ManageSkinIMGUIService.createSkinData(
+    ExtendButton.Skin.createDefaultSkinData(),
+    allCustomStyleData,
+  );
   /* TODO add build-in extend custom controls and its default skin data */
 };
 
@@ -35,3 +38,6 @@ let addDefaultSkinData = record => {
     },
   },
 };
+
+let unsafeGetDefaultSkinData = record =>
+  ManageSkinIMGUIService.unsafeGetSkinData(getDefaultSkinName(), record);

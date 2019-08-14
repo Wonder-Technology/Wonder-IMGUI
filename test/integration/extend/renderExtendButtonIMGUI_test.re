@@ -22,7 +22,7 @@ let _ =
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
     describe("test with io data", () => {
-      let _initSkin =
+      let _setDefaultSkinData =
           (
             ~record,
             ~buttonColor=[|0.35, 0.1, 0.1|],
@@ -32,212 +32,23 @@ let _ =
             ~hoverButtonImage=Js.Nullable.null,
             ~clickButtonImage=Js.Nullable.null,
             (),
-          ) => {
-        open ManageSkinIMGUIService;
-
-        let allCustomStyleData = createAllCustomStyleData();
-
-        let singleCustomStyleData = createSingleCustomStyleData();
-
-        let singleCustomStyleData =
-          singleCustomStyleData
-          |> addCustomStyleData("buttonColor", buttonColor |> Obj.magic)
-          |> addCustomStyleData(
-               "hoverButtonColor",
-               hoverButtonColor |> Obj.magic,
-             )
-          |> addCustomStyleData(
-               "clickButtonColor",
-               clickButtonColor |> Obj.magic,
-             );
-
-        let singleCustomStyleData =
-          switch (buttonImage |> Js.Nullable.toOption) {
-          | Some(buttonImage) =>
-            singleCustomStyleData
-            |> addCustomStyleData("buttonImage", buttonImage |> Obj.magic)
-          | None => singleCustomStyleData
-          };
-
-        let singleCustomStyleData =
-          switch (hoverButtonImage |> Js.Nullable.toOption) {
-          | Some(hoverButtonImage) =>
-            singleCustomStyleData
-            |> addCustomStyleData(
-                 "hoverButtonImage",
-                 hoverButtonImage |> Obj.magic,
-               )
-          | None => singleCustomStyleData
-          };
-
-        let singleCustomStyleData =
-          switch (clickButtonImage |> Js.Nullable.toOption) {
-          | Some(clickButtonImage) =>
-            singleCustomStyleData
-            |> addCustomStyleData(
-                 "clickButtonImage",
-                 clickButtonImage |> Obj.magic,
-               )
-          | None => singleCustomStyleData
-          };
-
-        let allCustomStyleData =
-          allCustomStyleData
-          |> addSingleCustomStyleData("CustomStyle1", singleCustomStyleData);
-
-        let skinData = createSkinData(allCustomStyleData);
-
+          ) =>
         record
-        |> clearAllSkins
-        |> DataSkinIMGUIService.addDefaultSkinData
-        |> addSkinData("Skin1", skinData);
-      };
-
-      let _registerCustomControl = record =>
-        ExtendIMGUIAPI.registerCustomControl(
-          "Wonder_Button",
-          (. customControlFuncData, showData, apiJsObj, record) => {
-            let (rect, str) = customControlFuncData |> Obj.magic;
-            /* TODO move to apiJsObj? */
-            let isInBox =
-                ((x, y, width, height), (posX: float, posY: float)) => {
-              open Pervasives;
-
-              let minX = x;
-              let minY = y;
-              let maxX = x +. width;
-              let maxY = y +. height;
-
-              minX <= posX && posX <= maxX && minY <= posY && posY <= maxY;
-            };
-
-            let convertIntPositionToFloatPosition = ((x, y)) => (
-              x |> NumberType.intToFloat,
-              y |> NumberType.intToFloat,
-            );
-
-            let judge =
-                (
-                  (clickButtonData: 'a, hoverButtonData: 'b, buttonData: 'c),
-                  (pointDown, pointPosition),
-                  isClickFunc,
-                  record,
-                ) =>
-              isInBox(rect, convertIntPositionToFloatPosition(pointPosition)) ?
-                isClickFunc(. record) ?
-                  (true, clickButtonData) :
-                  pointDown ?
-                    (false, clickButtonData) : (false, hoverButtonData) :
-                (false, buttonData);
-
-            let apiJsObj = apiJsObj |> Obj.magic;
-
-            let getIOData = apiJsObj##getIOData;
-            let getPointUp = apiJsObj##getPointUp;
-            let getPointDown = apiJsObj##getPointDown;
-            let getPointPosition = apiJsObj##getPointPosition;
-            let isClick = apiJsObj##isClick;
-
-            let drawBox = apiJsObj##drawBox;
-            let drawText = apiJsObj##drawText;
-            let drawImage = apiJsObj##drawImage;
-
-            let ioData = getIOData(. record);
-            let pointUp = getPointUp(. ioData);
-            let pointDown = getPointDown(. ioData);
-            let pointPosition = getPointPosition(. ioData);
-
-            let parseShowData = apiJsObj##parseShowData;
-            let unsafeGetSkinData = apiJsObj##unsafeGetSkinData;
-            let unsafeGetSingleCustomStyleDataMap =
-              apiJsObj##unsafeGetSingleCustomStyleDataMap;
-
-            let unsafeGetCustomStyleData = apiJsObj##unsafeGetCustomStyleData;
-
-            let hasCustomStyleData = apiJsObj##hasCustomStyleData;
-
-            let (skinName, singleCustomStyleName) =
-              parseShowData(. showData);
-
-            let singleCustomStyleDataMap =
-              unsafeGetSingleCustomStyleDataMap(.
-                singleCustomStyleName,
-                unsafeGetSkinData(. skinName, record),
-              );
-
-            let buttonImage =
-              hasCustomStyleData(. "buttonImage", singleCustomStyleDataMap) ?
-                unsafeGetCustomStyleData(.
-                  "buttonImage",
-                  singleCustomStyleDataMap,
-                )
-                |> Js.Nullable.return :
-                Js.Nullable.null;
-            let buttonColor =
-              unsafeGetCustomStyleData(.
-                "buttonColor",
-                singleCustomStyleDataMap,
-              );
-
-            let hoverButtonImage =
-              hasCustomStyleData(.
-                "hoverButtonImage",
-                singleCustomStyleDataMap,
-              ) ?
-                unsafeGetCustomStyleData(.
-                  "hoverButtonImage",
-                  singleCustomStyleDataMap,
-                )
-                |> Js.Nullable.return :
-                Js.Nullable.null;
-            let hoverButtonColor =
-              unsafeGetCustomStyleData(.
-                "hoverButtonColor",
-                singleCustomStyleDataMap,
-              );
-
-            let clickButtonImage =
-              hasCustomStyleData(.
-                "clickButtonImage",
-                singleCustomStyleDataMap,
-              ) ?
-                unsafeGetCustomStyleData(.
-                  "clickButtonImage",
-                  singleCustomStyleDataMap,
-                )
-                |> Js.Nullable.return :
-                Js.Nullable.null;
-            let clickButtonColor =
-              unsafeGetCustomStyleData(.
-                "clickButtonColor",
-                singleCustomStyleDataMap,
-              );
-
-            let (isButtonClick, (imageId, color)) =
-              judge(
-                (
-                  (clickButtonImage, clickButtonColor),
-                  (hoverButtonImage, hoverButtonColor),
-                  (buttonImage, buttonColor),
-                ),
-                (pointDown, pointPosition),
-                isClick,
-                record,
-              );
-
-            let record =
-              switch (Js.Nullable.toOption(imageId)) {
-              | None => drawBox(. rect, color, record)
-              | Some(imageId) =>
-                drawImage(. rect, (0., 0., 1., 1.), imageId, record)
-              };
-
-            let record = drawText(. rect, str, FontType.Center, record);
-
-            (record, isButtonClick |> Obj.magic);
-          },
-          record,
-        );
+        |> ExtendIMGUIAPI.setSkinData(
+             DataSkinIMGUIService.getDefaultSkinName(),
+             ExtendButton.Skin.setSkinData(
+               ExtendButton.Skin.createSkinData(
+                 ~buttonColor,
+                 ~hoverButtonColor,
+                 ~clickButtonColor,
+                 ~buttonImage,
+                 ~hoverButtonImage,
+                 ~clickButtonImage,
+                 (),
+               ),
+               ExtendIMGUIAPI.unsafeGetDefaultSkinData(record),
+             ),
+           );
 
       let _testWithIMGUIFuncAndSkinData =
           (
@@ -248,26 +59,28 @@ let _ =
           ) => {
         let record = RenderIMGUITool.prepareFntData(record);
 
-        let record =
-          record
-          |> _initSkin(
-               ~record=_,
-               ~buttonColor,
-               ~hoverButtonColor,
-               ~clickButtonColor,
-               (),
-             )
-          |> _registerCustomControl;
-
-        testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
+        testBufferDataFunc(
+          sandbox,
+          record,
+          (
+            imguiFunc,
+            record =>
+              record
+              |> _setDefaultSkinData(
+                   ~record=_,
+                   ~buttonColor,
+                   ~hoverButtonColor,
+                   ~clickButtonColor,
+                   (),
+                 ),
+          ),
+          bufferData,
+        );
       };
 
       let _testWithIMGUIFunc =
           (bufferData, (testBufferDataFunc, imguiFunc), record) => {
         let record = RenderIMGUITool.prepareFntData(record);
-
-        let record =
-          record |> _initSkin(~record=_, ()) |> _registerCustomControl;
 
         testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
       };
@@ -279,22 +92,12 @@ let _ =
 
           let apiJsObj = Obj.magic(apiJsObj);
 
-          /* let buttonFunc = apiJsObj##button;
-             let (record, isButtonClick) =
-               buttonFunc(.
-                 (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                 str1,
-                 record,
-               ); */
-
-          let unsafeGetCustomControl = apiJsObj##unsafeGetCustomControl;
-
-          let buttonFunc = unsafeGetCustomControl(. "Wonder_Button", record);
+          let button = apiJsObj##button;
 
           let (record, isButtonClick) =
-            buttonFunc(.
+            button(.
               ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1),
-              Js.Nullable.return(("Skin1", "CustomStyle1")),
+              Js.Nullable.null,
               record,
             );
 
@@ -337,25 +140,20 @@ let _ =
 
         let record =
           record^
-          |> _initSkin(~record=_, ())
-          |> _registerCustomControl
           |> ManageIMGUIAPI.setIMGUIFunc(
                RenderIMGUITool.buildCustomData(),
                (. _, apiJsObj, record) => {
                  let apiJsObj = Obj.magic(apiJsObj);
 
-                 let unsafeGetCustomControl = apiJsObj##unsafeGetCustomControl;
-
-                 let buttonFunc =
-                   unsafeGetCustomControl(. "Wonder_Button", record);
+                 let button = apiJsObj##button;
 
                  let (record, isButtonClick) =
-                   buttonFunc(.
+                   button(.
                      (
                        (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
                        str1,
                      ),
-                     Js.Nullable.return(("Skin1", "CustomStyle1")),
+                     Js.Nullable.null,
                      record,
                    );
 
@@ -372,6 +170,20 @@ let _ =
 
         isClick^ |> expect == result;
       };
+
+      /* let _testPositionBufferDataWithIOData = (ioData) => {
+
+                   RenderIMGUITool.testPositionBufferDataWithIOData(
+                     /* RenderIMGUITool.buildIOData(
+                       ~pointUp=false,
+                       ~pointDown=false,
+                       ~pointPosition=(- buttonX1, buttonY1),
+                       (),
+                     ), */
+                     ioData,
+
+                   )
+         }; */
 
       let _testImage =
           (
@@ -409,22 +221,37 @@ let _ =
             AssetTool.buildCustomImageDataArr(),
             record,
           );
-
-        let record =
-          record
-          |> _initSkin(
-               ~record=_,
-               ~buttonImage,
-               ~hoverButtonImage,
-               ~clickButtonImage,
-               (),
-             )
-          |> _registerCustomControl;
+        /*
+         let record =
+           record
+           |> _setDefaultSkinData(
+                ~record=_,
+                ~buttonImage,
+                ~hoverButtonImage,
+                ~clickButtonImage,
+                (),
+              ); */
 
         let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
           ButtonIMGUITool.buildButtonData1();
 
-        testBufferDataFunc(sandbox, record, _buildIMGUIFunc(), bufferData);
+        testBufferDataFunc(
+          sandbox,
+          record,
+          (
+            _buildIMGUIFunc(),
+            record =>
+              record
+              |> _setDefaultSkinData(
+                   ~record=_,
+                   ~buttonImage,
+                   ~hoverButtonImage,
+                   ~clickButtonImage,
+                   (),
+                 ),
+          ),
+          bufferData,
+        );
       };
 
       describe("test buffer data", () => {
@@ -570,14 +397,10 @@ let _ =
 
                     let apiJsObj = Obj.magic(apiJsObj);
 
-                    let unsafeGetCustomControl =
-                      apiJsObj##unsafeGetCustomControl;
-
-                    let buttonFunc =
-                      unsafeGetCustomControl(. "Wonder_Button", record);
+                    let button = apiJsObj##button;
 
                     let (record, isButtonClick) =
-                      buttonFunc(.
+                      button(.
                         (
                           (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
                           str1,
@@ -587,7 +410,7 @@ let _ =
                       );
 
                     let (record, isButtonClick) =
-                      buttonFunc(.
+                      button(.
                         (
                           (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
                           str2,
@@ -646,7 +469,7 @@ let _ =
               |],
               ~record=record^,
               ~testBufferDataFunc=
-                RenderIMGUITool.testPositionBufferDataWithIOData(
+                RenderIMGUITool.testPositionBufferDataWithIODataAndAfterInitFunc(
                   RenderIMGUITool.buildIOData(
                     ~pointUp=false,
                     ~pointDown=false,
@@ -700,7 +523,7 @@ let _ =
                   0.8336380255941499,
                 |],
                 ~record=record^,
-                ~testBufferDataFunc=RenderIMGUITool.testTexCoordBufferData,
+                ~testBufferDataFunc=RenderIMGUITool.testTexCoordBufferDataAndAfterInitFunc,
                 (),
               );
             })
@@ -740,7 +563,7 @@ let _ =
                   9,
                 |],
                 ~record=record^,
-                ~testBufferDataFunc=RenderIMGUITool.testIndexBufferData,
+                ~testBufferDataFunc=RenderIMGUITool.testIndexBufferDataAndAfterInitFunc,
                 (),
               );
             })
@@ -796,7 +619,7 @@ let _ =
                 |],
                 ~hoverButtonColor=[|0.4, 0.2, 0.|],
                 ~testBufferDataFunc=
-                  RenderIMGUITool.testColorBufferDataWithIOData(
+                  RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
                     RenderIMGUITool.buildIOData(
                       ~pointUp=false,
                       ~pointDown=false,
@@ -831,17 +654,6 @@ let _ =
                   record,
                 );
 
-              let record =
-                record
-                |> _initSkin(
-                     ~record=_,
-                     ~buttonImage=Js.Nullable.return(textureId1),
-                     ~hoverButtonImage=Js.Nullable.return(textureId2),
-                     ~clickButtonImage=Js.Nullable.return(textureId3),
-                     (),
-                   )
-                |> _registerCustomControl;
-
               let getExtension = RenderIMGUITool.buildNoVAOExtension(sandbox);
 
               let gl =
@@ -857,6 +669,16 @@ let _ =
                    );
               let record =
                 ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
+
+              let record =
+                record
+                |> _setDefaultSkinData(
+                     ~record=_,
+                     ~buttonImage=Js.Nullable.return(textureId1),
+                     ~hoverButtonImage=Js.Nullable.return(textureId2),
+                     ~clickButtonImage=Js.Nullable.return(textureId3),
+                     (),
+                   );
 
               let record =
                 ManageIMGUIAPI.render(
@@ -942,7 +764,7 @@ let _ =
                   |],
                   ~clickButtonColor=[|0.1, 0.2, 0.5|],
                   ~testBufferDataFunc=
-                    RenderIMGUITool.testColorBufferDataWithIOData(
+                    RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
                       RenderIMGUITool.buildIOData(
                         ~pointUp=false,
                         ~pointDown=true,
@@ -1021,7 +843,7 @@ let _ =
                   |],
                   ~clickButtonColor=[|0.1, 0.2, 0.5|],
                   ~testBufferDataFunc=
-                    RenderIMGUITool.testColorBufferDataWithIOData(
+                    RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
                       RenderIMGUITool.buildIOData(
                         ~pointUp=true,
                         ~pointDown=true,
@@ -1100,7 +922,7 @@ let _ =
               |],
               ~buttonColor=[|0.4, 0.2, 0.|],
               ~testBufferDataFunc=
-                RenderIMGUITool.testColorBufferDataWithIOData(
+                RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
                   RenderIMGUITool.buildIOData(
                     ~pointUp=false,
                     ~pointDown=false,

@@ -162,8 +162,15 @@ let createCreateGlTextureStub = sandbox => {
   );
 };
 
-let testBufferDataWithIOData =
-    (sandbox, bufferDataIndex, ioData, record, imguiFunc, targetBufferDataArr) => {
+let testBufferDataWithIODataAndAfterInitFunc =
+    (
+      sandbox,
+      bufferDataIndex,
+      ioData,
+      record,
+      (imguiFunc, handleAfterInitFunc),
+      targetBufferDataArr,
+    ) => {
   open Wonder_jest;
   open Expect;
   open Expect.Operators;
@@ -196,6 +203,9 @@ let testBufferDataWithIOData =
     record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
+
+  let record = record |> handleAfterInitFunc;
+
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
   let record = ManageIMGUIAPI.render(gl, ioData, record);
 
@@ -209,6 +219,34 @@ let testBufferDataWithIOData =
      |]);
 };
 
+let testBufferDataWithIOData =
+    (sandbox, bufferDataIndex, ioData, record, imguiFunc, targetBufferDataArr) =>
+  testBufferDataWithIODataAndAfterInitFunc(
+    sandbox,
+    bufferDataIndex,
+    ioData,
+    record,
+    (imguiFunc, record => record),
+    targetBufferDataArr,
+  );
+
+let testColorBufferDataWithIODataAndAfterInitFunc =
+    (
+      ioData,
+      sandbox,
+      record,
+      (imguiFunc, afterInitFunc),
+      targetBufferDataArr,
+    ) =>
+  testBufferDataWithIODataAndAfterInitFunc(
+    sandbox,
+    1,
+    ioData,
+    record,
+    (imguiFunc, afterInitFunc),
+    targetBufferDataArr,
+  );
+
 let testColorBufferDataWithIOData =
     (ioData, sandbox, record, imguiFunc, targetBufferDataArr) =>
   testBufferDataWithIOData(
@@ -220,14 +258,31 @@ let testColorBufferDataWithIOData =
     targetBufferDataArr,
   );
 
-let testPositionBufferDataWithIOData =
-    (ioData, sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferDataWithIOData(
+let testPositionBufferDataWithIODataAndAfterInitFunc =
+    (
+      ioData,
+      sandbox,
+      record,
+      (imguiFunc, handleAfterInitFunc),
+      targetBufferDataArr,
+    ) =>
+  testBufferDataWithIODataAndAfterInitFunc(
     sandbox,
     0,
     ioData,
     record,
-    imguiFunc,
+    (imguiFunc, handleAfterInitFunc),
+    targetBufferDataArr,
+  );
+
+let testTexCoordBufferDataAndAfterInitFunc =
+    (sandbox, record, (imguiFunc, handleAfterInitFunc), targetBufferDataArr) =>
+  testBufferDataWithIODataAndAfterInitFunc(
+    sandbox,
+    2,
+    buildIOData(),
+    record,
+    (imguiFunc, handleAfterInitFunc),
     targetBufferDataArr,
   );
 
@@ -251,7 +306,8 @@ let testColorBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
 let testTexCoordBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
   testBufferData(sandbox, 2, record, imguiFunc, targetBufferDataArr);
 
-let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
+let testIndexBufferDataAndAfterInitFunc =
+    (sandbox, record, (imguiFunc, afterInitFunc), targetBufferDataArr) => {
   open Wonder_jest;
   open Expect;
   open Expect.Operators;
@@ -278,6 +334,9 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
     record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
+
+  let record = record |> afterInitFunc;
+
   let bufferDataCallCountAfterInit = bufferData |> getCallCount;
   let record = ManageIMGUIAPI.render(gl, buildIOData(), record);
 
@@ -290,6 +349,14 @@ let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) => {
        dynamic_draw,
      |]);
 };
+
+let testIndexBufferData = (sandbox, record, imguiFunc, targetBufferDataArr) =>
+  testIndexBufferDataAndAfterInitFunc(
+    sandbox,
+    record,
+    (imguiFunc, record => record),
+    targetBufferDataArr,
+  );
 
 let prepareFntData = record => {
   open IMGUIType;

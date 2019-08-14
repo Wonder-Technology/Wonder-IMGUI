@@ -1,47 +1,53 @@
 open IMGUIType;
 
+open SkinType;
+
 let getAllSkinDataMap = record => record.extendData.skinData.allSkinDataMap;
 
-let clearAllSkins = record => {
+let _setAllSkinDataMap = (allSkinDataMap, record) => {
   ...record,
   extendData: {
     ...record.extendData,
     skinData: {
-      allSkinDataMap: WonderCommonlib.ImmutableHashMapService.createEmpty(),
+      allSkinDataMap: allSkinDataMap,
     },
   },
 };
 
-let addSkinData = (skinName, skinData, record) => {
-  ...record,
-  extendData: {
-    ...record.extendData,
-    skinData: {
-      allSkinDataMap:
-        getAllSkinDataMap(record)
-        |> WonderCommonlib.ImmutableHashMapService.set(skinName, skinData),
-    },
-  },
-};
+let clearAllSkins = record =>
+  _setAllSkinDataMap(
+    WonderCommonlib.ImmutableHashMapService.createEmpty(),
+    record,
+  );
 
-let removeSkinData = (skinName, record) => {
-  ...record,
-  extendData: {
-    ...record.extendData,
-    skinData: {
-      allSkinDataMap:
-        getAllSkinDataMap(record)
-        |> WonderCommonlib.ImmutableHashMapService.deleteVal(skinName),
-    },
-  },
-};
+let addSkinData = (skinName, skinData, record) =>
+  _setAllSkinDataMap(
+    getAllSkinDataMap(record)
+    |> WonderCommonlib.ImmutableHashMapService.set(skinName, skinData),
+    record,
+  );
+
+let removeSkinData = (skinName, record) =>
+  _setAllSkinDataMap(
+    getAllSkinDataMap(record)
+    |> WonderCommonlib.ImmutableHashMapService.deleteVal(skinName),
+    record,
+  );
 
 let unsafeGetSkinData = (skinName, record) =>
   getAllSkinDataMap(record)
   |> WonderCommonlib.ImmutableHashMapService.unsafeGet(skinName);
 
-let createSkinData = allCustomStyleData => {
-  allCustomStyleData: allCustomStyleData,
+let setSkinData = (skinName, skinData, record) =>
+  (
+    getAllSkinDataMap(record)
+    |> WonderCommonlib.ImmutableHashMapService.set(skinName, skinData)
+  )
+  ->(_setAllSkinDataMap(record));
+
+let createSkinData = (buttonSkinData, allCustomStyleData) => {
+  buttonSkinData,
+  allCustomStyleData,
 };
 
 let createAllCustomStyleData = () =>

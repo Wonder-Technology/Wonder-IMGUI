@@ -18,6 +18,12 @@ let removeSkinData = ManageSkinIMGUIService.removeSkinData;
 
 let createSkinData = ManageSkinIMGUIService.createSkinData;
 
+let unsafeGetSkinData = ManageSkinIMGUIService.unsafeGetSkinData;
+
+let unsafeGetDefaultSkinData = DataSkinIMGUIService.unsafeGetDefaultSkinData;
+
+let setSkinData = ManageSkinIMGUIService.setSkinData;
+
 let clearAllSkins = ManageSkinIMGUIService.clearAllSkins;
 
 let addDefaultSkinData = DataSkinIMGUIService.addDefaultSkinData;

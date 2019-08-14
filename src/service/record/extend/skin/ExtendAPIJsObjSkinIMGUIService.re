@@ -5,7 +5,7 @@ let parseShowData =
     switch (Js.Nullable.toOption(showData)) {
     | None => (
         DataSkinIMGUIService.getDefaultSkinName(),
-        DataSkinIMGUIService.getDefaultCustomStyleName(),
+        Js.Nullable.return(DataSkinIMGUIService.getDefaultCustomStyleName()),
       )
     | Some(showData) => showData
     };
