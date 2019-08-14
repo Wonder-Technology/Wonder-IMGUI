@@ -10,9 +10,21 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let createButtonSkinData = ExtendIMGUIAPI.createButtonSkinData;
+
+let setButtonSkinData = ExtendIMGUIAPI.setButtonSkinData;
+
+let getDefaultSkinName = ExtendIMGUIAPI.getDefaultSkinName;
+
 let addDefaultSkinData = ExtendIMGUIAPI.addDefaultSkinData;
 
 let clearAllSkins = ExtendIMGUIAPI.clearAllSkins;
+
+let setSkinData = ExtendIMGUIAPI.setSkinData;
+
+let unsafeGetDefaultSkinData = ExtendIMGUIAPI.unsafeGetDefaultSkinData;
+
+let unsafeGetSkinData = ExtendIMGUIAPI.unsafeGetSkinData;
 
 let createSkinData = ExtendIMGUIAPI.createSkinData;
 
@@ -80,9 +92,21 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let createButtonSkinData = ExtendIMGUIAPI.createButtonSkinData;
+
+let setButtonSkinData = ExtendIMGUIAPI.setButtonSkinData;
+
+let getDefaultSkinName = ExtendIMGUIAPI.getDefaultSkinName;
+
 let addDefaultSkinData = ExtendIMGUIAPI.addDefaultSkinData;
 
 let clearAllSkins = ExtendIMGUIAPI.clearAllSkins;
+
+let setSkinData = ExtendIMGUIAPI.setSkinData;
+
+let unsafeGetDefaultSkinData = ExtendIMGUIAPI.unsafeGetDefaultSkinData;
+
+let unsafeGetSkinData = ExtendIMGUIAPI.unsafeGetSkinData;
 
 let createSkinData = ExtendIMGUIAPI.createSkinData;
 

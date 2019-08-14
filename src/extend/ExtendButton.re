@@ -87,14 +87,8 @@ module CustomControl = {
 
       let parseShowData = apiJsObj##parseShowData;
       let unsafeGetSkinData = apiJsObj##unsafeGetSkinData;
-      let unsafeGetSingleCustomStyleDataMap =
-        apiJsObj##unsafeGetSingleCustomStyleDataMap;
 
-      let unsafeGetCustomStyleData = apiJsObj##unsafeGetCustomStyleData;
-
-      let hasCustomStyleData = apiJsObj##hasCustomStyleData;
-
-      let (skinName, singleCustomStyleName) = parseShowData(. showData);
+      let (skinName, _) = parseShowData(. showData);
 
       let {
         buttonColor,
@@ -104,8 +98,7 @@ module CustomControl = {
         hoverButtonImage,
         clickButtonImage,
       } =
-        ManageSkinIMGUIService.unsafeGetSkinData(skinName, record)
-        |> Skin.getSkinData;
+        unsafeGetSkinData(. skinName, record) |> Skin.getSkinData;
 
       let (isButtonClick, (imageId, color)) =
         judge(

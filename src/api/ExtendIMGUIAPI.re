@@ -27,3 +27,25 @@ let setSkinData = ManageSkinIMGUIService.setSkinData;
 let clearAllSkins = ManageSkinIMGUIService.clearAllSkins;
 
 let addDefaultSkinData = DataSkinIMGUIService.addDefaultSkinData;
+
+let getDefaultSkinName = DataSkinIMGUIService.getDefaultSkinName;
+
+let setButtonSkinData = ExtendButton.Skin.setSkinData;
+
+let createButtonSkinData =
+    (
+      buttonColor,
+      hoverButtonColor,
+      clickButtonColor,
+      buttonImage,
+      hoverButtonImage,
+      clickButtonImage,
+    )
+    : SkinType.buttonSkinData => {
+  buttonColor,
+  hoverButtonColor,
+  clickButtonColor,
+  buttonImage,
+  hoverButtonImage,
+  clickButtonImage,
+};

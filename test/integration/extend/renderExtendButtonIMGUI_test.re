@@ -35,16 +35,15 @@ let _ =
           ) =>
         record
         |> ExtendIMGUIAPI.setSkinData(
-             DataSkinIMGUIService.getDefaultSkinName(),
-             ExtendButton.Skin.setSkinData(
-               ExtendButton.Skin.createSkinData(
-                 ~buttonColor,
-                 ~hoverButtonColor,
-                 ~clickButtonColor,
-                 ~buttonImage,
-                 ~hoverButtonImage,
-                 ~clickButtonImage,
-                 (),
+             ExtendIMGUIAPI.getDefaultSkinName(),
+             ExtendIMGUIAPI.setButtonSkinData(
+               ExtendIMGUIAPI.createButtonSkinData(
+                 buttonColor,
+                 hoverButtonColor,
+                 clickButtonColor,
+                 buttonImage,
+                 hoverButtonImage,
+                 clickButtonImage,
                ),
                ExtendIMGUIAPI.unsafeGetDefaultSkinData(record),
              ),
