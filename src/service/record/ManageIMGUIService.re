@@ -73,13 +73,25 @@ let _sendUniformProjectionMatData = (gl, program, canvasSize) =>
     gl,
   );
 
-let _getProgram = record => {
-  let {program} = record.webglData |> OptionService.unsafeGet;
+let _getCustomTextureProgram = record => {
+  let {customTextureShaderData} = record.webglData |> OptionService.unsafeGet;
 
-  program;
+  customTextureShaderData.program;
 };
 
-let _sendUniformData = (gl, program, canvasSize) => {
+let _getFontTextureProgram = record => {
+  let {fontTextureShaderData} = record.webglData |> OptionService.unsafeGet;
+
+  fontTextureShaderData.program;
+};
+
+let _getNoTextureProgram = record => {
+  let {noTextureShaderData} = record.webglData |> OptionService.unsafeGet;
+
+  noTextureShaderData.program;
+};
+
+let _sendTextureProgramUniformData = (gl, program, canvasSize) => {
   useProgram(program, gl);
 
   _sendUniformProjectionMatData(gl, program, canvasSize);
@@ -89,17 +101,41 @@ let _sendUniformData = (gl, program, canvasSize) => {
   ();
 };
 
-let sendUniformProjectionMatData = (gl, canvasSize, record) => {
-  let program = _getProgram(record);
+let _sendNoTextureProgramUniformData = (gl, program, canvasSize) => {
+  useProgram(program, gl);
+
+  _sendUniformProjectionMatData(gl, program, canvasSize);
+
+  ();
+};
+
+let sendCustomTextureProgramUniformProjectionMatData =
+    (gl, canvasSize, record) => {
+  let program = _getCustomTextureProgram(record);
 
   useProgram(program, gl);
 
-  uniformMatrix4fv(
-    gl |> getUniformLocation(program, "u_projectionMat"),
-    false,
-    _buildOrthoProjectionMat4TypeArr(canvasSize),
-    gl,
-  );
+  _sendUniformProjectionMatData(gl, program, canvasSize) |> ignore;
+
+  record;
+};
+
+let sendFontTextureProgramUniformProjectionMatData = (gl, canvasSize, record) => {
+  let program = _getFontTextureProgram(record);
+
+  useProgram(program, gl);
+
+  _sendUniformProjectionMatData(gl, program, canvasSize) |> ignore;
+
+  record;
+};
+
+let sendNoTextureProgramUniformProjectionMatData = (gl, canvasSize, record) => {
+  let program = _getNoTextureProgram(record);
+
+  useProgram(program, gl);
+
+  _sendUniformProjectionMatData(gl, program, canvasSize) |> ignore;
 
   record;
 };
@@ -108,19 +144,30 @@ let init = (gl, canvasSize, record) =>
   !AssetIMGUIService.isLoadAsset(record) ?
     record :
     {
-      let program =
+      let customTextureProgram =
         gl
         |> createProgram
         |> WonderWebgl.ProgramService.initShader(
-             ShaderData.vs,
-             ShaderData.fs,
+             ShaderData.vs_customTexture,
+             ShaderData.fs_customTexture,
              gl,
            );
-
-      let positionBuffer = _createArrayBuffer(gl);
-      let colorBuffer = _createArrayBuffer(gl);
-      let texCoordBuffer = _createArrayBuffer(gl);
-      let indexBuffer = _createElementArrayBuffer(gl);
+      let fontTextureProgram =
+        gl
+        |> createProgram
+        |> WonderWebgl.ProgramService.initShader(
+             ShaderData.vs_fontTexture,
+             ShaderData.fs_fontTexture,
+             gl,
+           );
+      let noTextureProgram =
+        gl
+        |> createProgram
+        |> WonderWebgl.ProgramService.initShader(
+             ShaderData.vs_noTexture,
+             ShaderData.fs_noTexture,
+             gl,
+           );
 
       let fontTexture =
         _createFontTexture(
@@ -129,7 +176,9 @@ let init = (gl, canvasSize, record) =>
           |> WonderWebgl.GlType.imageElementToTextureSource,
         );
 
-      _sendUniformData(gl, program, canvasSize);
+      _sendTextureProgramUniformData(gl, customTextureProgram, canvasSize);
+      _sendTextureProgramUniformData(gl, fontTextureProgram, canvasSize);
+      _sendNoTextureProgramUniformData(gl, noTextureProgram, canvasSize);
 
       let record =
         record
@@ -155,24 +204,62 @@ let init = (gl, canvasSize, record) =>
         },
         webglData:
           Some({
-            program,
-            positionBuffer,
-            colorBuffer,
-            texCoordBuffer,
-            indexBuffer,
+            customTextureShaderData: {
+              program: customTextureProgram,
+              aPositonLocation:
+                gl |> getAttribLocation(customTextureProgram, "a_position"),
+              aColorLocation:
+                gl |> getAttribLocation(customTextureProgram, "a_color"),
+              aTexCoordLocation:
+                gl |> getAttribLocation(customTextureProgram, "a_texCoord"),
+              positionBuffer: _createArrayBuffer(gl),
+              colorBuffer: _createArrayBuffer(gl),
+              texCoordBuffer: _createArrayBuffer(gl),
+              indexBuffer: _createElementArrayBuffer(gl),
+            },
+            fontTextureShaderData: {
+              program: fontTextureProgram,
+              aPositonLocation:
+                gl |> getAttribLocation(fontTextureProgram, "a_position"),
+              aColorLocation:
+                gl |> getAttribLocation(fontTextureProgram, "a_color"),
+              aTexCoordLocation:
+                gl |> getAttribLocation(fontTextureProgram, "a_texCoord"),
+              positionBuffer: _createArrayBuffer(gl),
+              colorBuffer: _createArrayBuffer(gl),
+              texCoordBuffer: _createArrayBuffer(gl),
+              indexBuffer: _createElementArrayBuffer(gl),
+            },
+            noTextureShaderData: {
+              program: noTextureProgram,
+              aPositonLocation:
+                gl |> getAttribLocation(noTextureProgram, "a_position"),
+              aColorLocation:
+                gl |> getAttribLocation(noTextureProgram, "a_color"),
+              positionBuffer: _createArrayBuffer(gl),
+              colorBuffer: _createArrayBuffer(gl),
+              indexBuffer: _createElementArrayBuffer(gl),
+            },
             fontTexture,
-            aPositonLocation: gl |> getAttribLocation(program, "a_position"),
-            aColorLocation: gl |> getAttribLocation(program, "a_color"),
-            aTexCoordLocation: gl |> getAttribLocation(program, "a_texCoord"),
             lastWebglData: None,
           }),
       };
     };
 
 let _createEmptyDrawData = () => {
-  fontTextureDrawData: {
-    drawType: DrawDataType.FontTexture,
+  noTextureDrawData: {
+    verticeArr: [||],
+    colorArr: [||],
+    indexArr: [||],
+  },
+  customTextureDrawData: {
     customTexture: None,
+    verticeArr: [||],
+    colorArr: [||],
+    texCoordArr: [||],
+    indexArr: [||],
+  },
+  fontTextureDrawData: {
     verticeArr: [||],
     colorArr: [||],
     texCoordArr: [||],
@@ -254,43 +341,48 @@ let _setGlState = gl => {
   blendFunc(getSrcAlpha(gl), getOneMinusSrcAlpha(gl), gl);
 };
 
-let _draw = (gl, drawElementsDataArr, record) => {
-  let {fontTexture} = RecordIMGUIService.unsafeGetWebglData(record);
+let _drawElements = (count, countOffset, gl) =>
+  count === 0 ?
+    gl :
+    {
+      drawElements(
+        getTriangles(gl),
+        count,
+        getUnsignedShort(gl),
+        countOffset,
+        gl,
+      );
 
+      gl;
+    };
+
+let _drawCustomTexture = (drawElementsDataArr, record, gl) => {
   drawElementsDataArr
   |> WonderCommonlib.ArrayService.forEach(
-       (. {drawType, customTexture, count, countOffset}: drawElementsData) => {
-       let texture =
-         switch (drawType) {
-         | FontTexture => fontTexture
-         | CustomTexture => customTexture |> OptionService.unsafeGet
-         | type_ =>
-           WonderLog.Log.fatal(
-             WonderLog.Log.buildFatalMessage(
-               ~title="_draw",
-               ~description={j|unknown type_: $type_|j},
-               ~reason="",
-               ~solution={j||j},
-               ~params={j||j},
-             ),
-           )
-         };
+       (. {customTexture, count, countOffset}: customTextureDrawElementsData) => {
+       let texture = customTexture |> OptionService.unsafeGet;
 
        bindTexture(getTexture2D(gl), texture, gl);
 
-       drawElements(
-         getTriangles(gl),
-         count,
-         getUnsignedShort(gl),
-         countOffset,
-         gl,
-       );
+       _drawElements(count, countOffset, gl) |> ignore;
      });
 
-  record;
+  gl;
 };
 
-let _restoreGlState = (gl, record) => {
+let _drawFontTexture =
+    (drawElementData: DrawDataType.fontTextureDrawElementsData, record, gl) => {
+  let {fontTexture} = RecordIMGUIService.unsafeGetWebglData(record);
+
+  bindTexture(getTexture2D(gl), fontTexture, gl);
+
+  _drawElements(drawElementData.count, 0, gl);
+};
+
+let _drawNoTexture = (drawElementData, gl) =>
+  _drawElements(drawElementData.count, 0, gl);
+
+let _restoreGlState = (record, gl) => {
   let {
     lastProgram,
     lastElementArrayBuffer,
@@ -323,10 +415,11 @@ let _restoreGlState = (gl, record) => {
   record;
 };
 
-let _buildGroupedDrawDataArr = record => {
+let _buildAllDrawData = record => {
   let fontTextureDrawData = RecordIMGUIService.getFontTextureDrawData(record);
   let customTextureDrawDataMap =
     RecordIMGUIService.getCustomTextureDrawDataMap(record);
+  let noTextureDrawData = RecordIMGUIService.getNoTextureDrawData(record);
 
   let (_, baseIndex, customTextureDrawDataArr) =
     customTextureDrawDataMap
@@ -334,7 +427,7 @@ let _buildGroupedDrawDataArr = record => {
     |> WonderCommonlib.ArrayService.reduceOneParam(
          (.
            (lastVerticeArr, baseIndex, resultDrawDataArr),
-           ({verticeArr, indexArr}: DrawDataType.drawData) as drawData,
+           ({verticeArr, indexArr}: DrawDataType.customTextureDrawData) as drawData,
          ) => {
            let baseIndex =
              DrawDataArrayService.getBaseIndex(lastVerticeArr) + baseIndex;
@@ -353,27 +446,78 @@ let _buildGroupedDrawDataArr = record => {
          ([||], 0, [||]),
        );
 
-  let newBaseIndex =
-    switch (ArrayService.getLast(customTextureDrawDataArr)) {
-    | None => baseIndex
-    | Some(({verticeArr}: DrawDataType.drawData)) =>
-      DrawDataArrayService.getBaseIndex(verticeArr) + baseIndex
-    };
+  /* let newBaseIndex =
+       switch (ArrayService.getLast(customTextureDrawDataArr)) {
+       | None => baseIndex
+       | Some(({verticeArr}: DrawDataType.customTextureDrawData)) =>
+         DrawDataArrayService.getBaseIndex(verticeArr) + baseIndex
+       };
 
-  let fontTextureDrawData = {
-    ...fontTextureDrawData,
-    indexArr:
-      fontTextureDrawData.indexArr
-      |> Js.Array.map(index => index + newBaseIndex),
-  };
+     let fontTextureDrawData = {
+       ...fontTextureDrawData,
+       indexArr:
+         fontTextureDrawData.indexArr
+         |> Js.Array.map(index => index + newBaseIndex),
+     };
 
-  (
-    record,
-    DrawDataArrayService.concatArrays([|
+     let newBaseIndex =
+       DrawDataArrayService.getBaseIndex(fontTextureDrawData.verticeArr)
+       + newBaseIndex;
+
+     let noTextureDrawData = {
+       ...noTextureDrawData,
+       indexArr:
+         noTextureDrawData.indexArr |> Js.Array.map(index => index + newBaseIndex),
+     }; */
+
+  (record, customTextureDrawDataArr, fontTextureDrawData, noTextureDrawData);
+};
+
+let _renderCustomTextures = (customTextureDrawDataArr, record, gl) => {
+  let {customTextureShaderData} =
+    RecordIMGUIService.unsafeGetWebglData(record);
+
+  useProgram(customTextureShaderData.program, gl);
+
+  let (record, drawElementsDataArr) =
+    BufferDataIMGUIService.bufferCustomTextureDataAndSend(
+      gl,
       customTextureDrawDataArr,
-      [|fontTextureDrawData|],
-    |]),
-  );
+      record,
+    );
+
+  gl |> _drawCustomTexture(drawElementsDataArr, record);
+};
+
+let _renderFontTexture = (fontTextureDrawData, record, gl) => {
+  let {fontTextureShaderData} =
+    RecordIMGUIService.unsafeGetWebglData(record);
+
+  useProgram(fontTextureShaderData.program, gl);
+
+  let (record, fontTextureDrawElementData) =
+    BufferDataIMGUIService.bufferFontTextureDataAndSend(
+      gl,
+      fontTextureDrawData,
+      record,
+    );
+
+  gl |> _drawFontTexture(fontTextureDrawElementData, record);
+};
+
+let _renderNoTexture = (noTextureDrawData, record, gl) => {
+  let {noTextureShaderData} = RecordIMGUIService.unsafeGetWebglData(record);
+
+  useProgram(noTextureShaderData.program, gl);
+
+  let (record, noTextureDrawElementData) =
+    BufferDataIMGUIService.bufferNoTextureDataAndSend(
+      gl,
+      noTextureDrawData,
+      record,
+    );
+
+  gl |> _drawNoTexture(noTextureDrawElementData);
 };
 
 let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
@@ -392,19 +536,27 @@ let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
    */
   let record = _backupGlState(gl, record);
 
-  let (record, groupedDrawDataArr) = record |> _buildGroupedDrawDataArr;
+  let (
+    record,
+    customTextureDrawDataArr,
+    fontTextureDrawData,
+    noTextureDrawData,
+  ) =
+    record |> _buildAllDrawData;
 
-  let (record, drawElementsDataArr) =
-    BufferDataIMGUIService.bufferAllData(gl, groupedDrawDataArr, record);
-
-  let {program} = RecordIMGUIService.unsafeGetWebglData(record);
-
-  useProgram(program, gl);
+  let {customTextureShaderData, fontTextureShaderData, noTextureShaderData} =
+    RecordIMGUIService.unsafeGetWebglData(record);
 
   _setGlState(gl);
 
-  (record |> _draw(gl, drawElementsDataArr) |> _restoreGlState(gl))
-  ->(setRecordFunc(data));
+  gl
+  |> _renderCustomTextures(customTextureDrawDataArr, record)
+  |> _renderFontTexture(fontTextureDrawData, record)
+  |> _renderNoTexture(noTextureDrawData, record)
+  |> _restoreGlState(record)
+  |> ignore;
+
+  record->(setRecordFunc(data));
 };
 
 let getCustomData = ({imguiFuncData}) =>
@@ -518,7 +670,6 @@ let createRecord = () => {
        }, */
     {
       textColor: [|1., 1., 1.|],
-      fontTexUvForWhite: [|0., 0.|],
     },
   assetData: {
     fntId: "fnt",

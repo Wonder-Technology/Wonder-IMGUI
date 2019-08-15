@@ -6,7 +6,7 @@ open WonderWebgl.Gl;
 
 open Js.Typed_array;
 
-let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
+let _bufferArrayBufferData = ((buffer, pointArr), gl) => {
   bindBuffer(getArrayBuffer(gl), buffer, gl);
   bufferFloat32Data(
     getArrayBuffer(gl),
@@ -15,9 +15,12 @@ let _bufferArrayBufferData = ((buffer, pointArr, location, size), gl) => {
     gl,
   );
 
+  gl;
+};
+
+let _sendArrayBufferData = ((location, size), gl) => {
   enableVertexAttribArray(location, gl);
   vertexAttribPointer(location, size, getFloat(gl), false, 0, 0, gl);
-  resetBuffer(getArrayBuffer(gl), Js.Nullable.null, gl);
 
   gl;
 };
@@ -34,18 +37,11 @@ let _bufferElementArrayBufferData = (buffer, pointArr, gl) => {
   gl;
 };
 
-let bufferAllData = (gl, groupedDrawDataArr, record) => {
-  let {
-    program,
-    positionBuffer,
-    colorBuffer,
-    texCoordBuffer,
-    indexBuffer,
-    aPositonLocation,
-    aColorLocation,
-    aTexCoordLocation,
-  } =
+let bufferCustomTextureDataAndSend = (gl, customTextureDrawDataArr, record) => {
+  let {customTextureShaderData} =
     RecordIMGUIService.unsafeGetWebglData(record);
+
+  let {positionBuffer, colorBuffer, texCoordBuffer, indexBuffer}: customTextureShaderData = customTextureShaderData;
 
   let (
     drawElementsDataArr,
@@ -55,7 +51,7 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
     totalTexCoordArr,
     totalIndexArr,
   ) =
-    groupedDrawDataArr
+    customTextureDrawDataArr
     |> WonderCommonlib.ArrayService.reduceOneParam(
          (.
            (
@@ -66,14 +62,7 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
              totalTexCoordArr,
              totalIndexArr,
            ),
-           {
-             drawType,
-             customTexture,
-             verticeArr,
-             colorArr,
-             texCoordArr,
-             indexArr,
-           }: DrawDataType.drawData,
+           {customTexture, verticeArr, colorArr, texCoordArr, indexArr}: DrawDataType.customTextureDrawData,
          ) => {
            let count = indexArr |> Js.Array.length;
 
@@ -92,7 +81,7 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
              (
                drawElementsDataArr
                |> ArrayService.push(
-                    {drawType, customTexture, count, countOffset}: drawElementsData,
+                    {customTexture, count, countOffset}: customTextureDrawElementsData,
                   ),
                newCountOffset,
                totalVerticeArr |> Js.Array.concat(verticeArr),
@@ -106,26 +95,60 @@ let bufferAllData = (gl, groupedDrawDataArr, record) => {
        );
 
   gl
-  |> _bufferArrayBufferData((
-       positionBuffer,
-       totalVerticeArr,
-       aPositonLocation,
-       2,
-     ))
-  |> _bufferArrayBufferData((colorBuffer, totalColorArr, aColorLocation, 3))
-  |> _bufferArrayBufferData((
-       texCoordBuffer,
-       totalTexCoordArr,
-       aTexCoordLocation,
-       2,
-     ))
+  |> _bufferArrayBufferData((positionBuffer, totalVerticeArr))
+  |> _sendArrayBufferData((customTextureShaderData.aPositonLocation, 2))
+  |> _bufferArrayBufferData((colorBuffer, totalColorArr))
+  |> _sendArrayBufferData((customTextureShaderData.aColorLocation, 3))
+  |> _bufferArrayBufferData((texCoordBuffer, totalTexCoordArr))
+  |> _sendArrayBufferData((customTextureShaderData.aTexCoordLocation, 2))
   |> _bufferElementArrayBufferData(indexBuffer, totalIndexArr)
   |> ignore;
 
   (record, drawElementsDataArr);
 };
 
-let coloredVertex =
+let bufferFontTextureDataAndSend = (gl, fontTextureDrawData, record) => {
+  let {fontTextureShaderData} =
+    RecordIMGUIService.unsafeGetWebglData(record);
+
+  let {positionBuffer, colorBuffer, texCoordBuffer, indexBuffer}: fontTextureShaderData = fontTextureShaderData;
+
+  let {verticeArr, colorArr, texCoordArr, indexArr} = fontTextureDrawData;
+
+  gl
+  |> _bufferArrayBufferData((positionBuffer, verticeArr))
+  |> _sendArrayBufferData((fontTextureShaderData.aPositonLocation, 2))
+  |> _bufferArrayBufferData((colorBuffer, colorArr))
+  |> _sendArrayBufferData((fontTextureShaderData.aColorLocation, 3))
+  |> _bufferArrayBufferData((texCoordBuffer, texCoordArr))
+  |> _sendArrayBufferData((fontTextureShaderData.aTexCoordLocation, 2))
+  |> _bufferElementArrayBufferData(indexBuffer, indexArr)
+  |> ignore;
+
+  (
+    record,
+    {count: indexArr |> Js.Array.length}: fontTextureDrawElementsData,
+  );
+};
+
+let bufferNoTextureDataAndSend =
+    (gl, {verticeArr, colorArr, indexArr}, record) => {
+  let {noTextureShaderData} = RecordIMGUIService.unsafeGetWebglData(record);
+
+  let {positionBuffer, colorBuffer, indexBuffer} = noTextureShaderData;
+
+  gl
+  |> _bufferArrayBufferData((positionBuffer, verticeArr))
+  |> _sendArrayBufferData((noTextureShaderData.aPositonLocation, 2))
+  |> _bufferArrayBufferData((colorBuffer, colorArr))
+  |> _sendArrayBufferData((noTextureShaderData.aColorLocation, 3))
+  |> _bufferElementArrayBufferData(indexBuffer, indexArr)
+  |> ignore;
+
+  (record, {count: indexArr |> Js.Array.length}: noTextureDrawElementsData);
+};
+
+let coloredTexturedVertex =
     (
       positionX,
       positionY,
@@ -136,4 +159,10 @@ let coloredVertex =
   verticeArr |> ArrayService.push(positionX) |> ArrayService.push(positionY),
   colorArr |> DrawDataArrayService.addPoints(color),
   texCoordArr |> DrawDataArrayService.addPoints(fontTexUvForWhite),
+);
+
+let coloredNoTexturedVertex =
+    (positionX, positionY, color, (verticeArr, colorArr)) => (
+  verticeArr |> ArrayService.push(positionX) |> ArrayService.push(positionY),
+  colorArr |> DrawDataArrayService.addPoints(color),
 );

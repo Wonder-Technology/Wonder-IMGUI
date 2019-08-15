@@ -57,28 +57,16 @@ let _ =
       test("test position buffer data", () =>
         _test(
           [|38., 48., 38., 253., 143., 48., 143., 253.|],
-          RenderIMGUITool.testPositionBufferData,
+          RenderIMGUITool.testNoTextureProgramPositionBufferData,
           record^,
         )
       );
-
-      describe("test texCoord buffer data", () =>
-        test("box texCoord data use setting->fontTexUvForWhite", () => {
-          let u = 0.1;
-          let v = 0.2;
-          let record =
-            SettingIMGUITool.setSetting(
-              ~record=record^,
-              ~fontTexUvForWhite=[|u, v|],
-              (),
-            );
-
-          _test(
-            [|u, v, u, v, u, v, u, v|],
-            RenderIMGUITool.testTexCoordBufferData,
-            record,
-          );
-        })
+      test("test color buffer data", () =>
+        _test(
+          [|0.2, 0.5, 0.8, 0.2, 0.5, 0.8, 0.2, 0.5, 0.8, 0.2, 0.5, 0.8|],
+          RenderIMGUITool.testNoTextureProgramColorBufferData,
+          record^,
+        )
       );
     });
   });

@@ -18,7 +18,7 @@ let _ =
     });
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
-    describe("sendUniformProjectionMatData", () => {
+    describe("sendCustomTextureProgramUniformProjectionMatData", () => {
       let _buildNoVAOExtension = sandbox =>
         RenderIMGUITool.buildNoVAOExtension(sandbox);
 
@@ -56,7 +56,11 @@ let _ =
         let (record, canvasWidth, canvasHeight) = _prepareEmptyIMGUIFunc(gl);
 
         let record =
-          ManageIMGUIAPI.sendUniformProjectionMatData(gl, (0, 0), record);
+          ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData(
+            gl,
+            (0, 0),
+            record,
+          );
 
         useProgram |> getCall(1) |> expect |> toCalledWith([|program|]);
       });
@@ -87,7 +91,7 @@ let _ =
             _prepareEmptyIMGUIFunc(gl);
 
           let record =
-            ManageIMGUIAPI.sendUniformProjectionMatData(
+            ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData(
               gl,
               (500, 250),
               record,

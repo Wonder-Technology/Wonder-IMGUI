@@ -14,6 +14,8 @@ let createButtonSkinData = ExtendIMGUIAPI.createButtonSkinData;
 
 let setButtonSkinData = ExtendIMGUIAPI.setButtonSkinData;
 
+let getButtonSkinData = ExtendIMGUIAPI.getButtonSkinData;
+
 let getDefaultSkinName = ExtendIMGUIAPI.getDefaultSkinName;
 
 let addDefaultSkinData = ExtendIMGUIAPI.addDefaultSkinData;
@@ -62,7 +64,11 @@ let addFont = IOIMGUIAPI.addFont;
 
 let load = IOIMGUIAPI.load;
 
-let sendUniformProjectionMatData = ManageIMGUIAPI.sendUniformProjectionMatData;
+let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
+
+let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
+
+let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
 
 let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
 
@@ -96,6 +102,8 @@ let createButtonSkinData = ExtendIMGUIAPI.createButtonSkinData;
 
 let setButtonSkinData = ExtendIMGUIAPI.setButtonSkinData;
 
+let getButtonSkinData = ExtendIMGUIAPI.getButtonSkinData;
+
 let getDefaultSkinName = ExtendIMGUIAPI.getDefaultSkinName;
 
 let addDefaultSkinData = ExtendIMGUIAPI.addDefaultSkinData;
@@ -144,7 +152,11 @@ let addFont = IOIMGUIAPI.addFont;
 
 let load = IOIMGUIAPI.load;
 
-let sendUniformProjectionMatData = ManageIMGUIAPI.sendUniformProjectionMatData;
+let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
+
+let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
+
+let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
 
 let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
 

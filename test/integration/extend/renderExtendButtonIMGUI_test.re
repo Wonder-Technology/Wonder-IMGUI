@@ -255,17 +255,9 @@ let _ =
 
       describe("test buffer data", () => {
         describe("test draw box and draw text", () => {
-          test("test position buffer data", () =>
+          test("test fontTexture program->position buffer data", () =>
             _test(
               [|
-                35.,
-                45.,
-                35.,
-                250.,
-                140.,
-                45.,
-                140.,
-                250.,
                 46.,
                 119.,
                 46.,
@@ -283,205 +275,154 @@ let _ =
                 133.,
                 174.,
               |],
-              RenderIMGUITool.testPositionBufferData,
+              RenderIMGUITool.testFontTextureProgramPositionBufferData,
+              record^,
+            )
+          );
+          test("test no texture program->position buffer data", () =>
+            _test(
+              [|35., 45., 35., 250., 140., 45., 140., 250.|],
+              RenderIMGUITool.testNoTextureProgramPositionBufferData,
               record^,
             )
           );
 
-          describe("test texCoord buffer data", () =>
-            test("box texCoord data use setting->fontTexUvForWhite", () => {
-              let u = 0.1;
-              let v = 0.2;
-              let record =
-                SettingIMGUITool.setSetting(
-                  ~record=record^,
-                  ~fontTexUvForWhite=[|u, v|],
-                  (),
-                );
-
-              _test(
-                [|
-                  u,
-                  v,
-                  u,
-                  v,
-                  u,
-                  v,
-                  u,
-                  v,
-                  0.1,
-                  0.34552102376599636,
-                  0.1,
-                  0.4460694698354662,
-                  0.19183673469387755,
-                  0.34552102376599636,
-                  0.19183673469387755,
-                  0.4460694698354662,
-                  0.8734693877551021,
-                  0.7568555758683729,
-                  0.8734693877551021,
-                  0.8336380255941499,
-                  0.963265306122449,
-                  0.7568555758683729,
-                  0.963265306122449,
-                  0.8336380255941499,
-                |],
-                RenderIMGUITool.testTexCoordBufferData,
-                record,
-              );
-            })
+          test("test fontTexture program->texCoord buffer data", () =>
+            _test(
+              [|
+                0.1,
+                0.34552102376599636,
+                0.1,
+                0.4460694698354662,
+                0.19183673469387755,
+                0.34552102376599636,
+                0.19183673469387755,
+                0.4460694698354662,
+                0.8734693877551021,
+                0.7568555758683729,
+                0.8734693877551021,
+                0.8336380255941499,
+                0.963265306122449,
+                0.7568555758683729,
+                0.963265306122449,
+                0.8336380255941499,
+              |],
+              RenderIMGUITool.testFontTextureProgramTexCoordBufferData,
+              record^,
+            )
           );
 
           describe("test index buffer", () => {
-            test("test one button", () =>
-              _test(
-                [|0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5, 8, 9, 10, 11, 10, 9|],
-                RenderIMGUITool.testIndexBufferData,
-                record^,
-              )
-            );
-            test("test two buttons", () =>
-              _testWithIMGUIFunc(
-                [|
-                  0,
-                  1,
-                  2,
-                  3,
-                  2,
-                  1,
-                  4,
-                  5,
-                  6,
-                  7,
-                  6,
-                  5,
-                  8,
-                  9,
-                  10,
-                  11,
-                  10,
-                  9,
-                  12,
-                  13,
-                  14,
-                  15,
-                  14,
-                  13,
-                  16,
-                  17,
-                  18,
-                  19,
-                  18,
-                  17,
-                  20,
-                  21,
-                  22,
-                  23,
-                  22,
-                  21,
-                |],
-                (
-                  RenderIMGUITool.testIndexBufferData,
-                  (. _, apiJsObj, record) => {
-                    let (
-                      (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                      str1,
-                    ) =
-                      ButtonIMGUITool.buildButtonData1();
-                    let (
-                      (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
-                      str2,
-                    ) =
-                      ButtonIMGUITool.buildButtonData1();
+            describe("test one button", () => {
+              test("test fontTexture program->index buffer", () =>
+                _test(
+                  [|0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5|],
+                  RenderIMGUITool.testFontTextureProgramIndexBufferData,
+                  record^,
+                )
+              );
+              test("test no texture program->index buffer", () =>
+                _test(
+                  [|0, 1, 2, 3, 2, 1|],
+                  RenderIMGUITool.testNoTextureProgramIndexBufferData,
+                  record^,
+                )
+              );
+            });
 
-                    let apiJsObj = Obj.magic(apiJsObj);
+            describe("test two buttons", () => {
+              let _buildIMGUIFunc = () =>
+                (. _, apiJsObj, record) => {
+                  let (
+                    (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                    str1,
+                  ) =
+                    ButtonIMGUITool.buildButtonData1();
+                  let (
+                    (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
+                    str2,
+                  ) =
+                    ButtonIMGUITool.buildButtonData1();
 
-                    let button = apiJsObj##button;
+                  let apiJsObj = Obj.magic(apiJsObj);
 
-                    let (record, isButtonClick) =
-                      button(.
-                        (
-                          (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                          str1,
-                        ),
-                        Js.Nullable.null,
-                        record,
-                      );
+                  let button = apiJsObj##button;
 
-                    let (record, isButtonClick) =
-                      button(.
-                        (
-                          (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
-                          str2,
-                        ),
-                        Js.Nullable.null,
-                        record,
-                      );
+                  let (record, isButtonClick) =
+                    button(.
+                      (
+                        (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                        str1,
+                      ),
+                      Js.Nullable.null,
+                      record,
+                    );
 
-                    record;
-                  },
-                ),
-                record^,
-              )
-            );
+                  let (record, isButtonClick) =
+                    button(.
+                      (
+                        (buttonX2, buttonY2, buttonWidth2, buttonHeight2),
+                        str2,
+                      ),
+                      Js.Nullable.null,
+                      record,
+                    );
+
+                  record;
+                };
+
+              test("test fontTexture program->index buffer", () =>
+                _testWithIMGUIFunc(
+                  [|
+                    0,
+                    1,
+                    2,
+                    3,
+                    2,
+                    1,
+                    4,
+                    5,
+                    6,
+                    7,
+                    6,
+                    5,
+                    8,
+                    9,
+                    10,
+                    11,
+                    10,
+                    9,
+                    12,
+                    13,
+                    14,
+                    15,
+                    14,
+                    13,
+                  |],
+                  (
+                    RenderIMGUITool.testFontTextureProgramIndexBufferData,
+                    _buildIMGUIFunc(),
+                  ),
+                  record^,
+                )
+              );
+              test("test no texture program->index buffer", () =>
+                _testWithIMGUIFunc(
+                  [|0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5|],
+                  (
+                    RenderIMGUITool.testNoTextureProgramIndexBufferData,
+                    _buildIMGUIFunc(),
+                  ),
+                  record^,
+                )
+              );
+            });
           });
         });
 
         describe("test draw image and draw text", () => {
-          test("test position buffer data", () => {
-            let (
-              (_, _, textureId1),
-              (_, _, textureId2),
-              (_, _, textureId3),
-            ) =
-              RenderIMGUITool.buildImageData();
-            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-              ButtonIMGUITool.buildButtonData1();
-
-            _testImage(
-              ~buttonImage=Js.Nullable.return(textureId3),
-              ~bufferData=[|
-                35.,
-                45.,
-                35.,
-                250.,
-                140.,
-                45.,
-                140.,
-                250.,
-                46.,
-                119.,
-                46.,
-                174.,
-                91.,
-                119.,
-                91.,
-                174.,
-                89.,
-                132.,
-                89.,
-                174.,
-                133.,
-                132.,
-                133.,
-                174.,
-              |],
-              ~record=record^,
-              ~testBufferDataFunc=
-                RenderIMGUITool.testPositionBufferDataWithIODataAndAfterInitFunc(
-                  RenderIMGUITool.buildIOData(
-                    ~pointUp=false,
-                    ~pointDown=false,
-                    ~pointPosition=(- buttonX1, buttonY1),
-                    (),
-                  ),
-                ),
-              (),
-            );
-          });
-
-          describe("test texCoord buffer data", () =>
-            test("should use whole image", () => {
+          describe("test position buffer data", () => {
+            test("test customTexture program->position buffer data", () => {
               let (
                 (_, _, textureId1),
                 (_, _, textureId2),
@@ -493,79 +434,111 @@ let _ =
 
               _testImage(
                 ~buttonImage=Js.Nullable.return(textureId3),
-                ~hoverButtonImage=Js.Nullable.return(textureId3),
-                ~clickButtonImage=Js.Nullable.return(textureId3),
-                ~bufferData=[|
-                  0.,
-                  0.,
-                  0.,
-                  1.,
-                  1.,
-                  0.,
-                  1.,
-                  1.,
-                  0.1,
-                  0.34552102376599636,
-                  0.1,
-                  0.4460694698354662,
-                  0.19183673469387755,
-                  0.34552102376599636,
-                  0.19183673469387755,
-                  0.4460694698354662,
-                  0.8734693877551021,
-                  0.7568555758683729,
-                  0.8734693877551021,
-                  0.8336380255941499,
-                  0.963265306122449,
-                  0.7568555758683729,
-                  0.963265306122449,
-                  0.8336380255941499,
-                |],
+                ~bufferData=[|35., 45., 35., 250., 140., 45., 140., 250.|],
                 ~record=record^,
-                ~testBufferDataFunc=RenderIMGUITool.testTexCoordBufferDataAndAfterInitFunc,
+                ~testBufferDataFunc=
+                  RenderIMGUITool.testCustomTextureProgramPositionBufferDataWithIODataAndAfterInitFunc(
+                    RenderIMGUITool.buildIOData(
+                      ~pointUp=false,
+                      ~pointDown=false,
+                      ~pointPosition=(- buttonX1, buttonY1),
+                      (),
+                    ),
+                  ),
                 (),
               );
-            })
-          );
-
-          describe("test index buffer", () =>
-            test("test one button", () => {
+            });
+            test("test font texture program->position buffer data", () => {
               let (
                 (_, _, textureId1),
                 (_, _, textureId2),
                 (_, _, textureId3),
               ) =
                 RenderIMGUITool.buildImageData();
+              let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+                ButtonIMGUITool.buildButtonData1();
 
               _testImage(
                 ~buttonImage=Js.Nullable.return(textureId3),
-                ~hoverButtonImage=Js.Nullable.return(textureId3),
-                ~clickButtonImage=Js.Nullable.return(textureId3),
                 ~bufferData=[|
-                  0,
-                  1,
-                  2,
-                  3,
-                  2,
-                  1,
-                  4,
-                  5,
-                  6,
-                  7,
-                  6,
-                  5,
-                  8,
-                  9,
-                  10,
-                  11,
-                  10,
-                  9,
+                  46.,
+                  119.,
+                  46.,
+                  174.,
+                  91.,
+                  119.,
+                  91.,
+                  174.,
+                  89.,
+                  132.,
+                  89.,
+                  174.,
+                  133.,
+                  132.,
+                  133.,
+                  174.,
                 |],
                 ~record=record^,
-                ~testBufferDataFunc=RenderIMGUITool.testIndexBufferDataAndAfterInitFunc,
+                ~testBufferDataFunc=
+                  RenderIMGUITool.testFontTextureProgramPositionBufferDataWithIODataAndAfterInitFunc(
+                    RenderIMGUITool.buildIOData(
+                      ~pointUp=false,
+                      ~pointDown=false,
+                      ~pointPosition=(- buttonX1, buttonY1),
+                      (),
+                    ),
+                  ),
                 (),
               );
-            })
+            });
+          });
+
+          describe("test texCoord buffer data", () =>
+            describe("test customTexture program->texCoord buffer data", () =>
+              test("should use whole image", () => {
+                let (
+                  (_, _, textureId1),
+                  (_, _, textureId2),
+                  (_, _, textureId3),
+                ) =
+                  RenderIMGUITool.buildImageData();
+                let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+                  ButtonIMGUITool.buildButtonData1();
+
+                _testImage(
+                  ~buttonImage=Js.Nullable.return(textureId3),
+                  ~hoverButtonImage=Js.Nullable.return(textureId3),
+                  ~clickButtonImage=Js.Nullable.return(textureId3),
+                  ~bufferData=[|0., 0., 0., 1., 1., 0., 1., 1.|],
+                  ~record=record^,
+                  ~testBufferDataFunc=RenderIMGUITool.testCustomTextureProgramTexCoordBufferDataAndAfterInitFunc,
+                  (),
+                );
+              })
+            )
+          );
+
+          describe("test index buffer", () =>
+            describe("test one button", () =>
+              test("test customTexture program->index buffer data", () => {
+                let (
+                  (_, _, textureId1),
+                  (_, _, textureId2),
+                  (_, _, textureId3),
+                ) =
+                  RenderIMGUITool.buildImageData();
+
+                _testImage(
+                  ~buttonImage=Js.Nullable.return(textureId3),
+                  ~hoverButtonImage=Js.Nullable.return(textureId3),
+                  ~clickButtonImage=Js.Nullable.return(textureId3),
+                  ~bufferData=[|0, 1, 2, 3, 2, 1|],
+                  ~record=record^,
+                  ~testBufferDataFunc=RenderIMGUITool.testCustomTextureProgramIndexBufferDataAndAfterInitFunc,
+                  (),
+                );
+              })
+            )
           );
         });
       });
@@ -573,63 +546,41 @@ let _ =
       describe("if mouse hit button", () => {
         describe("if mouse not click or down", () => {
           describe("test color buffer data", () =>
-            test("box color should be custom style->hoverButtonColor", () => {
-              let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-                ButtonIMGUITool.buildButtonData1();
+            describe("test no texture program", () =>
+              test("box color should be custom style->hoverButtonColor", () => {
+                let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+                  ButtonIMGUITool.buildButtonData1();
 
-              _testWithSkinData(
-                ~bufferData=[|
-                  0.4,
-                  0.2,
-                  0.,
-                  0.4,
-                  0.2,
-                  0.,
-                  0.4,
-                  0.2,
-                  0.,
-                  0.4,
-                  0.2,
-                  0.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                  1.,
-                |],
-                ~hoverButtonColor=[|0.4, 0.2, 0.|],
-                ~testBufferDataFunc=
-                  RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
-                    RenderIMGUITool.buildIOData(
-                      ~pointUp=false,
-                      ~pointDown=false,
-                      ~pointPosition=(buttonX1, buttonY1),
-                      (),
+                _testWithSkinData(
+                  ~bufferData=[|
+                    0.4,
+                    0.2,
+                    0.,
+                    0.4,
+                    0.2,
+                    0.,
+                    0.4,
+                    0.2,
+                    0.,
+                    0.4,
+                    0.2,
+                    0.,
+                  |],
+                  ~hoverButtonColor=[|0.4, 0.2, 0.|],
+                  ~testBufferDataFunc=
+                    RenderIMGUITool.testNoTextureProgramColorBufferDataWithIODataAndAfterInitFunc(
+                      RenderIMGUITool.buildIOData(
+                        ~pointUp=false,
+                        ~pointDown=false,
+                        ~pointPosition=(buttonX1, buttonY1),
+                        (),
+                      ),
                     ),
-                  ),
-                ~record=record^,
-                (),
-              );
-            })
+                  ~record=record^,
+                  (),
+                );
+              })
+            )
           );
 
           describe("test image", () =>
@@ -718,63 +669,44 @@ let _ =
         describe("if mouse down", () => {
           describe("test buffer data", () =>
             describe("test color buffer data", () =>
-              test("box color should be setting->clickButtonColor", () => {
-                let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-                  ButtonIMGUITool.buildButtonData1();
+              describe("test no texture program", () =>
+                test("box color should be custom style->clickButtonColor", () => {
+                  let (
+                    (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                    str1,
+                  ) =
+                    ButtonIMGUITool.buildButtonData1();
 
-                _testWithSkinData(
-                  ~bufferData=[|
-                    0.1,
-                    0.2,
-                    0.5,
-                    0.1,
-                    0.2,
-                    0.5,
-                    0.1,
-                    0.2,
-                    0.5,
-                    0.1,
-                    0.2,
-                    0.5,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                  |],
-                  ~clickButtonColor=[|0.1, 0.2, 0.5|],
-                  ~testBufferDataFunc=
-                    RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
-                      RenderIMGUITool.buildIOData(
-                        ~pointUp=false,
-                        ~pointDown=true,
-                        ~pointPosition=(buttonX1, buttonY1),
-                        (),
+                  _testWithSkinData(
+                    ~bufferData=[|
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.1,
+                      0.2,
+                      0.5,
+                    |],
+                    ~clickButtonColor=[|0.1, 0.2, 0.5|],
+                    ~testBufferDataFunc=
+                      RenderIMGUITool.testNoTextureProgramColorBufferDataWithIODataAndAfterInitFunc(
+                        RenderIMGUITool.buildIOData(
+                          ~pointUp=false,
+                          ~pointDown=true,
+                          ~pointPosition=(buttonX1, buttonY1),
+                          (),
+                        ),
                       ),
-                    ),
-                  ~record=record^,
-                  (),
-                );
-              })
+                    ~record=record^,
+                    (),
+                  );
+                })
+              )
             )
           );
 
@@ -797,63 +729,44 @@ let _ =
         describe("if mouse click", () => {
           describe("test buffer data", () =>
             describe("test color buffer data", () =>
-              test("box color should be setting->clickButtonColor", () => {
-                let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-                  ButtonIMGUITool.buildButtonData1();
+              describe("test no texture program", () =>
+                test("box color should be custom style->clickButtonColor", () => {
+                  let (
+                    (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                    str1,
+                  ) =
+                    ButtonIMGUITool.buildButtonData1();
 
-                _testWithSkinData(
-                  ~bufferData=[|
-                    0.1,
-                    0.2,
-                    0.5,
-                    0.1,
-                    0.2,
-                    0.5,
-                    0.1,
-                    0.2,
-                    0.5,
-                    0.1,
-                    0.2,
-                    0.5,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                    1.,
-                  |],
-                  ~clickButtonColor=[|0.1, 0.2, 0.5|],
-                  ~testBufferDataFunc=
-                    RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
-                      RenderIMGUITool.buildIOData(
-                        ~pointUp=true,
-                        ~pointDown=true,
-                        ~pointPosition=(buttonX1, buttonY1),
-                        (),
+                  _testWithSkinData(
+                    ~bufferData=[|
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.1,
+                      0.2,
+                      0.5,
+                      0.1,
+                      0.2,
+                      0.5,
+                    |],
+                    ~clickButtonColor=[|0.1, 0.2, 0.5|],
+                    ~testBufferDataFunc=
+                      RenderIMGUITool.testNoTextureProgramColorBufferDataWithIODataAndAfterInitFunc(
+                        RenderIMGUITool.buildIOData(
+                          ~pointUp=true,
+                          ~pointDown=true,
+                          ~pointPosition=(buttonX1, buttonY1),
+                          (),
+                        ),
                       ),
-                    ),
-                  ~record=record^,
-                  (),
-                );
-              })
+                    ~record=record^,
+                    (),
+                  );
+                })
+              )
             )
           );
 
@@ -876,63 +789,41 @@ let _ =
 
       describe("else", () => {
         describe("test color buffer data", () =>
-          test("box color should be setting->buttonColor", () => {
-            let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
-              ButtonIMGUITool.buildButtonData1();
+          describe("test no texture program", () =>
+            test("box color should be setting->buttonColor", () => {
+              let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
+                ButtonIMGUITool.buildButtonData1();
 
-            _testWithSkinData(
-              ~bufferData=[|
-                0.4,
-                0.2,
-                0.,
-                0.4,
-                0.2,
-                0.,
-                0.4,
-                0.2,
-                0.,
-                0.4,
-                0.2,
-                0.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-                1.,
-              |],
-              ~buttonColor=[|0.4, 0.2, 0.|],
-              ~testBufferDataFunc=
-                RenderIMGUITool.testColorBufferDataWithIODataAndAfterInitFunc(
-                  RenderIMGUITool.buildIOData(
-                    ~pointUp=false,
-                    ~pointDown=false,
-                    ~pointPosition=(buttonX1 - 1, buttonY1),
-                    (),
+              _testWithSkinData(
+                ~bufferData=[|
+                  0.4,
+                  0.2,
+                  0.,
+                  0.4,
+                  0.2,
+                  0.,
+                  0.4,
+                  0.2,
+                  0.,
+                  0.4,
+                  0.2,
+                  0.,
+                |],
+                ~buttonColor=[|0.4, 0.2, 0.|],
+                ~testBufferDataFunc=
+                  RenderIMGUITool.testNoTextureProgramColorBufferDataWithIODataAndAfterInitFunc(
+                    RenderIMGUITool.buildIOData(
+                      ~pointUp=false,
+                      ~pointDown=false,
+                      ~pointPosition=(buttonX1 - 1, buttonY1),
+                      (),
+                    ),
                   ),
-                ),
-              ~record=record^,
-              (),
-            );
-          })
+                ~record=record^,
+                (),
+              );
+            })
+          )
         );
 
         describe("test button is not click", () => {

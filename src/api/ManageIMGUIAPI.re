@@ -29,7 +29,6 @@ let getSetting = record => {
        radioButtonSetting,
           checkboxSetting,
           sliderSetting, */
-    fontTexUvForWhite,
   } =
     RecordIMGUIService.getSetting(record);
 
@@ -70,7 +69,6 @@ let getSetting = record => {
     /* "radioButtonSetting": radioButtonSettingJsObj,
        "checkboxSetting": checkboxSettingJsObj,
        "sliderSetting": sliderSettingJsObj, */
-    "fontTexUvForWhite": fontTexUvForWhite,
   };
 };
 
@@ -117,7 +115,7 @@ let setSetting = (settingJsObj, record) =>
          radioButtonSetting,
          checkboxSetting,
          sliderSetting, */
-      fontTexUvForWhite: settingJsObj##fontTexUvForWhite,
+      /* fontTexUvForWhite: settingJsObj##fontTexUvForWhite, */
     },
     record,
   );
@@ -128,5 +126,24 @@ let getIMGUIFunc = ManageIMGUIService.getIMGUIFunc;
 
 let setIMGUIFunc = ManageIMGUIService.setIMGUIFunc;
 
-let sendUniformProjectionMatData = (gl, canvasSize, record) =>
-  ManageIMGUIService.sendUniformProjectionMatData(gl, canvasSize, record);
+let sendCustomTextureProgramUniformProjectionMatData =
+    (gl, canvasSize, record) =>
+  ManageIMGUIService.sendCustomTextureProgramUniformProjectionMatData(
+    gl,
+    canvasSize,
+    record,
+  );
+
+let sendNoTextureProgramUniformProjectionMatData = (gl, canvasSize, record) =>
+  ManageIMGUIService.sendNoTextureProgramUniformProjectionMatData(
+    gl,
+    canvasSize,
+    record,
+  );
+
+let sendNoTextureProgramUniformProjectionMatData = (gl, canvasSize, record) =>
+  ManageIMGUIService.sendNoTextureProgramUniformProjectionMatData(
+    gl,
+    canvasSize,
+    record,
+  );

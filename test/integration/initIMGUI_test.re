@@ -22,7 +22,7 @@ let _ =
     });
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
-    describe("create program", () => {
+    describe("create texture program", () => {
       test("test vs shader source", () => {
         let shaderSource = createEmptyStubWithJsObjSandbox(sandbox);
 
@@ -33,11 +33,8 @@ let _ =
             record^,
           );
 
-        shaderSource
-        |> getCall(0)
-        |> getArgs
-        |. List.nth(1)
-        |> expect == ShaderData.vs;
+        (shaderSource |> getCall(0) |> getArgs)->(List.nth(1))
+        |> expect == ShaderData.vs_customTexture;
       });
       test("test fs shader source", () => {
         let shaderSource = createEmptyStubWithJsObjSandbox(sandbox);
@@ -49,11 +46,8 @@ let _ =
             record^,
           );
 
-        shaderSource
-        |> getCall(1)
-        |> getArgs
-        |. List.nth(1)
-        |> expect == ShaderData.fs;
+        (shaderSource |> getCall(1) |> getArgs)->(List.nth(1))
+        |> expect == ShaderData.fs_customTexture;
       });
       test("set program to record", () => {
         let program = Obj.magic(1);
@@ -69,8 +63,7 @@ let _ =
             record^,
           );
 
-        RecordIMGUITool.unsafeGetWebglData(record).program
-        |> expect == program;
+        ShaderIMGUITool.getCustomTextureProgram(record) |> expect == program;
       });
     });
 
@@ -107,15 +100,15 @@ let _ =
             bindBuffer |> withTwoArgs(array_buffer, buffer) |> getCallCount,
             bufferData |> getCall(0) |> getArgs,
           )
-          |>
-          expect == (
-                      1,
-                      [
-                        array_buffer,
-                        Float32Array.make([||]) |> Obj.magic,
-                        dynamic_draw,
-                      ],
-                    );
+          |> expect
+          == (
+               1,
+               [
+                 array_buffer,
+                 Float32Array.make([||]) |> Obj.magic,
+                 dynamic_draw,
+               ],
+             );
         })
       );
 
@@ -153,15 +146,15 @@ let _ =
             |> getCallCount,
             bufferData |> getCall(3) |> getArgs,
           )
-          |>
-          expect == (
-                      1,
-                      [
-                        element_array_buffer,
-                        Uint16Array.make([||]) |> Obj.magic,
-                        dynamic_draw,
-                      ],
-                    );
+          |> expect
+          == (
+               1,
+               [
+                 element_array_buffer,
+                 Uint16Array.make([||]) |> Obj.magic,
+                 dynamic_draw,
+               ],
+             );
         })
       );
     });
@@ -256,7 +249,7 @@ let _ =
       });
     });
 
-    describe("get shader location", () => {
+    describe("get texture shader location", () => {
       describe("get attribute location", () => {
         let _test = (name, getRecordLocationFunc) => {
           let location = 10;
@@ -289,17 +282,19 @@ let _ =
 
         test("test get a_position location", () =>
           _test("a_position", record =>
-            RecordIMGUITool.unsafeGetWebglData(record).aPositonLocation
+            ShaderIMGUITool.getCustomTextureShaderData(record).
+              aPositonLocation
           )
         );
         test("test get a_color location", () =>
           _test("a_color", record =>
-            RecordIMGUITool.unsafeGetWebglData(record).aColorLocation
+            ShaderIMGUITool.getCustomTextureShaderData(record).aColorLocation
           )
         );
         test("test get a_texCoord location", () =>
           _test("a_texCoord", record =>
-            RecordIMGUITool.unsafeGetWebglData(record).aTexCoordLocation
+            ShaderIMGUITool.getCustomTextureShaderData(record).
+              aTexCoordLocation
           )
         );
       });

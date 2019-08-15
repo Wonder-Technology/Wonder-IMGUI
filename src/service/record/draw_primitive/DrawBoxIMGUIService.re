@@ -3,9 +3,8 @@ open IMGUIType;
 open DrawDataType;
 
 let draw = ((x, y, width, height), color, record) => {
-  let {fontTexUvForWhite} = RecordIMGUIService.getSetting(record);
-  let {verticeArr, colorArr, texCoordArr, indexArr} =
-    RecordIMGUIService.getFontTextureDrawData(record);
+  let {verticeArr, colorArr, indexArr} =
+    RecordIMGUIService.getNoTextureDrawData(record);
 
   let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);
 
@@ -13,8 +12,7 @@ let draw = ((x, y, width, height), color, record) => {
     ...record,
     drawData: {
       ...record.drawData,
-      fontTextureDrawData: {
-        ...record.drawData.fontTextureDrawData,
+      noTextureDrawData: {
         verticeArr:
           verticeArr
           |> DrawDataArrayService.addPoints([|
@@ -35,16 +33,6 @@ let draw = ((x, y, width, height), color, record) => {
                  color,
                  color,
                  color,
-               |]),
-             ),
-        texCoordArr:
-          texCoordArr
-          |> DrawDataArrayService.addPoints(
-               DrawDataArrayService.concatArrays([|
-                 fontTexUvForWhite,
-                 fontTexUvForWhite,
-                 fontTexUvForWhite,
-                 fontTexUvForWhite,
                |]),
              ),
         indexArr:

@@ -1,9 +1,4 @@
-type drawType =
-  | FontTexture
-  | CustomTexture;
-
-type drawData = {
-  drawType,
+type customTextureDrawData = {
   customTexture: option(WonderWebgl.GlType.texture),
   verticeArr: array(float),
   colorArr: array(float),
@@ -11,15 +6,27 @@ type drawData = {
   indexArr: array(int),
 };
 
-/* type drawDataArr = array(drawData); */
+type fontTextureDrawData = {
+  verticeArr: array(float),
+  colorArr: array(float),
+  texCoordArr: array(float),
+  indexArr: array(int),
+};
 
-type drawElementsData = {
-  drawType,
+type noTextureDrawData = {
+  verticeArr: array(float),
+  colorArr: array(float),
+  indexArr: array(int),
+};
+
+type customTextureDrawElementsData = {
   customTexture: option(WonderWebgl.GlType.texture),
   count: int,
   countOffset: int,
 };
 
-type drawElementsDataArr = array(drawElementsData);
+type fontTextureDrawElementsData = {count: int};
 
-external drawTypeToInt : drawType => int = "%identity";
+type noTextureDrawElementsData = {count: int};
+
+type customTextureDrawElementsDataArr = array(customTextureDrawElementsData);

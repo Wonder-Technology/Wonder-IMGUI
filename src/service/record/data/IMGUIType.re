@@ -38,7 +38,7 @@ open FontType;
 
 type setting = {
   textColor: colorArr,
-  fontTexUvForWhite: array(float),
+  /* fontTexUvForWhite: array(float), */
   /* buttonSetting,
      radioButtonSetting,
      checkboxSetting,
@@ -63,18 +63,43 @@ type lastWebglData = {
   lastIsEnableBlend: bool,
 };
 
-type webglData = {
+type customTextureShaderData = {
   program,
+  aPositonLocation: attributeLocation,
+  aColorLocation: attributeLocation,
+  aTexCoordLocation: attributeLocation,
   positionBuffer: buffer,
   colorBuffer: buffer,
   texCoordBuffer: buffer,
   indexBuffer: buffer,
-  fontTexture: texture,
+};
+
+type fontTextureShaderData = {
+  program,
   aPositonLocation: attributeLocation,
   aColorLocation: attributeLocation,
   aTexCoordLocation: attributeLocation,
+  positionBuffer: buffer,
+  colorBuffer: buffer,
+  texCoordBuffer: buffer,
+  indexBuffer: buffer,
+};
+
+type noTextureShaderData = {
+  program,
+  aPositonLocation: attributeLocation,
+  aColorLocation: attributeLocation,
+  positionBuffer: buffer,
+  colorBuffer: buffer,
+  indexBuffer: buffer,
+};
+
+type webglData = {
+  customTextureShaderData,
+  fontTextureShaderData,
+  noTextureShaderData,
+  fontTexture: texture,
   lastWebglData: option(lastWebglData),
-  /* currentFontTextureDrawDataBaseIndex: int, */
 };
 
 type fftCharData = {
@@ -133,9 +158,13 @@ type groupData = {
 type layoutData = {groupData};
 
 type drawData = {
-  fontTextureDrawData: DrawDataType.drawData,
+  noTextureDrawData: DrawDataType.noTextureDrawData,
+  customTextureDrawData: DrawDataType.customTextureDrawData,
+  fontTextureDrawData: DrawDataType.fontTextureDrawData,
   customTextureDrawDataMap:
-    WonderCommonlib.MutableHashMapService.t(DrawDataType.drawData),
+    WonderCommonlib.MutableHashMapService.t(
+      DrawDataType.customTextureDrawData,
+    ),
 };
 
 /* type controlData = {

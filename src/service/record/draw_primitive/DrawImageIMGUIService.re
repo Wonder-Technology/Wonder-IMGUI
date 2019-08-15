@@ -4,15 +4,14 @@ open IMGUIType;
 
 open DrawDataType;
 
-let _getOrCreateCustomTextureDrawData = (id, record) : drawData =>
+let _getOrCreateCustomTextureDrawData = (id, record): customTextureDrawData =>
   switch (
     RecordIMGUIService.getCustomTextureDrawDataMap(record)
     |> WonderCommonlib.MutableHashMapService.get(id)
   ) {
   | None => {
-      drawType: CustomTexture,
       customTexture:
-        AssetIMGUIService.unsafeGetCustomTexture(id, record) |. Some,
+        AssetIMGUIService.unsafeGetCustomTexture(id, record)->Some,
       verticeArr: [||],
       colorArr: [||],
       texCoordArr: [||],
@@ -21,14 +20,8 @@ let _getOrCreateCustomTextureDrawData = (id, record) : drawData =>
   | Some(drawData) => drawData
   };
 
-let draw =
-    (
-      (x, y, width, height),
-      (s0, t0, s1, t1),
-      id,
-      record,
-    ) => {
-  let ({verticeArr, colorArr, texCoordArr, indexArr}: drawData) as drawData =
+let draw = ((x, y, width, height), (s0, t0, s1, t1), id, record) => {
+  let ({verticeArr, colorArr, texCoordArr, indexArr}: customTextureDrawData) as drawData =
     _getOrCreateCustomTextureDrawData(id, record);
 
   let baseIndex = DrawDataArrayService.getBaseIndex(verticeArr);

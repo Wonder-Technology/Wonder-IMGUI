@@ -83,7 +83,7 @@ let _ =
                   145.,
                   147.,
                 |],
-                RenderIMGUITool.testPositionBufferData,
+                RenderIMGUITool.testFontTextureProgramPositionBufferData,
                 record^,
               )
             );
@@ -127,7 +127,7 @@ let _ =
                   1.,
                   1.,
                 |],
-                RenderIMGUITool.testColorBufferData,
+                RenderIMGUITool.testFontTextureProgramColorBufferData,
                 record^,
               )
             );
@@ -159,14 +159,14 @@ let _ =
                   0.7653061224489796,
                   0.7330895795246801,
                 |],
-                RenderIMGUITool.testTexCoordBufferData,
+                RenderIMGUITool.testFontTextureProgramTexCoordBufferData,
                 record^,
               )
             );
             test("test index buffer data", () =>
               _test(
                 [|0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5, 8, 9, 10, 11, 10, 9|],
-                RenderIMGUITool.testIndexBufferData,
+                RenderIMGUITool.testFontTextureProgramIndexBufferData,
                 record^,
               )
             );
@@ -183,7 +183,7 @@ let _ =
 
               let record = RenderIMGUITool.prepareFntData(record^);
 
-              RenderIMGUITool.testPositionBufferData(
+              RenderIMGUITool.testFontTextureProgramPositionBufferData(
                 sandbox,
                 record,
                 (. _, apiJsObj, record) => {
@@ -212,7 +212,7 @@ let _ =
 
               let record = RenderIMGUITool.prepareFntData(record^);
 
-              RenderIMGUITool.testPositionBufferData(
+              RenderIMGUITool.testFontTextureProgramPositionBufferData(
                 sandbox,
                 record,
                 (. _, apiJsObj, record) => {
@@ -262,7 +262,7 @@ let _ =
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
-                RenderIMGUITool.testPositionBufferData(
+                RenderIMGUITool.testFontTextureProgramPositionBufferData(
                   sandbox,
                   record,
                   (. _, apiJsObj, record) => {
@@ -324,7 +324,7 @@ let _ =
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
-                RenderIMGUITool.testPositionBufferData(
+                RenderIMGUITool.testFontTextureProgramPositionBufferData(
                   sandbox,
                   record,
                   (. _, apiJsObj, record) => {
@@ -375,7 +375,7 @@ let _ =
 
                   let record = RenderIMGUITool.prepareFntData(record^);
 
-                  RenderIMGUITool.testPositionBufferData(
+                  RenderIMGUITool.testFontTextureProgramPositionBufferData(
                     sandbox,
                     record,
                     (. _, apiJsObj, record) => {
@@ -433,7 +433,7 @@ let _ =
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
-                RenderIMGUITool.testPositionBufferData(
+                RenderIMGUITool.testFontTextureProgramPositionBufferData(
                   sandbox,
                   record,
                   (. _, apiJsObj, record) => {
@@ -479,7 +479,7 @@ let _ =
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
-                RenderIMGUITool.testPositionBufferData(
+                RenderIMGUITool.testFontTextureProgramPositionBufferData(
                   sandbox,
                   record,
                   (. _, apiJsObj, record) => {
@@ -535,7 +535,7 @@ let _ =
 
                   let record = RenderIMGUITool. prepareFntData(record^);
 
-                  RenderIMGUITool.testPositionBufferData(sandbox, record,
+                  RenderIMGUITool.testFontTextureProgramPositionBufferData(sandbox, record,
                     (record) => {
                       let record =
                         record

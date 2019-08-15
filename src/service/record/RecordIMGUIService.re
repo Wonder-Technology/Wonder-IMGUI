@@ -15,6 +15,8 @@ let getIOData = record => record.ioData;
 
 /* let getRadioButtonData = record => record.controlData.radioButtonData; */
 
+let getNoTextureDrawData = record => record.drawData.noTextureDrawData;
+
 let getFontTextureDrawData = record => record.drawData.fontTextureDrawData;
 
 let getCustomTextureDrawDataMap = record =>
