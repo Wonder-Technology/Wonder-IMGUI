@@ -23,25 +23,25 @@ let clearAllSkins = record =>
 let addSkinData = (skinName, skinData, record) =>
   _setAllSkinDataMap(
     getAllSkinDataMap(record)
-    |> WonderCommonlib.ImmutableHashMapService.set(skinName, skinData),
+    |> AllSkinDataMapService.addSkinData(skinName, skinData),
     record,
   );
 
 let removeSkinData = (skinName, record) =>
   _setAllSkinDataMap(
     getAllSkinDataMap(record)
-    |> WonderCommonlib.ImmutableHashMapService.deleteVal(skinName),
+    |> AllSkinDataMapService.removeSkinData(skinName),
     record,
   );
 
 let unsafeGetSkinData = (skinName, record) =>
   getAllSkinDataMap(record)
-  |> WonderCommonlib.ImmutableHashMapService.unsafeGet(skinName);
+  |> AllSkinDataMapService.unsafeGetSkinData(skinName);
 
 let setSkinData = (skinName, skinData, record) =>
   (
     getAllSkinDataMap(record)
-    |> WonderCommonlib.ImmutableHashMapService.set(skinName, skinData)
+    |> AllSkinDataMapService.setSkinData(skinName, skinData)
   )
   ->(_setAllSkinDataMap(record));
 
@@ -88,3 +88,18 @@ let unsafeGetCustomStyleData = (customStyleName, singleCustomStyleDataMap) =>
 let hasCustomStyleData = (customStyleName, singleCustomStyleDataMap) =>
   singleCustomStyleDataMap
   |> WonderCommonlib.ImmutableHashMapService.has(customStyleName);
+
+let mergeAllSkinDataMaps = (sourceAllSkinDataMap, record) =>
+  _setAllSkinDataMap(
+    AllSkinDataMapService.mergeAllSkinDataMaps(
+      sourceAllSkinDataMap,
+      getAllSkinDataMap(record),
+    ),
+    record,
+  );
+
+let hasSingleCustomStyleName = singleCustomStyleName =>
+  !(singleCustomStyleName |> Js.Nullable.isNullable);
+
+let parseSingleCustomStyleName = singleCustomStyleName =>
+  singleCustomStyleName |> Js.Nullable.toOption |> OptionService.unsafeGet;

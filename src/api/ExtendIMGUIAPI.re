@@ -30,6 +30,8 @@ let addDefaultSkinData = DataSkinIMGUIService.addDefaultSkinData;
 
 let getDefaultSkinName = DataSkinIMGUIService.getDefaultSkinName;
 
+let getButtonSkinData = ExtendButton.Skin.getSkinData;
+
 let setButtonSkinData = ExtendButton.Skin.setSkinData;
 
 let createButtonSkinData =

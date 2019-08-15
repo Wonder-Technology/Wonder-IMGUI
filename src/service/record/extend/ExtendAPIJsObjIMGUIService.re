@@ -30,6 +30,14 @@ let createAPIJsObj = () => {
         customStyleName,
         singleCustomStyleDataMap,
       ),
+  "hasSingleCustomStyleName":
+    (. singleCustomStyleName) =>
+      ManageSkinIMGUIService.hasSingleCustomStyleName(singleCustomStyleName),
+  "parseSingleCustomStyleName":
+    (. singleCustomStyleName) =>
+      ManageSkinIMGUIService.parseSingleCustomStyleName(
+        singleCustomStyleName,
+      ),
   "hasCustomStyleData":
     (. customStyleName, singleCustomStyleDataMap) =>
       ManageSkinIMGUIService.hasCustomStyleData(

@@ -24,6 +24,7 @@ type singleSkinData = {
   allCustomStyleData,
 };
 
-type skinData = {
-  allSkinDataMap: WonderCommonlib.ImmutableHashMapService.t(singleSkinData),
-};
+type allSkinDataMap =
+  WonderCommonlib.ImmutableHashMapService.t(singleSkinData);
+
+type skinData = {allSkinDataMap};
