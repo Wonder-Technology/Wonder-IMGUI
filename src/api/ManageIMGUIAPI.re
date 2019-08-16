@@ -36,8 +36,8 @@ let sendCustomTextureProgramUniformProjectionMatData =
     record,
   );
 
-let sendNoTextureProgramUniformProjectionMatData = (gl, canvasSize, record) =>
-  ManageIMGUIService.sendNoTextureProgramUniformProjectionMatData(
+let sendFontTextureProgramUniformProjectionMatData = (gl, canvasSize, record) =>
+  ManageIMGUIService.sendFontTextureProgramUniformProjectionMatData(
     gl,
     canvasSize,
     record,
