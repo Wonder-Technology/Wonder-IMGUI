@@ -500,10 +500,7 @@ let prepareFntData = record => {
     Node.Path.join([|Node.Process.cwd(), "./test/res/font/myFont.fnt"|]);
 
   let fntData =
-    IOIMGUITool.parseFnt(
-      Node.Fs.readFileAsUtf8Sync(fntFilePath),
-      fntFilePath,
-    );
+    IOIMGUITool.parseFnt(Node.Fs.readFileAsUtf8Sync(fntFilePath));
 
   {
     ...record,

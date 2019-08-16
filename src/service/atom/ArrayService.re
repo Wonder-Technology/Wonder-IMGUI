@@ -14,6 +14,8 @@ let push = (item, arr) => {
 let getLast = arr =>
   Array.unsafe_get(arr, Js.Array.length(arr) - 1) |> Obj.magic |> Js.toOption;
 
+let unsafeGetFirst = arr => Array.unsafe_get(arr, 0);
+
 let chunk = (size, arr) => {
   let (resultArr, chunkArr, currentSize) =
     arr

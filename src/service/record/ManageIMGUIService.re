@@ -141,7 +141,7 @@ let sendNoTextureProgramUniformProjectionMatData = (gl, canvasSize, record) => {
 };
 
 let init = (gl, canvasSize, record) =>
-  !AssetIMGUIService.isLoadAsset(record) ?
+  !AssetIMGUIService.LoadAsset.isLoadAsset(record) ?
     record :
     {
       let customTextureProgram =
@@ -630,7 +630,7 @@ let _exec = (apiJsObj, getRecordFunc, data) => {
 let render = (gl, ioData, apiJsObj, (getRecordFunc, setRecordFunc), data) => {
   let record = getRecordFunc(data);
 
-  !AssetIMGUIService.isLoadAsset(record) ?
+  !AssetIMGUIService.LoadAsset.isLoadAsset(record) ?
     data :
     data
     |> _prepare(ioData, (getRecordFunc, setRecordFunc))
@@ -646,6 +646,7 @@ let createRecord = () => {
     bitmapMap: WonderCommonlib.MutableHashMapService.createEmpty(),
     customImageArr: [||],
     customTextureMap: WonderCommonlib.MutableHashMapService.createEmpty(),
+    settedAssetData: RecordAssetIMGUIService.createSettedAssetData(),
   },
   fontData: None,
   webglData: None,

@@ -24,7 +24,7 @@ let _parseStrToObj = str => {
           let value =
             Js.Re.test(value, int_exp) ?
               value :
-              value |. Js.String.get(0) == "\"" ?
+              value->(Js.String.get(0)) == "\"" ?
                 value
                 |> Js.String.substring(
                      ~from=1,
@@ -47,7 +47,8 @@ let _parseStrToObj = str => {
 };
 
 let _parseChar = (fntStr: string) => {
-  let fontDefDictionary = WonderCommonlib.MutableSparseMapService.createEmpty();
+  let fontDefDictionary =
+    WonderCommonlib.MutableSparseMapService.createEmpty();
 
   let char_exp = [%re {|/char [^\n]*(\n|$)/gi|}];
 
@@ -70,23 +71,33 @@ let _parseChar = (fntStr: string) => {
                {
                  id: charId,
                  rect: (
-                   charObj |> WonderCommonlib.MutableHashMapService.unsafeGet("x"),
-                   charObj |> WonderCommonlib.MutableHashMapService.unsafeGet("y"),
+                   charObj
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("x"),
+                   charObj
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet("y"),
                    charObj
                    |> WonderCommonlib.MutableHashMapService.unsafeGet("width"),
                    charObj
-                   |> WonderCommonlib.MutableHashMapService.unsafeGet("height"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet(
+                        "height",
+                      ),
                  ),
                  xOffset:
                    charObj
-                   |> WonderCommonlib.MutableHashMapService.unsafeGet("xoffset"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet(
+                        "xoffset",
+                      ),
                  yOffset:
                    charObj
-                   |> WonderCommonlib.MutableHashMapService.unsafeGet("yoffset"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet(
+                        "yoffset",
+                      ),
                  /* xAdvance equal width of char texture */
                  xAdvance:
                    charObj
-                   |> WonderCommonlib.MutableHashMapService.unsafeGet("xadvance"),
+                   |> WonderCommonlib.MutableHashMapService.unsafeGet(
+                        "xadvance",
+                      ),
                },
              )
           |> ignore;
@@ -149,7 +160,7 @@ let _parseKerning = (fntStr: string) => {
   kerningArray |> _changeKerningArrayToHashMap;
 };
 
-let parse = (fntStr, url) => {
+let parse = fntStr => {
   let common_exp = [%re {|/common [^\n]*(\n|$)/gi|}];
   let page_exp = [%re {|/page [^\n]*(\n|$)/gi|}];
 
@@ -216,10 +227,14 @@ let parse = (fntStr, url) => {
   /* TODO support multi pages */
   {
     commonHeight:
-      commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("lineHeight"),
-    commonBase: commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("base"),
-    scaleW: commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("scaleW"),
-    scaleH: commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("scaleH"),
+      commonObj
+      |> WonderCommonlib.MutableHashMapService.unsafeGet("lineHeight"),
+    commonBase:
+      commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("base"),
+    scaleW:
+      commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("scaleW"),
+    scaleH:
+      commonObj |> WonderCommonlib.MutableHashMapService.unsafeGet("scaleH"),
     fontDefDictionary: _parseChar(fntStr),
     kerningMap: _parseKerning(fntStr),
   };

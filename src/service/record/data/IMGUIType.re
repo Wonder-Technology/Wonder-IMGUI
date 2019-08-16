@@ -79,35 +79,31 @@ type fontData = {
   bitmapFilePath: string,
 };
 
+type id = string;
+
+type mimeType = string;
+
+type settedAssetData = {
+  fntContent: option(string),
+  bitmapArrayBuffer: option(Js.Typed_array.ArrayBuffer.t),
+  customImageDataArr:
+    (array((Js.Typed_array.ArrayBuffer.t, id, mimeType))),
+};
+
 type assetData = {
-  fntId: string,
-  bitmapId: string,
+  fntId: id,
+  bitmapId: id,
   fntDataMap: WonderCommonlib.MutableHashMapService.t(fntData),
   bitmapMap:
     WonderCommonlib.MutableHashMapService.t(
       WonderWebgl.DomExtendType.imageElement,
     ),
   customImageArr:
-    array(
-      (WonderWebgl.DomExtendType.imageElement, string, ImageType.imageType),
-    ),
+    array((WonderWebgl.DomExtendType.imageElement, id, ImageType.imageType)),
   customTextureMap:
     WonderCommonlib.MutableHashMapService.t(WonderWebgl.GlType.texture),
+  settedAssetData,
 };
-
-/* type radioButtonData = {
-     isSelectedMap: WonderCommonlib.MutableHashMapService.t(int),
-   };
-
-   type checkboxData = {
-     index: int,
-     isSelectedMap: WonderCommonlib.MutableSparseMapService.t(bool),
-   };
-
-   type sliderData = {
-     index: int,
-     valueMap: WonderCommonlib.MutableSparseMapService.t(float),
-   }; */
 
 type groupData = {
   positionArr: array(position),
@@ -125,12 +121,6 @@ type drawData = {
       DrawDataType.customTextureDrawData,
     ),
 };
-
-/* type controlData = {
-     radioButtonData,
-     checkboxData,
-     sliderData,
-   }; */
 
 type customControlAPIJsObj;
 
@@ -173,7 +163,6 @@ and imguiRecord = {
   webglData: option(webglData),
   drawData,
   imguiFuncData,
-  /* controlData, */
   ioData,
   layoutData,
   extendData,

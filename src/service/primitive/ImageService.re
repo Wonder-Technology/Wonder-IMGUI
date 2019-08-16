@@ -21,6 +21,13 @@ let getType = src =>
   | _ => Unknown
   };
 
+let convertMimeTypeToImageType = mimeType =>
+  switch (mimeType) {
+  | "image/png" => Png
+  | "image/jpeg" => Jpg
+  | _ => Unknown
+  };
+
 let _loadBlobImage = [%raw
   (objectUrl, resolve, reject) => {|
           if (typeof window.loadImageBlob_wonder_imgui === "undefined") {

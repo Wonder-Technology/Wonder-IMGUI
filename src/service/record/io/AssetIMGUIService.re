@@ -41,76 +41,6 @@ let setBitmap = (bitmap, {assetData} as record) => {
   record;
 };
 
-let isLoadAsset = record =>
-  /* RecordIMGUIService.getFontData(record)
-     |> Js.Option.isSome */
-  getBitmap(record) |> Js.Option.isSome;
-
-let load =
-    (
-      customTextureSourceDataArr,
-      (fetchFunc, handleWhenLoadingFunc),
-      {assetData} as record,
-    ) => {
-  let customImageArr = assetData.customImageArr;
-  let imguiRecord = ref(Obj.magic(1));
-
-  Most.mergeArray(
-    [|
-      FontIMGUIService.load(fetchFunc, handleWhenLoadingFunc, record)
-      |> then_(record => {
-           imguiRecord := record;
-           () |> resolve;
-         })
-      |> Most.fromPromise,
-    |]
-    |> Js.Array.concat(
-         customTextureSourceDataArr
-         |> Js.Array.map(((imagePath, imageId)) =>
-              Most.fromPromise(
-                fetchFunc(. imagePath)
-                |> then_(response => {
-                     handleWhenLoadingFunc(
-                       FetchService.getContentLength(response),
-                       imagePath,
-                     );
-
-                     response |> resolve;
-                   })
-                |> then_(Fetch.Response.blob),
-              )
-              |> Most.flatMap(blob =>
-                   ImageService.loadImageByBlobPromise(
-                     blob |> Blob.createObjectURL,
-                   )
-                   |> Most.tap(image => Blob.revokeObjectURL(blob))
-                 )
-              |> Most.map(image => {
-                   customImageArr
-                   |> ArrayService.push((
-                        image,
-                        imageId,
-                        ImageService.getType(imagePath),
-                      ))
-                   |> ignore;
-                   ();
-                 })
-            ),
-       ),
-  )
-  |> Most.drain
-  |> then_(() =>
-       {
-         ...imguiRecord^,
-         assetData: {
-           ...imguiRecord^.assetData,
-           customImageArr,
-         },
-       }
-       |> resolve
-     );
-};
-
 let createCustomTextures = (gl, customImageArr, customTextureMap) => {
   open WonderWebgl;
   open Gl;
@@ -156,14 +86,16 @@ let createCustomTextures = (gl, customImageArr, customTextureMap) => {
            gl,
          );
 
-         customTextureMap |> WonderCommonlib.MutableHashMapService.set(id, texture);
+         customTextureMap
+         |> WonderCommonlib.MutableHashMapService.set(id, texture);
        },
        customTextureMap,
      );
 };
 
 let unsafeGetCustomTexture = (id, {assetData}) =>
-  assetData.customTextureMap |> WonderCommonlib.MutableHashMapService.unsafeGet(id);
+  assetData.customTextureMap
+  |> WonderCommonlib.MutableHashMapService.unsafeGet(id);
 
 let getCustomImageArr = ({assetData}) => assetData.customImageArr;
 
@@ -173,4 +105,123 @@ let setCustomImageArr = (customImageArr, record) => {
     ...record.assetData,
     customImageArr,
   },
+};
+
+module LoadAsset = {
+  let isLoadAsset = record => getBitmap(record) |> Js.Option.isSome;
+
+  let load =
+      (
+        customTextureSourceDataArr,
+        (fetchFunc, handleWhenLoadingFunc),
+        {assetData} as record,
+      ) => {
+    let customImageArr = assetData.customImageArr;
+    let imguiRecord = ref(Obj.magic(1));
+
+    Most.mergeArray(
+      [|
+        FontIMGUIService.load(fetchFunc, handleWhenLoadingFunc, record)
+        |> then_(record => {
+             imguiRecord := record;
+             () |> resolve;
+           })
+        |> Most.fromPromise,
+      |]
+      |> Js.Array.concat(
+           customTextureSourceDataArr
+           |> Js.Array.map(((imagePath, imageId)) =>
+                Most.fromPromise(
+                  fetchFunc(. imagePath)
+                  |> then_(response => {
+                       handleWhenLoadingFunc(
+                         FetchService.getContentLength(response),
+                         imagePath,
+                       );
+
+                       response |> resolve;
+                     })
+                  |> then_(Fetch.Response.blob),
+                )
+                |> Most.flatMap(blob =>
+                     ImageService.loadImageByBlobPromise(
+                       blob |> Blob.createObjectURL,
+                     )
+                     |> Most.tap(image => Blob.revokeObjectURL(blob))
+                   )
+                |> Most.map(image => {
+                     customImageArr
+                     |> ArrayService.push((
+                          image,
+                          imageId,
+                          ImageService.getType(imagePath),
+                        ))
+                     |> ignore;
+                     ();
+                   })
+              ),
+         ),
+    )
+    |> Most.drain
+    |> then_(() =>
+         {
+           ...imguiRecord^,
+           assetData: {
+             ...imguiRecord^.assetData,
+             customImageArr,
+           },
+         }
+         |> resolve
+       );
+  };
+};
+
+module SetAsset = {
+  open WonderBsMost;
+
+  let _initFont = record =>
+    (
+      switch (FontIMGUIService.SetAsset.getBitmapData(record)) {
+      | None => Most.empty()
+      | Some(bitmapData) =>
+        FontIMGUIService.initBitmap(
+          Blob.newBlobFromArrayBuffer(bitmapData, "image/png"),
+          record,
+        )
+      }
+    )
+    |> Most.merge(
+         switch (FontIMGUIService.SetAsset.getFntData(record)) {
+         | None => Most.empty()
+         | Some(fntData) => FontIMGUIService.initFnt(fntData, record)
+         },
+       );
+
+  let _initCustomImages = ({assetData} as record) => {
+    let customImageArr = assetData.customImageArr;
+
+    CustomImageIMGUIService.SetAsset.getCustomImageDataArr(record)
+    |> Most.from
+    |> Most.flatMap(((arrayBuffer, imageId, mimeType)) => {
+         let blob = Blob.newBlobFromArrayBuffer(arrayBuffer, mimeType);
+
+         ImageService.loadImageByBlobPromise(blob |> Blob.createObjectURL)
+         |> Most.tap(image => Blob.revokeObjectURL(blob))
+         |> Most.map(image => {
+              customImageArr
+              |> ArrayService.push((
+                   image,
+                   imageId,
+                   ImageService.convertMimeTypeToImageType(mimeType),
+                 ))
+              |> ignore;
+              ();
+            });
+       });
+  };
+
+  let initAssets = record =>
+    _initFont(record)
+    |> Most.merge(_initCustomImages(record))
+    |> Most.map(_ => record);
 };

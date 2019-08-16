@@ -1,3 +1,17 @@
+let initSettedAssets = AssetIMGUIAPI.initSettedAssets;
+
+let addSettedAssetCustomImageData = AssetIMGUIAPI.addSettedAssetCustomImageData;
+
+let getSettedAssetCustomImageDataArr = AssetIMGUIAPI.getSettedAssetCustomImageDataArr;
+
+let setSettedAssetBitmapData = AssetIMGUIAPI.setSettedAssetBitmapData;
+
+let unsafeGetSettedAssetBitmapData = AssetIMGUIAPI.unsafeGetSettedAssetBitmapData;
+
+let setSettedAssetFntData = AssetIMGUIAPI.setSettedAssetFntData;
+
+let unsafeGetSettedAssetFntData = AssetIMGUIAPI.unsafeGetSettedAssetFntData;
+
 let setCustomImageArr = AssetIMGUIAPI.setCustomImageArr;
 
 let getCustomImageArr = AssetIMGUIAPI.getCustomImageArr;
@@ -66,7 +80,7 @@ let load = IOIMGUIAPI.load;
 
 let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
 
-let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
+let sendFontTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendFontTextureProgramUniformProjectionMatData;
 
 let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
 
@@ -82,6 +96,20 @@ let init = ManageIMGUIAPI.init;
 
 let createRecord = ManageIMGUIAPI.createRecord;
 
+let initSettedAssets = AssetIMGUIAPI.initSettedAssets;
+
+let addSettedAssetCustomImageData = AssetIMGUIAPI.addSettedAssetCustomImageData;
+
+let getSettedAssetCustomImageDataArr = AssetIMGUIAPI.getSettedAssetCustomImageDataArr;
+
+let setSettedAssetBitmapData = AssetIMGUIAPI.setSettedAssetBitmapData;
+
+let unsafeGetSettedAssetBitmapData = AssetIMGUIAPI.unsafeGetSettedAssetBitmapData;
+
+let setSettedAssetFntData = AssetIMGUIAPI.setSettedAssetFntData;
+
+let unsafeGetSettedAssetFntData = AssetIMGUIAPI.unsafeGetSettedAssetFntData;
+
 let setCustomImageArr = AssetIMGUIAPI.setCustomImageArr;
 
 let getCustomImageArr = AssetIMGUIAPI.getCustomImageArr;
@@ -150,7 +178,7 @@ let load = IOIMGUIAPI.load;
 
 let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
 
-let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureProgramUniformProjectionMatData;
+let sendFontTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendFontTextureProgramUniformProjectionMatData;
 
 let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
 

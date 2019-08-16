@@ -1,5 +1,5 @@
 let load = (customTextureSourceDataArr, handleWhenLoadingFunc, record) =>
-  AssetIMGUIService.load(
+  AssetIMGUIService.LoadAsset.load(
     switch (Js.Nullable.toOption(customTextureSourceDataArr)) {
     | None => [||]
     | Some(customTextureSourceDataArr) => customTextureSourceDataArr

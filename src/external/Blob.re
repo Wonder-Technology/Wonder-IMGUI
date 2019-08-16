@@ -1,10 +1,10 @@
 open BlobType;
 
-/* let newBlobFromArrayBuffer = [%raw
-     (arrayBuffer, type_) => {|
+let newBlobFromArrayBuffer = [%raw
+  (arrayBuffer, type_) => {|
    return new Blob([arrayBuffer], {type: type_})
      |}
-   ]; */
+];
 
 let createObjectURL = [%raw
   blob => {|

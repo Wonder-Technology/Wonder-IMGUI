@@ -1,13 +1,12 @@
 let load =
     (customTextureSourceDataArr, (fetchFunc, handleWhenLoadingFunc), record) =>
   record
-  |> AssetIMGUIService.load(
+  |> AssetIMGUIService.LoadAsset.load(
        customTextureSourceDataArr,
        (fetchFunc, handleWhenLoadingFunc),
      );
 
-let parseFnt = (fntStr, fntFilePath) =>
-  ParseFntIMGUIService.parse(fntStr, fntFilePath);
+let parseFnt = fntStr => ParseFntIMGUIService.parse(fntStr);
 
 let buildFakeFetchTextResponse = (sandbox, contentLength, text) =>
   {
@@ -91,7 +90,7 @@ let buildFakeFetch =
 let buildFakeURL = [%raw
   sandbox => {|
             var URL = {
-              createObjectURL: (blob) => blob,
+              createObjectURL: sandbox.stub(),
               revokeObjectURL: sandbox.stub()
             };
 
@@ -99,11 +98,45 @@ let buildFakeURL = [%raw
         |}
 ];
 
+let setFakeCreateObjectURLReturnBlob = [%raw
+  param => {|
+            window.URL.createObjectURL = blob => blob;
+  |}
+];
+
+let getFakeCreateObjectURL = [%raw
+  param => {|
+  return window.URL.createObjectURL
+  |}
+];
+
 let buildFakeLoadImage = [%bs.raw
-  () => {|
+  param => {|
             window.loadImageBlob_wonder_imgui = function(objectUrl, resolve, reject){
                 resolve(objectUrl)
             }
 
         |}
 ];
+
+let buildFakeBlob = [%raw
+  param => {|
+var Blob = function(arrayBufferArr, param){
+if( typeof window.blobData_wonder_forTest === "undefined"){
+window.blobData_wonder_forTest = [
+[arrayBufferArr[0], param]
+];
+} else{
+window.blobData_wonder_forTest.push(
+[arrayBufferArr[0], param]
+);
+}
+};
+
+window.Blob = Blob;
+|}
+];
+
+let getBlobData = [%raw param => {|
+return window.blobData_wonder_forTest;
+|}];
