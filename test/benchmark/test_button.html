@@ -17,7 +17,9 @@
 
     <script>
         var _setDefaultSkinData = function (record, buttonColor, hoverButtonColor, clickButtonColor,
-            buttonImage, hoverButtonImage, clickButtonImage
+            buttonImage, hoverButtonImage, clickButtonImage,
+            fontAlign,
+            fontColor
         ) {
             var buttonColor = buttonColor !== undefined ? buttonColor : /* array */[
                 0.35,
@@ -35,7 +37,10 @@
                 0.1
             ];
 
-            return wdimgui.setSkinData(wdimgui.getDefaultSkinName(/* () */0), wdimgui.setButtonSkinData(wdimgui.createButtonSkinData(buttonColor, hoverButtonColor, clickButtonColor, buttonImage, hoverButtonImage, clickButtonImage), wdimgui.unsafeGetDefaultSkinData(record)), record);
+            return wdimgui.setSkinData(wdimgui.getDefaultSkinName(/* () */0), wdimgui.setButtonSkinData(wdimgui.createButtonSkinData(buttonColor, hoverButtonColor, clickButtonColor, buttonImage, hoverButtonImage, clickButtonImage,
+                fontAlign,
+                fontColor
+            ), wdimgui.unsafeGetDefaultSkinData(record)), record);
         };
 
         window.onload = function () {
@@ -125,8 +130,6 @@
                                 return record
                             }, record);
 
-                            var record = setSetting(record);
-
 
                             var record = wdimgui.init(gl, [canvas.width, canvas.height], record);
 
@@ -137,6 +140,7 @@
                                 [0.40, 0.5, 0.1],
                                 [0.50, 0.1, 0.5],
                                 "a2", "a1", "a2",
+                                1, [1.0, 1.0, 1.0]
                             );
 
 
