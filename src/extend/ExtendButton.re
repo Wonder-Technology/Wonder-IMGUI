@@ -9,6 +9,8 @@ module Skin = {
         ~buttonImage=Js.Nullable.null,
         ~hoverButtonImage=Js.Nullable.null,
         ~clickButtonImage=Js.Nullable.null,
+        ~fontAlign=FontType.Center,
+        ~fontColor=[|1., 1., 1.|],
         (),
       ) => {
     buttonColor,
@@ -17,6 +19,8 @@ module Skin = {
     buttonImage,
     hoverButtonImage,
     clickButtonImage,
+    fontAlign,
+    fontColor,
   };
 
   let createDefaultSkinData = () => createSkinData();
@@ -97,6 +101,8 @@ module CustomControl = {
         buttonImage,
         hoverButtonImage,
         clickButtonImage,
+        fontAlign,
+        fontColor,
       } =
         unsafeGetSkinData(. skinName, record) |> Skin.getSkinData;
 
@@ -119,7 +125,7 @@ module CustomControl = {
           drawImage(. rect, (0., 0., 1., 1.), imageId, record)
         };
 
-      let record = drawText(. rect, str, FontType.Center, record);
+      let record = drawText(. rect, str, (fontColor, fontAlign), record);
 
       (record, isButtonClick |> Obj.magic);
     };

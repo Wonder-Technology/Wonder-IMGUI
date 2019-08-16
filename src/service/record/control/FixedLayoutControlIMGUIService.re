@@ -1,13 +1,13 @@
 open IMGUIType;
 
 let label =
-  (. rect: StructureType.rect, str, align, record) =>
+  (. rect: StructureType.rect, str, cssData, record) =>
     record
     |> DrawTextIMGUIService.draw(
          GroupLayoutIMGUIService.computeRectBasedOnTopLeftOfView(rect, record)
          |> StructureService.convertIntRectToFloatRect,
          str,
-         align,
+         cssData,
        );
 
 let image =

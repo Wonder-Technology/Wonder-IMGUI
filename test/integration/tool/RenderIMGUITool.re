@@ -30,6 +30,7 @@ let buildLabelData = () => {
   let labelHeight1 = 200;
   let labelStr1 = "a";
   let labelAlign1 = Left;
+  let labelColor1 = [|1., 0.5, 1.|];
 
   let labelX2 = 20;
   let labelY2 = 20;
@@ -37,10 +38,21 @@ let buildLabelData = () => {
   let labelHeight2 = 200;
   let labelStr2 = "c";
   let labelAlign2 = Left;
+  let labelColor2 = [|0., 1., 1.|];
 
   (
-    ((labelX1, labelY1, labelWidth1, labelHeight1), labelStr1, labelAlign1),
-    ((labelX2, labelY2, labelWidth2, labelHeight2), labelStr2, labelAlign2),
+    (
+      (labelX1, labelY1, labelWidth1, labelHeight1),
+      labelStr1,
+      labelColor1,
+      labelAlign1,
+    ),
+    (
+      (labelX2, labelY2, labelWidth2, labelHeight2),
+      labelStr2,
+      labelColor2,
+      labelAlign2,
+    ),
   );
 };
 

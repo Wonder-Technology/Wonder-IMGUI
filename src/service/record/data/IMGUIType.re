@@ -4,47 +4,6 @@ open StructureType;
 
 open FontType;
 
-/* type radioButtonSetting = {
-     radioButtonOuterColor: colorArr,
-     radioButtonInnerColor: colorArr,
-     radioButtonOuterColorHover: colorArr,
-     radioButtonInnerColorHover: colorArr,
-     radioButtonCircleSegments: int,
-     radioButtonInnerRadius: float,
-     radioButtonOuterRadius: float,
-   };
-
-   type buttonSetting = {
-     buttonColor: colorArr,
-     hoverButtonColor: colorArr,
-     clickButtonColor: colorArr,
-   };
-
-   type checkboxSetting = {
-     checkboxOuterColor: colorArr,
-     checkboxInnerColor: colorArr,
-     checkboxOuterColorHover: colorArr,
-     checkboxInnerColorHover: colorArr,
-     checkboxInnerSizeRatio: float,
-     checkboxOuterSizeRatio: float,
-   };
-
-   type sliderSetting = {
-     sliderBackgroundColor: colorArr,
-     sliderFillColor: colorArr,
-     sliderBackgroundColorHover: colorArr,
-     sliderFillColorHover: colorArr,
-   }; */
-
-type setting = {
-  textColor: colorArr,
-  /* fontTexUvForWhite: array(float), */
-  /* buttonSetting,
-     radioButtonSetting,
-     checkboxSetting,
-     sliderSetting, */
-};
-
 type point('a) = ('a, 'a);
 
 type ioData = {
@@ -209,7 +168,6 @@ and extendData = {
   skinData: SkinType.skinData,
 }
 and imguiRecord = {
-  setting,
   assetData,
   fontData: option(fontData),
   webglData: option(webglData),

@@ -76,10 +76,6 @@ let getIMGUIFunc = ManageIMGUIAPI.getIMGUIFunc;
 
 let getCustomData = ManageIMGUIAPI.getCustomData;
 
-let setSetting = ManageIMGUIAPI.setSetting;
-
-let getSetting = ManageIMGUIAPI.getSetting;
-
 let render = ManageIMGUIAPI.render;
 
 let init = ManageIMGUIAPI.init;
@@ -163,10 +159,6 @@ let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
 let getIMGUIFunc = ManageIMGUIAPI.getIMGUIFunc;
 
 let getCustomData = ManageIMGUIAPI.getCustomData;
-
-let setSetting = ManageIMGUIAPI.setSetting;
-
-let getSetting = ManageIMGUIAPI.getSetting;
 
 let render = ManageIMGUIAPI.render;
 

@@ -9,8 +9,8 @@ let createAPIJsObj = () => {
   "drawBox":
     (. rect, color, record) => DrawBoxIMGUIService.draw(rect, color, record),
   "drawText":
-    (. rect, str, align, record) =>
-      DrawTextIMGUIService.draw(rect, str, align, record),
+    (. rect, str, cssData, record) =>
+      DrawTextIMGUIService.draw(rect, str, cssData, record),
   "drawImage":
     (. rect, uv, id, record) =>
       DrawImageIMGUIService.draw(rect, uv, id, record),

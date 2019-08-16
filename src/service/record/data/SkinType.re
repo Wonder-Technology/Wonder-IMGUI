@@ -17,6 +17,8 @@ type buttonSkinData = {
   buttonImage: Js.Nullable.t(imageId),
   hoverButtonImage: Js.Nullable.t(imageId),
   clickButtonImage: Js.Nullable.t(imageId),
+  fontAlign: FontType.align,
+  fontColor: color,
 };
 
 type singleSkinData = {

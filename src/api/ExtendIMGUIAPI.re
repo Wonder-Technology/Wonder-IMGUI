@@ -42,6 +42,8 @@ let createButtonSkinData =
       buttonImage,
       hoverButtonImage,
       clickButtonImage,
+      fontAlign,
+      fontColor,
     )
     : SkinType.buttonSkinData => {
   buttonColor,
@@ -50,4 +52,6 @@ let createButtonSkinData =
   buttonImage,
   hoverButtonImage,
   clickButtonImage,
+  fontAlign,
+  fontColor,
 };

@@ -31,6 +31,8 @@ let _ =
             ~buttonImage=Js.Nullable.null,
             ~hoverButtonImage=Js.Nullable.null,
             ~clickButtonImage=Js.Nullable.null,
+            ~fontAlign=FontType.Center,
+            ~fontColor=[|1., 1., 1.|],
             (),
           ) =>
         record
@@ -44,6 +46,8 @@ let _ =
                  buttonImage,
                  hoverButtonImage,
                  clickButtonImage,
+                 fontAlign,
+                 fontColor,
                ),
                ExtendIMGUIAPI.unsafeGetDefaultSkinData(record),
              ),

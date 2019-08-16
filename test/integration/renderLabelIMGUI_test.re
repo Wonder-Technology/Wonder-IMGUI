@@ -32,6 +32,7 @@ let _ =
               let labelHeight = 200;
               let labelStr = "aaa";
               let labelAlign = Left;
+              let labelColor = [|1., 1., 1.|];
 
               let record = RenderIMGUITool.prepareFntData(record);
 
@@ -45,7 +46,7 @@ let _ =
                     label(.
                       (labelX, labelY, labelWidth, labelHeight),
                       labelStr,
-                      labelAlign,
+                      (labelColor, labelAlign),
                       record,
                     );
 
@@ -180,6 +181,7 @@ let _ =
               let labelHeight = 200;
               let labelStr = "a";
               let labelAlign = Left;
+              let labelColor = [|1., 1., 1.|];
 
               let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -193,7 +195,7 @@ let _ =
                     label(.
                       (labelX, labelY, labelWidth, labelHeight),
                       labelStr,
-                      labelAlign,
+                      (labelColor, labelAlign),
                       record,
                     );
 
@@ -209,6 +211,7 @@ let _ =
               let labelHeight = 200;
               let labelStr = "a\nc";
               let labelAlign = Left;
+              let labelColor = [|1., 1., 1.|];
 
               let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -222,7 +225,7 @@ let _ =
                     label(.
                       (labelX, labelY, labelWidth, labelHeight),
                       labelStr,
-                      labelAlign,
+                      (labelColor, labelAlign),
                       record,
                     );
 
@@ -259,6 +262,7 @@ let _ =
                 let labelHeight = 200;
                 let labelStr = "a  b";
                 let labelAlign = Left;
+                let labelColor = [|1., 1., 1.|];
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -272,7 +276,7 @@ let _ =
                       label(.
                         (labelX, labelY, labelWidth, labelHeight),
                         labelStr,
-                        labelAlign,
+                        (labelColor, labelAlign),
                         record,
                       );
 
@@ -321,6 +325,7 @@ let _ =
                 let labelHeight = 200;
                 let labelStr = "a\n  b";
                 let labelAlign = Left;
+                let labelColor = [|1., 1., 1.|];
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -334,7 +339,7 @@ let _ =
                       label(.
                         (labelX, labelY, labelWidth, labelHeight),
                         labelStr,
-                        labelAlign,
+                        (labelColor, labelAlign),
                         record,
                       );
 
@@ -372,6 +377,7 @@ let _ =
                   let labelHeight = 200;
                   let labelStr = "a\tb";
                   let labelAlign = Left;
+                  let labelColor = [|1., 1., 1.|];
 
                   let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -385,7 +391,7 @@ let _ =
                         label(.
                           (labelX, labelY, labelWidth, labelHeight),
                           labelStr,
-                          labelAlign,
+                          (labelColor, labelAlign),
                           record,
                         );
 
@@ -430,6 +436,7 @@ let _ =
                 let labelHeight = 200;
                 let labelStr = "ab";
                 let labelAlign = Center;
+                let labelColor = [|1., 1., 1.|];
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -443,7 +450,7 @@ let _ =
                       label(.
                         (labelX, labelY, labelWidth, labelHeight),
                         labelStr,
-                        labelAlign,
+                        (labelColor, labelAlign),
                         record,
                       );
 
@@ -476,6 +483,7 @@ let _ =
                 let labelHeight = 200;
                 let labelStr = "ab";
                 let labelAlign = Right;
+                let labelColor = [|1., 1., 1.|];
 
                 let record = RenderIMGUITool.prepareFntData(record^);
 
@@ -489,7 +497,7 @@ let _ =
                       label(.
                         (labelX, labelY, labelWidth, labelHeight),
                         labelStr,
-                        labelAlign,
+                        (labelColor, labelAlign),
                         record,
                       );
 
@@ -542,7 +550,7 @@ let _ =
                         |> FixedLayoutControlIMGUIAPI.label(
                              (labelX, labelY, labelWidth, labelHeight),
                              labelStr,
-                             labelAlign,
+                             (labelColor, labelAlign),
                            );
 
                       record;

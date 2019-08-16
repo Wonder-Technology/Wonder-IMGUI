@@ -30,11 +30,13 @@ let _ =
           (
             (labelX1, labelY1, labelWidth1, labelHeight1),
             labelStr1,
+            labelColor1,
             labelAlign1,
           ),
           (
             (labelX2, labelY2, labelWidth2, labelHeight2),
             labelStr2,
+            labelColor2,
             labelAlign2,
           ),
         ) =
@@ -76,7 +78,7 @@ let _ =
                    label(.
                      (labelX1, labelY1, labelWidth1, labelHeight1),
                      labelStr1,
-                     labelAlign1,
+                     (labelColor1, labelAlign1),
                      record,
                    );
                  let record =
@@ -97,7 +99,7 @@ let _ =
                    label(.
                      (labelX2, labelY2, labelWidth2, labelHeight2),
                      labelStr2,
-                     labelAlign2,
+                     (labelColor2, labelAlign2),
                      record,
                    );
                  let record =
@@ -165,6 +167,7 @@ let _ =
           (
             (labelX1, labelY1, labelWidth1, labelHeight1),
             labelStr1,
+            labelColor1,
             labelAlign1,
           ),
           _,
@@ -199,7 +202,7 @@ let _ =
                    label(.
                      (labelX1, labelY1, labelWidth1, labelHeight1),
                      labelStr1,
-                     labelAlign1,
+                     (labelColor1, labelAlign1),
                      record,
                    );
                  let record =
@@ -237,11 +240,13 @@ let _ =
           (
             (labelX1, labelY1, labelWidth1, labelHeight1),
             labelStr1,
+            labelColor1,
             labelAlign1,
           ),
           (
             (labelX2, labelY2, labelWidth2, labelHeight2),
             labelStr2,
+            labelColor2,
             labelAlign2,
           ),
         ) =
@@ -273,7 +278,7 @@ let _ =
                    label(.
                      (labelX1, labelY1, labelWidth1, labelHeight1),
                      labelStr1,
-                     labelAlign1,
+                     (labelColor1, labelAlign1),
                      record,
                    );
 
@@ -379,11 +384,13 @@ let _ =
             (
               (labelX1, labelY1, labelWidth1, labelHeight1),
               labelStr1,
+              labelColor1,
               labelAlign1,
             ),
             (
               (labelX2, labelY2, labelWidth2, labelHeight2),
               labelStr2,
+              labelColor2,
               labelAlign2,
             ),
           ) =
@@ -401,7 +408,7 @@ let _ =
                      label(.
                        (labelX1, labelY1, labelWidth1, labelHeight1),
                        labelStr1,
-                       labelAlign1,
+                       (labelColor1, labelAlign1),
                        record,
                      );
 
@@ -608,11 +615,13 @@ let _ =
                   (
                     (labelX1, labelY1, labelWidth1, labelHeight1),
                     labelStr1,
+                    labelColor1,
                     labelAlign1,
                   ),
                   (
                     (labelX2, labelY2, labelWidth2, labelHeight2),
                     labelStr2,
+                    labelColor2,
                     labelAlign2,
                   ),
                 ) =
@@ -626,7 +635,7 @@ let _ =
                     label(.
                       (labelX1, labelY1, labelWidth1, labelHeight1),
                       labelStr1,
-                      labelAlign1,
+                      (labelColor1, labelAlign1),
                       record,
                     );
                   let record =
@@ -647,7 +656,7 @@ let _ =
                     label(.
                       (labelX2, labelY2, labelWidth2, labelHeight2),
                       labelStr2,
-                      labelAlign2,
+                      (labelColor2, labelAlign2),
                       record,
                     );
                   let record =
@@ -814,11 +823,13 @@ let _ =
                 (
                   (labelX1, labelY1, labelWidth1, labelHeight1),
                   labelStr1,
+                  labelColor1,
                   labelAlign1,
                 ),
                 (
                   (labelX2, labelY2, labelWidth2, labelHeight2),
                   labelStr2,
+                  labelColor2,
                   labelAlign2,
                 ),
               ) =
@@ -835,14 +846,14 @@ let _ =
                     label(.
                       (labelX1, labelY1, labelWidth1, labelHeight1),
                       labelStr1,
-                      labelAlign1,
+                      (labelColor1, labelAlign1),
                       record,
                     );
                   let record =
                     label(.
                       (labelX2, labelY2, labelWidth2, labelHeight2),
                       labelStr2,
-                      labelAlign2,
+                      (labelColor2, labelAlign2),
                       record,
                     );
 
@@ -858,6 +869,7 @@ let _ =
                   (
                     (labelX1, labelY1, labelWidth1, labelHeight1),
                     labelStr1,
+                    labelColor1,
                     labelAlign1,
                   ),
                   _,
@@ -882,7 +894,7 @@ let _ =
                     label(.
                       (labelX1, labelY1, labelWidth1, labelHeight1),
                       labelStr1,
-                      labelAlign1,
+                      (labelColor1, labelAlign1),
                       record,
                     );
                   let record =
@@ -1568,11 +1580,13 @@ let _ =
                   (
                     (labelX1, labelY1, labelWidth1, labelHeight1),
                     labelStr1,
+                    labelColor1,
                     labelAlign1,
                   ),
                   (
                     (labelX2, labelY2, labelWidth2, labelHeight2),
                     labelStr2,
+                    labelColor2,
                     labelAlign2,
                   ),
                 ) =
@@ -1614,7 +1628,7 @@ let _ =
                            label(.
                              (labelX1, labelY1, labelWidth1, labelHeight1),
                              labelStr1,
-                             labelAlign1,
+                             (labelColor1, labelAlign1),
                              record,
                            );
                          let record =

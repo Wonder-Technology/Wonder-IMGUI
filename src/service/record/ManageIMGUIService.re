@@ -639,38 +639,6 @@ let render = (gl, ioData, apiJsObj, (getRecordFunc, setRecordFunc), data) => {
 };
 
 let createRecord = () => {
-  setting:
-    /* buttonSetting: {
-         buttonColor: [|0.35, 0.1, 0.1|],
-         hoverButtonColor: [|0.40, 0.1, 0.1|],
-         clickButtonColor: [|0.50, 0.1, 0.1|],
-       },
-       radioButtonSetting: {
-         radioButtonOuterColor: [|0.3, 0.3, 0.3|],
-         radioButtonInnerColor: [|0.15, 0.15, 0.15|],
-         radioButtonOuterColorHover: [|0.33, 0.33, 0.33|],
-         radioButtonInnerColorHover: [|0.18, 0.18, 0.18|],
-         radioButtonCircleSegments: 9,
-         radioButtonInnerRadius: 0.6,
-         radioButtonOuterRadius: 1.,
-       },
-       checkboxSetting: {
-         checkboxOuterColor: [|0.3, 0.3, 0.3|],
-         checkboxInnerColor: [|0.15, 0.15, 0.15|],
-         checkboxOuterColorHover: [|0.33, 0.33, 0.33|],
-         checkboxInnerColorHover: [|0.18, 0.18, 0.18|],
-         checkboxInnerSizeRatio: 1.4,
-         checkboxOuterSizeRatio: 2.,
-       },
-       sliderSetting: {
-         sliderBackgroundColor: [|0.16, 0.16, 0.16|],
-         sliderFillColor: [|0., 0.3, 0.6|],
-         sliderBackgroundColorHover: [|0.19, 0.19, 0.19|],
-         sliderFillColorHover: [|0., 0.3, 0.7|],
-       }, */
-    {
-      textColor: [|1., 1., 1.|],
-    },
   assetData: {
     fntId: "fnt",
     bitmapId: "bitmap",
