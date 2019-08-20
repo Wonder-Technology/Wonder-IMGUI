@@ -223,5 +223,7 @@ module SetAsset = {
   let initAssets = record =>
     _initFont(record)
     |> Most.merge(_initCustomImages(record))
+    |> Most.drain
+    |> Most.fromPromise
     |> Most.map(_ => record);
 };

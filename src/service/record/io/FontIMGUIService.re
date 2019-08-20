@@ -15,12 +15,11 @@ let initBitmap = (blob, {assetData} as record) => {
 
   ImageService.loadImageByBlobPromise(blob |> Blob.createObjectURL)
   |> tap(image => Blob.revokeObjectURL(blob))
-  |> map(image => {
+  |> map(image =>
        bitmapMap
        |> WonderCommonlib.MutableHashMapService.set(bitmapId, image)
-       |> ignore;
-       ();
-     });
+       |> ignore
+     );
 };
 
 let initFnt = (fntStr, {assetData} as record) => {
@@ -29,12 +28,11 @@ let initFnt = (fntStr, {assetData} as record) => {
 
   just(fntStr)
   |> map(fntStr => ParseFntIMGUIService.parse(fntStr))
-  |> map(fntData => {
+  |> map(fntData =>
        fntDataMap
        |> WonderCommonlib.MutableHashMapService.set(fntId, fntData)
-       |> ignore;
-       ();
-     });
+       |> ignore
+     );
 };
 
 let load = (fetchFunc, handleWhenLoadingFunc, {assetData} as record) => {
