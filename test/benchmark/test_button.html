@@ -107,8 +107,7 @@
                         },
                         record)
                         .then((record) => {
-
-                            var record = wdimgui.setIMGUIFunc(null, (_, apiJsObj, record) => {
+                            var record = wdimgui.addExecFuncData("e1", null, 0, (_, apiJsObj, record) => {
                                 var label = apiJsObj.label;
                                 var image = apiJsObj.image;
                                 var button = apiJsObj.button;
@@ -118,6 +117,28 @@
                                         [
                                             [buttonX, buttonY, buttonWidth, buttonHeight],
                                             "ab"
+                                        ],
+                                        null,
+                                        record
+                                    );
+
+
+
+                                console.log("isButtonClick: ", isButtonClick);
+
+                                return record
+                            }, record);
+
+                            var record = wdimgui.addExecFuncData("e2", null, 1, (_, apiJsObj, record) => {
+                                var label = apiJsObj.label;
+                                var image = apiJsObj.image;
+                                var button = apiJsObj.button;
+
+                                var [record, isButtonClick] =
+                                    button(
+                                        [
+                                            [buttonX + 20, buttonY, buttonWidth, buttonHeight],
+                                            "cc"
                                         ],
                                         null,
                                         record

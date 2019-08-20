@@ -559,8 +559,15 @@ let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
   record->(setRecordFunc(data));
 };
 
-let getCustomData = ({imguiFuncData}) =>
-  imguiFuncData.customDataForIMGUIFunc;
+let getCustomData = (execFuncName, {execData}) =>
+  execData.execFuncDataArr
+  |> Js.Array.find(({name}: IMGUIType.execFuncData) =>
+       name == execFuncName
+     )
+  |> Js.Option.map((. {customData}: IMGUIType.execFuncData) => customData);
+
+let unsafeGetCustomData = (execFuncName, record) =>
+  getCustomData(execFuncName, record) |> OptionService.unsafeGet;
 
 let _clearData = record => {
   ...record,
@@ -586,20 +593,63 @@ let _clearData = record => {
   },
 };
 
-let getIMGUIFunc = ({imguiFuncData}) => imguiFuncData.imguiFunc;
+let getExecFunc = (execFuncName, {execData}) =>
+  execData.execFuncDataArr
+  |> Js.Array.find(({name}: IMGUIType.execFuncData) =>
+       name == execFuncName
+     )
+  |> Js.Option.map((. {execFunc}: IMGUIType.execFuncData) => execFunc);
 
-let setIMGUIFunc = (customData, func, record) =>
+let unsafeGetExecFunc = (execFuncName, record) =>
+  getExecFunc(execFuncName, record) |> OptionService.unsafeGet;
+
+let getExecFuncDataArr = record => record.execData.execFuncDataArr;
+
+let addExecFuncData = (execFuncName, customData, zIndex, func, record) =>
   {
     ...record,
-    imguiFuncData: {
-      ...record.imguiFuncData,
-      imguiFunc: Some(func),
-      customDataForIMGUIFunc: Some(customData),
+    execData: {
+      ...record.execData,
+      execFuncDataArr:
+        getExecFuncDataArr(record)
+        |> ArrayService.push({
+             execFunc: func,
+             customData,
+             zIndex,
+             name: execFuncName,
+           })
+        |> Js.Array.sortInPlaceWith((execFuncData1, execFuncData2) =>
+             execFuncData1.zIndex - execFuncData2.zIndex
+           ),
     },
   }
   |> _clearData;
 
-let getAPIJsObj = ({imguiFuncData}) => imguiFuncData.apiJsObj;
+let removeExecFuncData = (execFuncName, record) =>
+  {
+    ...record,
+    execData: {
+      ...record.execData,
+      execFuncDataArr:
+        getExecFuncDataArr(record)
+        |> Js.Array.filter(({name}: IMGUIType.execFuncData) =>
+             name !== execFuncName
+           ),
+    },
+  }
+  |> _clearData;
+
+let clearExecFuncDataArr = record =>
+  {
+    ...record,
+    execData: {
+      ...record.execData,
+      execFuncDataArr: WonderCommonlib.ArrayService.createEmpty(),
+    },
+  }
+  |> _clearData;
+
+let getAPIJsObj = ({execData}) => execData.apiJsObj;
 
 let _buildAPIJsObj = () => {
   "label": FixedLayoutControlIMGUIService.label,
@@ -612,19 +662,14 @@ let _buildAPIJsObj = () => {
 };
 
 let _exec = (apiJsObj, getRecordFunc, data) => {
-  let {imguiFuncData} as record = getRecordFunc(data);
+  let {execData} as record = getRecordFunc(data);
 
-  switch (getIMGUIFunc(record)) {
-  | None => data
-  | Some(func) =>
-    func(.
-      imguiFuncData.customDataForIMGUIFunc |> OptionService.unsafeGet,
-      /* getAPIJsObj(record), */
-      apiJsObj,
-      /* record, */
-      data,
-    )
-  };
+  getExecFuncDataArr(record)
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. data, {customData, execFunc}: execFuncData) =>
+         execFunc(. customData, apiJsObj, data),
+       data,
+     );
 };
 
 let render = (gl, ioData, apiJsObj, (getRecordFunc, setRecordFunc), data) => {
@@ -670,10 +715,9 @@ let createRecord = () => {
     pointPosition: (0, 0),
     pointMovementDelta: (0, 0),
   },
-  imguiFuncData: {
+  execData: {
     apiJsObj: _buildAPIJsObj() |> Obj.magic,
-    imguiFunc: None,
-    customDataForIMGUIFunc: None,
+    execFuncDataArr: WonderCommonlib.ArrayService.createEmpty(),
   },
   layoutData: {
     groupData: {

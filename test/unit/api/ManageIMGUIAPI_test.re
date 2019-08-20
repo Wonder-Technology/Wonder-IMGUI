@@ -22,15 +22,10 @@ let _ =
       let _buildNoVAOExtension = sandbox =>
         RenderIMGUITool.buildNoVAOExtension(sandbox);
 
-      let _prepareEmptyIMGUIFunc = gl => {
+      let _prepareEmptyExecFuncData = gl => {
         let canvasWidth = 1000;
         let canvasHeight = 500;
-        let record =
-          record^
-          |> ManageIMGUIAPI.setIMGUIFunc(
-               RenderIMGUITool.buildCustomData(), (. _, _, record) =>
-               record
-             );
+        let record = ExecIMGUITool.addExecFuncData(~record=record^, ());
 
         let record =
           ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
@@ -53,7 +48,7 @@ let _ =
             (),
           )
           |> Obj.magic;
-        let (record, canvasWidth, canvasHeight) = _prepareEmptyIMGUIFunc(gl);
+        let (record, canvasWidth, canvasHeight) = _prepareEmptyExecFuncData(gl);
 
         let record =
           ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData(
@@ -88,7 +83,7 @@ let _ =
             )
             |> Obj.magic;
           let (record, canvasWidth, canvasHeight) =
-            _prepareEmptyIMGUIFunc(gl);
+            _prepareEmptyExecFuncData(gl);
 
           let record =
             ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData(

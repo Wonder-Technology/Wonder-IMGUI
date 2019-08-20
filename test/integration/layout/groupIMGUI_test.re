@@ -18,16 +18,16 @@ let _ =
     describe(
       "the controls in group should positioned based on the group's top-left corner instead of the screen’s top-left corner",
       () => {
-        let _testWithIMGUIFunc =
-            (bufferData, (testBufferDataFunc, imguiFunc), record) => {
+        let _testWithExecFuncData =
+            (bufferData, (testBufferDataFunc, execFuncData), record) => {
           let record = RenderIMGUITool.prepareFntData(record);
 
-          testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
+          testBufferDataFunc(sandbox, record, execFuncData, bufferData);
         };
 
         describe("test button", () => {
           let _test = (bufferData, testBufferDataFunc, record) =>
-            _testWithIMGUIFunc(
+            _testWithExecFuncData(
               bufferData,
               (
                 testBufferDataFunc,
@@ -102,7 +102,7 @@ let _ =
         describe("test nested group", () =>
           describe("test button", () => {
             let _test = (bufferData, testBufferDataFunc, record) =>
-              _testWithIMGUIFunc(
+              _testWithExecFuncData(
                 bufferData,
                 (
                   testBufferDataFunc,

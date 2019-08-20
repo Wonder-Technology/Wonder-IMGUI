@@ -22,15 +22,15 @@ let _ =
     afterEach(() => restoreSandbox(refJsObjToSandbox(sandbox^)));
 
     describe("test buffer data", () => {
-      let _testWithIMGUIFunc =
-          (bufferData, (testBufferDataFunc, imguiFunc), record) => {
+      let _testWithExecFuncData =
+          (bufferData, (testBufferDataFunc, execFuncData), record) => {
         let record = RenderIMGUITool.prepareFntData(record);
 
-        testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
+        testBufferDataFunc(sandbox, record, execFuncData, bufferData);
       };
 
       let _test = (bufferData, testBufferDataFunc, record) =>
-        _testWithIMGUIFunc(
+        _testWithExecFuncData(
           bufferData,
           (
             testBufferDataFunc,
@@ -39,14 +39,10 @@ let _ =
                 BoxIMGUITool.buildBoxData1();
 
               let apiJsObj = Obj.magic(apiJsObj);
-              let boxFunc = apiJsObj##box;
+              let box = apiJsObj##box;
 
               let record =
-                boxFunc(.
-                  (boxX1, boxY1, boxWidth1, boxHeight1),
-                  color,
-                  record,
-                );
+                box(. (boxX1, boxY1, boxWidth1, boxHeight1), color, record);
 
               record;
             },

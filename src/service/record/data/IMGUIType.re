@@ -86,8 +86,7 @@ type mimeType = string;
 type settedAssetData = {
   fntContent: option(string),
   bitmapArrayBuffer: option(Js.Typed_array.ArrayBuffer.t),
-  customImageDataArr:
-    (array((Js.Typed_array.ArrayBuffer.t, id, mimeType))),
+  customImageDataArr: array((Js.Typed_array.ArrayBuffer.t, id, mimeType)),
 };
 
 type assetData = {
@@ -135,15 +134,24 @@ type customStyleName = string;
 type customControlFunctionShowData =
   Js.Nullable.t((skinName, Js.Nullable.t(customStyleName)));
 
-type customDataForIMGUIFunc;
+type customData;
 
 type apiJsObj;
 
-type imguiFunc =
-  (. customDataForIMGUIFunc, apiJsObj, imguiRecord) => imguiRecord
-and imguiFuncData = {
-  imguiFunc: option(imguiFunc),
-  customDataForIMGUIFunc: option(customDataForIMGUIFunc),
+type execFuncZIndex = int;
+
+type execFuncName = string;
+
+type execFunc = (. customData, apiJsObj, imguiRecord) => imguiRecord
+and execFuncData = {
+  execFunc,
+  customData,
+  zIndex: execFuncZIndex,
+  name: execFuncName,
+}
+and execFuncDataArr = array(execFuncData)
+and execData = {
+  execFuncDataArr,
   apiJsObj,
 }
 and customControlFunc =
@@ -162,7 +170,7 @@ and imguiRecord = {
   fontData: option(fontData),
   webglData: option(webglData),
   drawData,
-  imguiFuncData,
+  execData,
   ioData,
   layoutData,
   extendData,

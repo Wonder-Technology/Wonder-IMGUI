@@ -174,13 +174,13 @@ let createCreateGlTextureStub = sandbox => {
   );
 };
 
-let testBufferDataWithIODataAndAfterInitFunc =
+let testBufferDataWithIODataAndAfterInitFuncAndSetExecFuncData =
     (
       sandbox,
       bufferDataIndex,
       ioData,
       record,
-      (imguiFunc, handleAfterInitFunc),
+      (setExecFuncData, handleAfterInitFunc),
       targetBufferDataArr,
     ) => {
   open Wonder_jest;
@@ -211,8 +211,8 @@ let testBufferDataWithIODataAndAfterInitFunc =
     |> Obj.magic;
   let canvasWidth = 1000;
   let canvasHeight = 500;
-  let record =
-    record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
+  /* let record = ExecIMGUITool.addExecFuncData(~record, ~func=execFuncData, ()); */
+  let record = setExecFuncData(record);
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
@@ -231,70 +231,79 @@ let testBufferDataWithIODataAndAfterInitFunc =
      |]);
 };
 
+let testBufferDataWithIODataAndAfterInitFunc =
+    (
+      sandbox,
+      bufferDataIndex,
+      ioData,
+      record,
+      (execFuncData, handleAfterInitFunc),
+      targetBufferDataArr,
+    ) =>
+  testBufferDataWithIODataAndAfterInitFuncAndSetExecFuncData(
+    sandbox,
+    bufferDataIndex,
+    ioData,
+    record,
+    (
+      record => ExecIMGUITool.addExecFuncData(~record, ~func=execFuncData, ()),
+      handleAfterInitFunc,
+    ),
+    targetBufferDataArr,
+  );
+
 let testBufferDataWithIOData =
-    (sandbox, bufferDataIndex, ioData, record, imguiFunc, targetBufferDataArr) =>
+    (sandbox, bufferDataIndex, ioData, record, execFuncData, targetBufferDataArr) =>
   testBufferDataWithIODataAndAfterInitFunc(
     sandbox,
     bufferDataIndex,
     ioData,
     record,
-    (imguiFunc, record => record),
+    (execFuncData, record => record),
     targetBufferDataArr,
   );
 
 let testCustomTextureProgramColorBufferDataWithIODataAndAfterInitFunc =
-    (
-      ioData,
-      sandbox,
-      record,
-      (imguiFunc, afterInitFunc),
-      targetBufferDataArr,
-    ) =>
+    (ioData, sandbox, record, (execFuncData, afterInitFunc), targetBufferDataArr) =>
   testBufferDataWithIODataAndAfterInitFunc(
     sandbox,
     1,
     ioData,
     record,
-    (imguiFunc, afterInitFunc),
+    (execFuncData, afterInitFunc),
     targetBufferDataArr,
   );
 
 let testNoTextureProgramColorBufferDataWithIODataAndAfterInitFunc =
-    (
-      ioData,
-      sandbox,
-      record,
-      (imguiFunc, afterInitFunc),
-      targetBufferDataArr,
-    ) =>
+    (ioData, sandbox, record, (execFuncData, afterInitFunc), targetBufferDataArr) =>
   testBufferDataWithIODataAndAfterInitFunc(
     sandbox,
     9,
     ioData,
     record,
-    (imguiFunc, afterInitFunc),
+    (execFuncData, afterInitFunc),
     targetBufferDataArr,
   );
 
 let testCustomTextureProgramColorBufferDataWithIOData =
-    (ioData, sandbox, record, imguiFunc, targetBufferDataArr) =>
+    (ioData, sandbox, record, execFuncData, targetBufferDataArr) =>
   testBufferDataWithIOData(
     sandbox,
     1,
     ioData,
     record,
-    imguiFunc,
+    execFuncData,
     targetBufferDataArr,
   );
 
 let testNoTextureProgramColorBufferDataWithIOData =
-    (ioData, sandbox, record, imguiFunc, targetBufferDataArr) =>
+    (ioData, sandbox, record, execFuncData, targetBufferDataArr) =>
   testBufferDataWithIOData(
     sandbox,
     9,
     ioData,
     record,
-    imguiFunc,
+    execFuncData,
     targetBufferDataArr,
   );
 
@@ -303,7 +312,7 @@ let testCustomTextureProgramPositionBufferDataWithIODataAndAfterInitFunc =
       ioData,
       sandbox,
       record,
-      (imguiFunc, handleAfterInitFunc),
+      (execFuncData, handleAfterInitFunc),
       targetBufferDataArr,
     ) =>
   testBufferDataWithIODataAndAfterInitFunc(
@@ -311,7 +320,7 @@ let testCustomTextureProgramPositionBufferDataWithIODataAndAfterInitFunc =
     0,
     ioData,
     record,
-    (imguiFunc, handleAfterInitFunc),
+    (execFuncData, handleAfterInitFunc),
     targetBufferDataArr,
   );
 
@@ -320,7 +329,7 @@ let testFontTextureProgramPositionBufferDataWithIODataAndAfterInitFunc =
       ioData,
       sandbox,
       record,
-      (imguiFunc, handleAfterInitFunc),
+      (execFuncData, handleAfterInitFunc),
       targetBufferDataArr,
     ) =>
   testBufferDataWithIODataAndAfterInitFunc(
@@ -328,70 +337,70 @@ let testFontTextureProgramPositionBufferDataWithIODataAndAfterInitFunc =
     4,
     ioData,
     record,
-    (imguiFunc, handleAfterInitFunc),
+    (execFuncData, handleAfterInitFunc),
     targetBufferDataArr,
   );
 
 let testCustomTextureProgramTexCoordBufferDataAndAfterInitFunc =
-    (sandbox, record, (imguiFunc, handleAfterInitFunc), targetBufferDataArr) =>
+    (sandbox, record, (execFuncData, handleAfterInitFunc), targetBufferDataArr) =>
   testBufferDataWithIODataAndAfterInitFunc(
     sandbox,
     2,
     buildIOData(),
     record,
-    (imguiFunc, handleAfterInitFunc),
+    (execFuncData, handleAfterInitFunc),
     targetBufferDataArr,
   );
 
 let testBufferData =
-    (sandbox, bufferDataIndex, record, imguiFunc, targetBufferDataArr) =>
+    (sandbox, bufferDataIndex, record, execFuncData, targetBufferDataArr) =>
   testBufferDataWithIOData(
     sandbox,
     bufferDataIndex,
     buildIOData(),
     record,
-    imguiFunc,
+    execFuncData,
     targetBufferDataArr,
   );
 
 let testCustomTextureProgramPositionBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 0, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 0, record, execFuncData, targetBufferDataArr);
 
 let testFontTextureProgramPositionBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 4, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 4, record, execFuncData, targetBufferDataArr);
 
 let testNoTextureProgramPositionBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 8, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 8, record, execFuncData, targetBufferDataArr);
 
 let testCustomTextureProgramColorBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 1, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 1, record, execFuncData, targetBufferDataArr);
 
 let testFontTextureProgramColorBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 5, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 5, record, execFuncData, targetBufferDataArr);
 
 let testNoTextureProgramColorBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 9, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 9, record, execFuncData, targetBufferDataArr);
 
 let testCustomTextureProgramTexCoordBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 2, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 2, record, execFuncData, targetBufferDataArr);
 
 let testFontTextureProgramTexCoordBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
-  testBufferData(sandbox, 6, record, imguiFunc, targetBufferDataArr);
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
+  testBufferData(sandbox, 6, record, execFuncData, targetBufferDataArr);
 
 let _testIndexBufferDataAndAfterInitFunc =
     (
       sandbox,
       bufferDataIndex,
       record,
-      (imguiFunc, afterInitFunc),
+      (execFuncData, afterInitFunc),
       targetBufferDataArr,
     ) => {
   open Wonder_jest;
@@ -416,8 +425,7 @@ let _testIndexBufferDataAndAfterInitFunc =
     |> Obj.magic;
   let canvasWidth = 1000;
   let canvasHeight = 500;
-  let record =
-    record |> ManageIMGUIAPI.setIMGUIFunc(Obj.magic(-1), imguiFunc);
+  let record = ExecIMGUITool.addExecFuncData(~record, ~func=execFuncData, ());
 
   let record = ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 
@@ -437,59 +445,59 @@ let _testIndexBufferDataAndAfterInitFunc =
 };
 
 let testCustomTextureProgramIndexBufferDataAndAfterInitFunc =
-    (sandbox, record, (imguiFunc, afterInitFunc), targetBufferDataArr) =>
+    (sandbox, record, (execFuncData, afterInitFunc), targetBufferDataArr) =>
   _testIndexBufferDataAndAfterInitFunc(
     sandbox,
     3,
     record,
-    (imguiFunc, afterInitFunc),
+    (execFuncData, afterInitFunc),
     targetBufferDataArr,
   );
 
 let testFontTextureProgramIndexBufferDataAndAfterInitFunc =
-    (sandbox, record, (imguiFunc, afterInitFunc), targetBufferDataArr) =>
+    (sandbox, record, (execFuncData, afterInitFunc), targetBufferDataArr) =>
   _testIndexBufferDataAndAfterInitFunc(
     sandbox,
     7,
     record,
-    (imguiFunc, afterInitFunc),
+    (execFuncData, afterInitFunc),
     targetBufferDataArr,
   );
 
 let testCustomTextureProgramIndexBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
   testCustomTextureProgramIndexBufferDataAndAfterInitFunc(
     sandbox,
     record,
-    (imguiFunc, record => record),
+    (execFuncData, record => record),
     targetBufferDataArr,
   );
 
 let testFontTextureProgramIndexBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
   testFontTextureProgramIndexBufferDataAndAfterInitFunc(
     sandbox,
     record,
-    (imguiFunc, record => record),
+    (execFuncData, record => record),
     targetBufferDataArr,
   );
 
 let testNoTextureProgramIndexBufferDataAndAfterInitFunc =
-    (sandbox, record, (imguiFunc, afterInitFunc), targetBufferDataArr) =>
+    (sandbox, record, (execFuncData, afterInitFunc), targetBufferDataArr) =>
   _testIndexBufferDataAndAfterInitFunc(
     sandbox,
     10,
     record,
-    (imguiFunc, afterInitFunc),
+    (execFuncData, afterInitFunc),
     targetBufferDataArr,
   );
 
 let testNoTextureProgramIndexBufferData =
-    (sandbox, record, imguiFunc, targetBufferDataArr) =>
+    (sandbox, record, execFuncData, targetBufferDataArr) =>
   testNoTextureProgramIndexBufferDataAndAfterInitFunc(
     sandbox,
     record,
-    (imguiFunc, record => record),
+    (execFuncData, record => record),
     targetBufferDataArr,
   );
 

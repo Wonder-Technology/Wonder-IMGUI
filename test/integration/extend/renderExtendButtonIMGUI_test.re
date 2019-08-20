@@ -53,10 +53,10 @@ let _ =
              ),
            );
 
-      let _testWithIMGUIFuncAndSkinData =
+      let _testWithExecFuncDataAndSkinData =
           (
             bufferData,
-            (testBufferDataFunc, imguiFunc),
+            (testBufferDataFunc, execFuncData),
             (buttonColor, hoverButtonColor, clickButtonColor),
             record,
           ) => {
@@ -66,7 +66,7 @@ let _ =
           sandbox,
           record,
           (
-            imguiFunc,
+            execFuncData,
             record =>
               record
               |> _setDefaultSkinData(
@@ -81,14 +81,14 @@ let _ =
         );
       };
 
-      let _testWithIMGUIFunc =
-          (bufferData, (testBufferDataFunc, imguiFunc), record) => {
+      let _testWithExecFuncData =
+          (bufferData, (testBufferDataFunc, execFuncData), record) => {
         let record = RenderIMGUITool.prepareFntData(record);
 
-        testBufferDataFunc(sandbox, record, imguiFunc, bufferData);
+        testBufferDataFunc(sandbox, record, execFuncData, bufferData);
       };
 
-      let _buildIMGUIFunc = () =>
+      let _buildExecFuncData = () =>
         (. _, apiJsObj, record) => {
           let ((buttonX1, buttonY1, buttonWidth1, buttonHeight1), str1) =
             ButtonIMGUITool.buildButtonData1();
@@ -108,9 +108,9 @@ let _ =
         };
 
       let _test = (bufferData, testBufferDataFunc, record) =>
-        _testWithIMGUIFunc(
+        _testWithExecFuncData(
           bufferData,
-          (testBufferDataFunc, _buildIMGUIFunc()),
+          (testBufferDataFunc, _buildExecFuncData()),
           record,
         );
 
@@ -124,9 +124,9 @@ let _ =
             ~clickButtonColor=[|0.35, 0.1, 0.1|],
             (),
           ) =>
-        _testWithIMGUIFuncAndSkinData(
+        _testWithExecFuncDataAndSkinData(
           bufferData,
-          (testBufferDataFunc, _buildIMGUIFunc()),
+          (testBufferDataFunc, _buildExecFuncData()),
           (buttonColor, hoverButtonColor, clickButtonColor),
           record,
         );
@@ -142,29 +142,30 @@ let _ =
         let isClick = ref(false);
 
         let record =
-          record^
-          |> ManageIMGUIAPI.setIMGUIFunc(
-               RenderIMGUITool.buildCustomData(),
-               (. _, apiJsObj, record) => {
-                 let apiJsObj = Obj.magic(apiJsObj);
+          ExecIMGUITool.addExecFuncData(
+            ~record=record^,
+            ~func=
+              (. _, apiJsObj, record) => {
+                let apiJsObj = Obj.magic(apiJsObj);
 
-                 let button = apiJsObj##button;
+                let button = apiJsObj##button;
 
-                 let (record, isButtonClick) =
-                   button(.
-                     (
-                       (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
-                       str1,
-                     ),
-                     Js.Nullable.null,
-                     record,
-                   );
+                let (record, isButtonClick) =
+                  button(.
+                    (
+                      (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
+                      str1,
+                    ),
+                    Js.Nullable.null,
+                    record,
+                  );
 
-                 isClick := isButtonClick;
+                isClick := isButtonClick;
 
-                 record;
-               },
-             );
+                record;
+              },
+            (),
+          );
         let record = RenderIMGUITool.prepareFntData(record);
         let record =
           ManageIMGUIAPI.init(gl, RenderIMGUITool.buildCanvasSize(), record);
@@ -242,7 +243,7 @@ let _ =
           sandbox,
           record,
           (
-            _buildIMGUIFunc(),
+            _buildExecFuncData(),
             record =>
               record
               |> _setDefaultSkinData(
@@ -335,7 +336,7 @@ let _ =
             });
 
             describe("test two buttons", () => {
-              let _buildIMGUIFunc = () =>
+              let _buildExecFuncData = () =>
                 (. _, apiJsObj, record) => {
                   let (
                     (buttonX1, buttonY1, buttonWidth1, buttonHeight1),
@@ -376,7 +377,7 @@ let _ =
                 };
 
               test("test fontTexture program->index buffer", () =>
-                _testWithIMGUIFunc(
+                _testWithExecFuncData(
                   [|
                     0,
                     1,
@@ -405,17 +406,17 @@ let _ =
                   |],
                   (
                     RenderIMGUITool.testFontTextureProgramIndexBufferData,
-                    _buildIMGUIFunc(),
+                    _buildExecFuncData(),
                   ),
                   record^,
                 )
               );
               test("test no texture program->index buffer", () =>
-                _testWithIMGUIFunc(
+                _testWithExecFuncData(
                   [|0, 1, 2, 3, 2, 1, 4, 5, 6, 7, 6, 5|],
                   (
                     RenderIMGUITool.testNoTextureProgramIndexBufferData,
-                    _buildIMGUIFunc(),
+                    _buildExecFuncData(),
                   ),
                   record^,
                 )
@@ -615,12 +616,13 @@ let _ =
                 |> Obj.magic;
               let canvasWidth = 1000;
               let canvasHeight = 500;
+
               let record =
-                record
-                |> ManageIMGUIAPI.setIMGUIFunc(
-                     RenderIMGUITool.buildCustomData(),
-                     _buildIMGUIFunc(),
-                   );
+                ExecIMGUITool.addExecFuncData(
+                  ~record,
+                  ~func=_buildExecFuncData(),
+                  (),
+                );
               let record =
                 ManageIMGUIAPI.init(gl, (canvasWidth, canvasHeight), record);
 

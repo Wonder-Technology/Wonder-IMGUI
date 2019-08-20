@@ -84,11 +84,21 @@ let sendFontTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendFontText
 
 let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
 
-let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
+let clearExecFuncDataArr = ManageIMGUIAPI.clearExecFuncDataArr;
 
-let getIMGUIFunc = ManageIMGUIAPI.getIMGUIFunc;
+let removeExecFuncData = ManageIMGUIAPI.removeExecFuncData;
+
+let addExecFuncData = ManageIMGUIAPI.addExecFuncData;
+
+let unsafeGetExecFunc = ManageIMGUIAPI.unsafeGetExecFunc;
+
+let getExecFunc = ManageIMGUIAPI.getExecFunc;
+
+let unsafeGetCustomData = ManageIMGUIAPI.unsafeGetCustomData;
 
 let getCustomData = ManageIMGUIAPI.getCustomData;
+
+let getExecFuncDataArr = ManageIMGUIAPI.getExecFuncDataArr;
 
 let render = ManageIMGUIAPI.render;
 
@@ -182,11 +192,21 @@ let sendFontTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendFontText
 
 let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
 
-let setIMGUIFunc = ManageIMGUIAPI.setIMGUIFunc;
+let clearExecFuncDataArr = ManageIMGUIAPI.clearExecFuncDataArr;
 
-let getIMGUIFunc = ManageIMGUIAPI.getIMGUIFunc;
+let removeExecFuncData = ManageIMGUIAPI.removeExecFuncData;
+
+let addExecFuncData = ManageIMGUIAPI.addExecFuncData;
+
+let unsafeGetExecFunc = ManageIMGUIAPI.unsafeGetExecFunc;
+
+let getExecFunc = ManageIMGUIAPI.getExecFunc;
+
+let unsafeGetCustomData = ManageIMGUIAPI.unsafeGetCustomData;
 
 let getCustomData = ManageIMGUIAPI.getCustomData;
+
+let getExecFuncDataArr = ManageIMGUIAPI.getExecFuncDataArr;
 
 let render = ManageIMGUIAPI.render;
 
