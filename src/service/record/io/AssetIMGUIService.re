@@ -181,7 +181,7 @@ module SetAsset = {
 
   let _initFont = record =>
     (
-      switch (FontIMGUIService.SetAsset.getBitmapData(record)) {
+      switch (FontIMGUIService.SetAsset.getBitmapArrayBuffer(record)) {
       | None => Most.empty()
       | Some(bitmapData) =>
         FontIMGUIService.initBitmap(
@@ -191,7 +191,7 @@ module SetAsset = {
       }
     )
     |> Most.merge(
-         switch (FontIMGUIService.SetAsset.getFntData(record)) {
+         switch (FontIMGUIService.SetAsset.getFntContent(record)) {
          | None => Most.empty()
          | Some(fntData) => FontIMGUIService.initFnt(fntData, record)
          },

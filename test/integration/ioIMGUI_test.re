@@ -213,7 +213,7 @@ let _ =
           let fntContent = Node.Fs.readFileAsUtf8Sync(fntFilePath);
 
           let record =
-            record^ |> AssetIMGUIAPI.setSettedAssetFntData(fntContent);
+            record^ |> AssetIMGUIAPI.setSettedAssetFntData("", fntContent);
 
           record
           |> AssetIMGUIAPI.initSettedAssets
@@ -249,16 +249,17 @@ let _ =
             createObjectURL |> onCall(0) |> returns(bitmapObjectURL);
 
             let record =
-              record^ |> AssetIMGUIAPI.setSettedAssetBitmapData(bitmapData);
+              record^
+              |> AssetIMGUIAPI.setSettedAssetBitmapData("", bitmapData);
 
             record
             |> AssetIMGUIAPI.initSettedAssets
             |> MostTool.testStream(record => {
-                 let [|targetBitmapData, targetBitmapMimeType|] =
+                 let [|targetBitmapArrayBuffer, targetBitmapMimeType|] =
                    IOIMGUITool.getBlobData() |> ArrayService.unsafeGetFirst;
 
                  (
-                   targetBitmapData,
+                   targetBitmapArrayBuffer,
                    targetBitmapMimeType,
                    AssetTool.unsafeGetBitmap(record) |> Obj.magic,
                  )

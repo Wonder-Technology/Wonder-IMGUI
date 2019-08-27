@@ -10,11 +10,19 @@ let getCustomImageArr = AssetIMGUIService.getCustomImageArr;
 
 let setCustomImageArr = AssetIMGUIService.setCustomImageArr;
 
-let unsafeGetSettedAssetFntData = FontIMGUIService.SetAsset.unsafeGetFntData;
+let unsafeGetSettedAssetFntContent = FontIMGUIService.SetAsset.unsafeGetFntContent;
+
+let unsafeGetSettedAssetFntName = FontIMGUIService.SetAsset.unsafeGetFntName;
+
+let hasSettedAssetFntData = FontIMGUIService.SetAsset.hasFntData;
 
 let setSettedAssetFntData = FontIMGUIService.SetAsset.setFntData;
 
-let unsafeGetSettedAssetBitmapData = FontIMGUIService.SetAsset.unsafeGetBitmapData;
+let unsafeGetSettedAssetBitmapArrayBuffer = FontIMGUIService.SetAsset.unsafeGetBitmapArrayBuffer;
+
+let unsafeGetSettedAssetBitmapName = FontIMGUIService.SetAsset.unsafeGetBitmapName;
+
+let hasSettedAssetBitmapData = FontIMGUIService.SetAsset.hasBitmapData;
 
 let setSettedAssetBitmapData = FontIMGUIService.SetAsset.setBitmapData;
 

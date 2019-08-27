@@ -1,16 +1,22 @@
 let initSettedAssets = AssetIMGUIAPI.initSettedAssets;
 
+let hasSettedAssetCustomImageData = AssetIMGUIAPI.hasSettedAssetCustomImageData;
+
 let addSettedAssetCustomImageData = AssetIMGUIAPI.addSettedAssetCustomImageData;
 
 let getSettedAssetCustomImageDataArr = AssetIMGUIAPI.getSettedAssetCustomImageDataArr;
 
 let setSettedAssetBitmapData = AssetIMGUIAPI.setSettedAssetBitmapData;
 
-let unsafeGetSettedAssetBitmapData = AssetIMGUIAPI.unsafeGetSettedAssetBitmapData;
+let unsafeGetSettedAssetBitmapName = AssetIMGUIAPI.unsafeGetSettedAssetBitmapName;
+
+let unsafeGetSettedAssetBitmapArrayBuffer = AssetIMGUIAPI.unsafeGetSettedAssetBitmapArrayBuffer;
 
 let setSettedAssetFntData = AssetIMGUIAPI.setSettedAssetFntData;
 
-let unsafeGetSettedAssetFntData = AssetIMGUIAPI.unsafeGetSettedAssetFntData;
+let unsafeGetSettedAssetFntName = AssetIMGUIAPI.unsafeGetSettedAssetFntName;
+
+let unsafeGetSettedAssetFntContent = AssetIMGUIAPI.unsafeGetSettedAssetFntContent;
 
 let setCustomImageArr = AssetIMGUIAPI.setCustomImageArr;
 
@@ -66,6 +72,8 @@ let removeSkinData = ExtendIMGUIAPI.removeSkinData;
 
 let addSkinData = ExtendIMGUIAPI.addSkinData;
 
+let hasSkinData = ExtendIMGUIAPI.hasSkinData;
+
 let removeSingleCustomStyleData = ExtendIMGUIAPI.removeSingleCustomStyleData;
 
 let addSingleCustomStyleData = ExtendIMGUIAPI.addSingleCustomStyleData;
@@ -74,11 +82,15 @@ let removeCustomStyleData = ExtendIMGUIAPI.removeCustomStyleData;
 
 let addCustomStyleData = ExtendIMGUIAPI.addCustomStyleData;
 
+let hasCustomStyleData = ExtendIMGUIAPI.hasCustomStyleData;
+
 let createSingleCustomStyleData = ExtendIMGUIAPI.createSingleCustomStyleData;
 
 let createAllCustomStyleData = ExtendIMGUIAPI.createAllCustomStyleData;
 
 let registerCustomControl = ExtendIMGUIAPI.registerCustomControl;
+
+let hasCustomControl = ExtendIMGUIAPI.hasCustomControl;
 
 let box = FixedLayoutControlIMGUIAPI.box;
 
@@ -110,17 +122,23 @@ let createRecord = ManageIMGUIAPI.createRecord;
 
 let initSettedAssets = AssetIMGUIAPI.initSettedAssets;
 
+let hasSettedAssetCustomImageData = AssetIMGUIAPI.hasSettedAssetCustomImageData;
+
 let addSettedAssetCustomImageData = AssetIMGUIAPI.addSettedAssetCustomImageData;
 
 let getSettedAssetCustomImageDataArr = AssetIMGUIAPI.getSettedAssetCustomImageDataArr;
 
 let setSettedAssetBitmapData = AssetIMGUIAPI.setSettedAssetBitmapData;
 
-let unsafeGetSettedAssetBitmapData = AssetIMGUIAPI.unsafeGetSettedAssetBitmapData;
+let unsafeGetSettedAssetBitmapName = AssetIMGUIAPI.unsafeGetSettedAssetBitmapName;
+
+let unsafeGetSettedAssetBitmapArrayBuffer = AssetIMGUIAPI.unsafeGetSettedAssetBitmapArrayBuffer;
 
 let setSettedAssetFntData = AssetIMGUIAPI.setSettedAssetFntData;
 
-let unsafeGetSettedAssetFntData = AssetIMGUIAPI.unsafeGetSettedAssetFntData;
+let unsafeGetSettedAssetFntName = AssetIMGUIAPI.unsafeGetSettedAssetFntName;
+
+let unsafeGetSettedAssetFntContent = AssetIMGUIAPI.unsafeGetSettedAssetFntContent;
 
 let setCustomImageArr = AssetIMGUIAPI.setCustomImageArr;
 
@@ -176,6 +194,8 @@ let removeSkinData = ExtendIMGUIAPI.removeSkinData;
 
 let addSkinData = ExtendIMGUIAPI.addSkinData;
 
+let hasSkinData = ExtendIMGUIAPI.hasSkinData;
+
 let removeSingleCustomStyleData = ExtendIMGUIAPI.removeSingleCustomStyleData;
 
 let addSingleCustomStyleData = ExtendIMGUIAPI.addSingleCustomStyleData;
@@ -184,11 +204,15 @@ let removeCustomStyleData = ExtendIMGUIAPI.removeCustomStyleData;
 
 let addCustomStyleData = ExtendIMGUIAPI.addCustomStyleData;
 
+let hasCustomStyleData = ExtendIMGUIAPI.hasCustomStyleData;
+
 let createSingleCustomStyleData = ExtendIMGUIAPI.createSingleCustomStyleData;
 
 let createAllCustomStyleData = ExtendIMGUIAPI.createAllCustomStyleData;
 
 let registerCustomControl = ExtendIMGUIAPI.registerCustomControl;
+
+let hasCustomControl = ExtendIMGUIAPI.hasCustomControl;
 
 let box = FixedLayoutControlIMGUIAPI.box;
 

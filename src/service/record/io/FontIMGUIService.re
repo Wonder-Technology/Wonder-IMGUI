@@ -74,35 +74,54 @@ let load = (fetchFunc, handleWhenLoadingFunc, {assetData} as record) => {
 };
 
 module SetAsset = {
-  let getBitmapData = record =>
+  let getBitmapArrayBuffer = record =>
     RecordAssetIMGUIService.getSettedAssetData(record).bitmapArrayBuffer;
 
-  let unsafeGetBitmapData = record =>
-    record |> getBitmapData |> OptionService.unsafeGet;
+  let unsafeGetBitmapArrayBuffer = record =>
+    record |> getBitmapArrayBuffer |> OptionService.unsafeGet;
 
-  let setBitmapData = (bitmapArrayBuffer, record) => {
+  let getBitmapName = record =>
+    RecordAssetIMGUIService.getSettedAssetData(record).bitmapName;
+
+  let unsafeGetBitmapName = record =>
+    record |> getBitmapName |> OptionService.unsafeGet;
+
+  let hasBitmapData = (name, record) =>
+    getBitmapName(record) |> Js.Option.isSome;
+
+  let setBitmapData = (name, bitmapArrayBuffer, record) => {
     ...record,
     assetData: {
       ...record.assetData,
       settedAssetData: {
         ...RecordAssetIMGUIService.getSettedAssetData(record),
+        bitmapName: Some(name),
         bitmapArrayBuffer: Some(bitmapArrayBuffer),
       },
     },
   };
 
-  let getFntData = record =>
+  let getFntContent = record =>
     RecordAssetIMGUIService.getSettedAssetData(record).fntContent;
 
-  let unsafeGetFntData = record =>
-    record |> getFntData |> OptionService.unsafeGet;
+  let unsafeGetFntContent = record =>
+    record |> getFntContent |> OptionService.unsafeGet;
 
-  let setFntData = (content, record) => {
+  let getFntName = record =>
+    RecordAssetIMGUIService.getSettedAssetData(record).fntName;
+
+  let unsafeGetFntName = record =>
+    record |> getFntName |> OptionService.unsafeGet;
+
+  let hasFntData = (name, record) => getFntName(record) |> Js.Option.isSome;
+
+  let setFntData = (name, content, record) => {
     ...record,
     assetData: {
       ...record.assetData,
       settedAssetData: {
         ...RecordAssetIMGUIService.getSettedAssetData(record),
+        fntName: Some(name),
         fntContent: Some(content),
       },
     },

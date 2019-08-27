@@ -84,7 +84,9 @@ type id = string;
 type mimeType = string;
 
 type settedAssetData = {
+  fntName: option(string),
   fntContent: option(string),
+  bitmapName: option(string),
   bitmapArrayBuffer: option(Js.Typed_array.ArrayBuffer.t),
   customImageDataArr: array((Js.Typed_array.ArrayBuffer.t, id, mimeType)),
 };
