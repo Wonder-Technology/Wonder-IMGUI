@@ -24,6 +24,24 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let clearExecFuncDataArr = ExecIMGUIAPI.clearExecFuncDataArr;
+
+let removeExecFuncData = ExecIMGUIAPI.removeExecFuncData;
+
+let addExecFuncData = ExecIMGUIAPI.addExecFuncData;
+
+let hasExecFuncData = ExecIMGUIAPI.hasExecFuncData;
+
+let unsafeGetExecFunc = ExecIMGUIAPI.unsafeGetExecFunc;
+
+let getExecFunc = ExecIMGUIAPI.getExecFunc;
+
+let unsafeGetCustomData = ExecIMGUIAPI.unsafeGetCustomData;
+
+let getCustomData = ExecIMGUIAPI.getCustomData;
+
+let getExecFuncDataArr = ExecIMGUIAPI.getExecFuncDataArr;
+
 let createButtonSkinData = ExtendIMGUIAPI.createButtonSkinData;
 
 let setButtonSkinData = ExtendIMGUIAPI.setButtonSkinData;
@@ -83,22 +101,6 @@ let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureP
 let sendFontTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendFontTextureProgramUniformProjectionMatData;
 
 let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
-
-let clearExecFuncDataArr = ManageIMGUIAPI.clearExecFuncDataArr;
-
-let removeExecFuncData = ManageIMGUIAPI.removeExecFuncData;
-
-let addExecFuncData = ManageIMGUIAPI.addExecFuncData;
-
-let unsafeGetExecFunc = ManageIMGUIAPI.unsafeGetExecFunc;
-
-let getExecFunc = ManageIMGUIAPI.getExecFunc;
-
-let unsafeGetCustomData = ManageIMGUIAPI.unsafeGetCustomData;
-
-let getCustomData = ManageIMGUIAPI.getCustomData;
-
-let getExecFuncDataArr = ManageIMGUIAPI.getExecFuncDataArr;
 
 let render = ManageIMGUIAPI.render;
 
@@ -132,6 +134,24 @@ let setFntData = AssetIMGUIAPI.setFntData;
 
 let getFntData = AssetIMGUIAPI.getFntData;
 
+let clearExecFuncDataArr = ExecIMGUIAPI.clearExecFuncDataArr;
+
+let removeExecFuncData = ExecIMGUIAPI.removeExecFuncData;
+
+let addExecFuncData = ExecIMGUIAPI.addExecFuncData;
+
+let hasExecFuncData = ExecIMGUIAPI.hasExecFuncData;
+
+let unsafeGetExecFunc = ExecIMGUIAPI.unsafeGetExecFunc;
+
+let getExecFunc = ExecIMGUIAPI.getExecFunc;
+
+let unsafeGetCustomData = ExecIMGUIAPI.unsafeGetCustomData;
+
+let getCustomData = ExecIMGUIAPI.getCustomData;
+
+let getExecFuncDataArr = ExecIMGUIAPI.getExecFuncDataArr;
+
 let createButtonSkinData = ExtendIMGUIAPI.createButtonSkinData;
 
 let setButtonSkinData = ExtendIMGUIAPI.setButtonSkinData;
@@ -191,22 +211,6 @@ let sendNoTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendNoTextureP
 let sendFontTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendFontTextureProgramUniformProjectionMatData;
 
 let sendCustomTextureProgramUniformProjectionMatData = ManageIMGUIAPI.sendCustomTextureProgramUniformProjectionMatData;
-
-let clearExecFuncDataArr = ManageIMGUIAPI.clearExecFuncDataArr;
-
-let removeExecFuncData = ManageIMGUIAPI.removeExecFuncData;
-
-let addExecFuncData = ManageIMGUIAPI.addExecFuncData;
-
-let unsafeGetExecFunc = ManageIMGUIAPI.unsafeGetExecFunc;
-
-let getExecFunc = ManageIMGUIAPI.getExecFunc;
-
-let unsafeGetCustomData = ManageIMGUIAPI.unsafeGetCustomData;
-
-let getCustomData = ManageIMGUIAPI.getCustomData;
-
-let getExecFuncDataArr = ManageIMGUIAPI.getExecFuncDataArr;
 
 let render = ManageIMGUIAPI.render;
 

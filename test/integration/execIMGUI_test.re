@@ -22,7 +22,7 @@ let _ =
           ExecIMGUITool.addExecFuncData(~record=record^, ~name="e1", ());
         let record = ExecIMGUITool.addExecFuncData(~record, ~name="e2", ());
 
-        ManageIMGUIAPI.getExecFuncDataArr(record)
+        ExecIMGUIAPI.getExecFuncDataArr(record)
         |> Js.Array.length
         |> expect == 2;
       })
@@ -34,9 +34,9 @@ let _ =
           ExecIMGUITool.addExecFuncData(~record=record^, ~name="e1", ());
         let record = ExecIMGUITool.addExecFuncData(~record, ~name="e2", ());
 
-        let record = ManageIMGUIAPI.removeExecFuncData("e1", record);
+        let record = ExecIMGUIAPI.removeExecFuncData("e1", record);
 
-        ManageIMGUIAPI.getExecFuncDataArr(record)
+        ExecIMGUIAPI.getExecFuncDataArr(record)
         |> Js.Array.length
         |> expect == 1;
       })
@@ -62,7 +62,7 @@ let _ =
             (),
           );
 
-        ManageIMGUIAPI.getCustomData("e2", record)
+        ExecIMGUIAPI.getCustomData("e2", record)
         |> expect == Some(customData2);
       })
     );

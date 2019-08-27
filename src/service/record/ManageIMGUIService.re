@@ -559,96 +559,6 @@ let _finish = (gl, (getRecordFunc, setRecordFunc), data) => {
   record->(setRecordFunc(data));
 };
 
-let getCustomData = (execFuncName, {execData}) =>
-  execData.execFuncDataArr
-  |> Js.Array.find(({name}: IMGUIType.execFuncData) =>
-       name == execFuncName
-     )
-  |> Js.Option.map((. {customData}: IMGUIType.execFuncData) => customData);
-
-let unsafeGetCustomData = (execFuncName, record) =>
-  getCustomData(execFuncName, record) |> OptionService.unsafeGet;
-
-let _clearData = record => {
-  ...record,
-  /* controlData: {
-       ...record.controlData,
-       radioButtonData: {
-         isSelectedMap: WonderCommonlib.MutableHashMapService.createEmpty(),
-       },
-       checkboxData: {
-         index: 0,
-         isSelectedMap: WonderCommonlib.MutableSparseMapService.createEmpty(),
-       },
-       sliderData: {
-         index: 0,
-         valueMap: WonderCommonlib.MutableSparseMapService.createEmpty(),
-       },
-     }, */
-  layoutData: {
-    groupData: {
-      positionArr: [||],
-      index: 0,
-    },
-  },
-};
-
-let getExecFunc = (execFuncName, {execData}) =>
-  execData.execFuncDataArr
-  |> Js.Array.find(({name}: IMGUIType.execFuncData) =>
-       name == execFuncName
-     )
-  |> Js.Option.map((. {execFunc}: IMGUIType.execFuncData) => execFunc);
-
-let unsafeGetExecFunc = (execFuncName, record) =>
-  getExecFunc(execFuncName, record) |> OptionService.unsafeGet;
-
-let getExecFuncDataArr = record => record.execData.execFuncDataArr;
-
-let addExecFuncData = (execFuncName, customData, zIndex, func, record) =>
-  {
-    ...record,
-    execData: {
-      ...record.execData,
-      execFuncDataArr:
-        getExecFuncDataArr(record)
-        |> ArrayService.push({
-             execFunc: func,
-             customData,
-             zIndex,
-             name: execFuncName,
-           })
-        |> Js.Array.sortInPlaceWith((execFuncData1, execFuncData2) =>
-             execFuncData1.zIndex - execFuncData2.zIndex
-           ),
-    },
-  }
-  |> _clearData;
-
-let removeExecFuncData = (execFuncName, record) =>
-  {
-    ...record,
-    execData: {
-      ...record.execData,
-      execFuncDataArr:
-        getExecFuncDataArr(record)
-        |> Js.Array.filter(({name}: IMGUIType.execFuncData) =>
-             name !== execFuncName
-           ),
-    },
-  }
-  |> _clearData;
-
-let clearExecFuncDataArr = record =>
-  {
-    ...record,
-    execData: {
-      ...record.execData,
-      execFuncDataArr: WonderCommonlib.ArrayService.createEmpty(),
-    },
-  }
-  |> _clearData;
-
 let getAPIJsObj = ({execData}) => execData.apiJsObj;
 
 let _buildAPIJsObj = () => {
@@ -664,7 +574,7 @@ let _buildAPIJsObj = () => {
 let _exec = (apiJsObj, getRecordFunc, data) => {
   let {execData} as record = getRecordFunc(data);
 
-  getExecFuncDataArr(record)
+  OperateExecDataIMGUIService.getExecFuncDataArr(record)
   |> WonderCommonlib.ArrayService.reduceOneParam(
        (. data, {customData, execFunc}: execFuncData) =>
          execFunc(. customData, apiJsObj, data),

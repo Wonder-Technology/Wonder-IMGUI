@@ -22,22 +22,6 @@ let render = (gl, ioDataJsObj, record) =>
     record,
   );
 
-let getExecFuncDataArr = ManageIMGUIService.getExecFuncDataArr;
-
-let getCustomData = ManageIMGUIService.getCustomData;
-
-let unsafeGetCustomData = ManageIMGUIService.unsafeGetCustomData;
-
-let getExecFunc = ManageIMGUIService.getExecFunc;
-
-let unsafeGetExecFunc = ManageIMGUIService.unsafeGetExecFunc;
-
-let addExecFuncData = ManageIMGUIService.addExecFuncData;
-
-let removeExecFuncData = ManageIMGUIService.removeExecFuncData;
-
-let clearExecFuncDataArr = ManageIMGUIService.clearExecFuncDataArr;
-
 let sendCustomTextureProgramUniformProjectionMatData =
     (gl, canvasSize, record) =>
   ManageIMGUIService.sendCustomTextureProgramUniformProjectionMatData(

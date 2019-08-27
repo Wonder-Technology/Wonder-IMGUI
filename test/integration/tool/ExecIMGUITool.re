@@ -9,4 +9,4 @@ let addExecFuncData =
       ~func=buildEmptyExecFuncData(),
       (),
     ) =>
-  record |> ManageIMGUIAPI.addExecFuncData(name, customData, zIndex, func);
+  record |> ExecIMGUIAPI.addExecFuncData(name, customData, zIndex, func);
