@@ -28,6 +28,9 @@ let registerCustomControl = (name, customControlFunc, {extendData} as record) =>
   },
 };
 
+let hasCustomControl = (name, record) =>
+  _getFuncMap(record) |> WonderCommonlib.ImmutableHashMapService.has(name);
+
 let unsafeGetCustomControl =
   (. name, record) =>
     _getFuncMap(record)

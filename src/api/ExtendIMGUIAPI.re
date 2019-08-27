@@ -1,8 +1,12 @@
+let hasCustomControl = ManageCustomControlIMGUIService.hasCustomControl;
+
 let registerCustomControl = ManageCustomControlIMGUIService.registerCustomControl;
 
 let createAllCustomStyleData = ManageSkinIMGUIService.createAllCustomStyleData;
 
 let createSingleCustomStyleData = ManageSkinIMGUIService.createSingleCustomStyleData;
+
+let hasCustomStyleData = ManageSkinIMGUIService.hasCustomStyleData;
 
 let addCustomStyleData = ManageSkinIMGUIService.addCustomStyleData;
 
@@ -11,6 +15,8 @@ let removeCustomStyleData = ManageSkinIMGUIService.removeCustomStyleData;
 let addSingleCustomStyleData = ManageSkinIMGUIService.addSingleCustomStyleData;
 
 let removeSingleCustomStyleData = ManageSkinIMGUIService.removeSingleCustomStyleData;
+
+let hasSkinData = ManageSkinIMGUIService.hasSkinData;
 
 let addSkinData = ManageSkinIMGUIService.addSkinData;
 

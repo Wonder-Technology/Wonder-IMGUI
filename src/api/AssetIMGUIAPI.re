@@ -22,4 +22,6 @@ let getSettedAssetCustomImageDataArr = CustomImageIMGUIService.SetAsset.getCusto
 
 let addSettedAssetCustomImageData = CustomImageIMGUIService.SetAsset.addCustomImageData;
 
+let hasSettedAssetCustomImageData = CustomImageIMGUIService.SetAsset.hasCustomImageData;
+
 let initSettedAssets = AssetIMGUIService.SetAsset.initAssets;

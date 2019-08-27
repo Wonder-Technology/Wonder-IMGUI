@@ -1,3 +1,6 @@
+let hasSkinData = (skinName, map) =>
+  map |> WonderCommonlib.ImmutableHashMapService.has(skinName);
+
 let addSkinData = (skinName, skinData, map) =>
   map |> WonderCommonlib.ImmutableHashMapService.set(skinName, skinData);
 

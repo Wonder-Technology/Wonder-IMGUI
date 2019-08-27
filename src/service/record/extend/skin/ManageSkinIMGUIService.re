@@ -20,6 +20,9 @@ let clearAllSkins = record =>
     record,
   );
 
+let hasSkinData = (skinName, record) =>
+  getAllSkinDataMap(record) |> AllSkinDataMapService.hasSkinData(skinName);
+
 let addSkinData = (skinName, skinData, record) =>
   _setAllSkinDataMap(
     getAllSkinDataMap(record)
@@ -55,6 +58,9 @@ let createAllCustomStyleData = () =>
 
 let createSingleCustomStyleData = () =>
   WonderCommonlib.ImmutableHashMapService.createEmpty();
+
+let hasCustomStyleData = (name, singleCustomStyleData) =>
+  singleCustomStyleData |> WonderCommonlib.ImmutableHashMapService.has(name);
 
 let addCustomStyleData = (name, data: customStyleData, singleCustomStyleData) =>
   singleCustomStyleData
