@@ -76,3 +76,11 @@ let getExecFunc = (execFuncName, {execData}) =>
 
 let unsafeGetExecFunc = (execFuncName, record) =>
   getExecFunc(execFuncName, record) |> OptionService.unsafeGet;
+
+let getZIndex = (execFuncName, {execData}) =>
+  execData.execFuncDataArr
+  |> Js.Array.find(({name}: IMGUIType.execFuncData) => name == execFuncName)
+  |> Js.Option.map((. {zIndex}: IMGUIType.execFuncData) => zIndex);
+
+let unsafeGetZIndex = (execFuncName, record) =>
+  getZIndex(execFuncName, record) |> OptionService.unsafeGet;
