@@ -17,7 +17,7 @@ let hasExecFuncData = (execFuncName, record) =>
   |> Js.Array.find(({name}) => name === execFuncName)
   |> Js.Option.isSome;
 
-let addExecFuncData = (execFuncName, customData, zIndex, func, record) =>
+let addExecFuncData = (execFuncName, customData, execOrder, func, record) =>
   {
     ...record,
     execData: {
@@ -27,11 +27,11 @@ let addExecFuncData = (execFuncName, customData, zIndex, func, record) =>
         |> ArrayService.push({
              execFunc: func,
              customData,
-             zIndex,
+             execOrder,
              name: execFuncName,
            })
         |> Js.Array.sortInPlaceWith((execFuncData1, execFuncData2) =>
-             execFuncData1.zIndex - execFuncData2.zIndex
+             execFuncData1.execOrder - execFuncData2.execOrder
            ),
     },
   }
@@ -77,10 +77,10 @@ let getExecFunc = (execFuncName, {execData}) =>
 let unsafeGetExecFunc = (execFuncName, record) =>
   getExecFunc(execFuncName, record) |> OptionService.unsafeGet;
 
-let getZIndex = (execFuncName, {execData}) =>
+let getExecOrder = (execFuncName, {execData}) =>
   execData.execFuncDataArr
   |> Js.Array.find(({name}: IMGUIType.execFuncData) => name == execFuncName)
-  |> Js.Option.map((. {zIndex}: IMGUIType.execFuncData) => zIndex);
+  |> Js.Option.map((. {execOrder}: IMGUIType.execFuncData) => execOrder);
 
-let unsafeGetZIndex = (execFuncName, record) =>
-  getZIndex(execFuncName, record) |> OptionService.unsafeGet;
+let unsafeGetExecOrder = (execFuncName, record) =>
+  getExecOrder(execFuncName, record) |> OptionService.unsafeGet;

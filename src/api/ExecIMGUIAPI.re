@@ -8,9 +8,9 @@ let getExecFunc = OperateExecDataIMGUIService.getExecFunc;
 
 let unsafeGetExecFunc = OperateExecDataIMGUIService.unsafeGetExecFunc;
 
-let getZIndex = OperateExecDataIMGUIService.getZIndex;
+let getExecOrder = OperateExecDataIMGUIService.getExecOrder;
 
-let unsafeGetZIndex = OperateExecDataIMGUIService.unsafeGetZIndex;
+let unsafeGetExecOrder = OperateExecDataIMGUIService.unsafeGetExecOrder;
 
 let hasExecFuncData = OperateExecDataIMGUIService.hasExecFuncData;
 

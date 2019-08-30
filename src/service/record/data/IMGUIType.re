@@ -140,7 +140,7 @@ type customData;
 
 type apiJsObj;
 
-type execFuncZIndex = int;
+type execFuncExecOrder = int;
 
 type execFuncName = string;
 
@@ -148,7 +148,7 @@ type execFunc = (. customData, apiJsObj, imguiRecord) => imguiRecord
 and execFuncData = {
   execFunc,
   customData,
-  zIndex: execFuncZIndex,
+  execOrder: execFuncExecOrder,
   name: execFuncName,
 }
 and execFuncDataArr = array(execFuncData)

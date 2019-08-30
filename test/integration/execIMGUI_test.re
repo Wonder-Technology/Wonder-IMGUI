@@ -68,7 +68,7 @@ let _ =
     );
 
     describe("exec func", () =>
-      describe("exec all funcs sorted by zIndex ", () =>
+      describe("exec all funcs sorted by execOrder ", () =>
         describe("test no texture program->position buffer data", () =>
           test("test", () => {
             let record = record^ |> AssetTool.prepareFontAsset;
@@ -99,7 +99,7 @@ let _ =
 
                           record;
                         },
-                      ~zIndex=2,
+                      ~execOrder=2,
                       (),
                     );
 
@@ -120,7 +120,7 @@ let _ =
 
                           record;
                         },
-                      ~zIndex=1,
+                      ~execOrder=1,
                       (),
                     );
 
