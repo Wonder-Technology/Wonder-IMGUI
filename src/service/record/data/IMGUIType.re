@@ -100,7 +100,13 @@ type assetData = {
       WonderWebgl.DomExtendType.imageElement,
     ),
   customImageArr:
-    array((WonderWebgl.DomExtendType.imageElement, id, ImageType.imageType)),
+    array(
+      (
+        WonderWebgl.DomExtendType.imageElement,
+        ExtendType.customImageId,
+        ImageType.imageType,
+      ),
+    ),
   customTextureMap:
     WonderCommonlib.MutableHashMapService.t(WonderWebgl.GlType.texture),
   settedAssetData,

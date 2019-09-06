@@ -8,15 +8,13 @@ type allCustomStyleData =
 
 type color = array(float);
 
-type imageId = string;
-
 type buttonSkinData = {
   buttonColor: color,
   hoverButtonColor: color,
   clickButtonColor: color,
-  buttonImage: Js.Nullable.t(imageId),
-  hoverButtonImage: Js.Nullable.t(imageId),
-  clickButtonImage: Js.Nullable.t(imageId),
+  buttonImage: Js.Nullable.t(ExtendType.customImageId),
+  hoverButtonImage: Js.Nullable.t(ExtendType.customImageId),
+  clickButtonImage: Js.Nullable.t(ExtendType.customImageId),
   fontAlign: FontType.align,
   fontColor: color,
 };
