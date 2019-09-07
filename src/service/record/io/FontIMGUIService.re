@@ -87,7 +87,7 @@ module SetAsset = {
     record |> getBitmapName |> OptionService.unsafeGet;
 
   let hasBitmapData = (name, record) =>
-    getBitmapName(record) |> Js.Option.isSome;
+    getBitmapName(record) === Some(name);
 
   let setBitmapData = (name, bitmapArrayBuffer, record) => {
     ...record,
@@ -101,7 +101,7 @@ module SetAsset = {
     },
   };
 
-  let removeBitmapData = (record) => {
+  let removeBitmapData = record => {
     ...record,
     assetData: {
       ...record.assetData,
@@ -125,7 +125,7 @@ module SetAsset = {
   let unsafeGetFntName = record =>
     record |> getFntName |> OptionService.unsafeGet;
 
-  let hasFntData = (name, record) => getFntName(record) |> Js.Option.isSome;
+  let hasFntData = (name, record) => getFntName(record) === Some(name);
 
   let setFntData = (name, content, record) => {
     ...record,

@@ -29,7 +29,7 @@ module SetAsset = {
         ...RecordAssetIMGUIService.getSettedAssetData(record),
         customImageDataArr:
           getCustomImageDataArr(record)
-          |> Js.Array.filter(((_, id, _)) => id === imageId),
+          |> Js.Array.filter(((_, id, _)) => id !== imageId),
       },
     },
   };
