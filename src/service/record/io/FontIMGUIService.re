@@ -101,6 +101,18 @@ module SetAsset = {
     },
   };
 
+  let removeBitmapData = (record) => {
+    ...record,
+    assetData: {
+      ...record.assetData,
+      settedAssetData: {
+        ...RecordAssetIMGUIService.getSettedAssetData(record),
+        bitmapName: None,
+        bitmapArrayBuffer: None,
+      },
+    },
+  };
+
   let getFntContent = record =>
     RecordAssetIMGUIService.getSettedAssetData(record).fntContent;
 

@@ -20,4 +20,17 @@ module SetAsset = {
       },
     },
   };
+
+  let removeCustomImageData = (imageId, record) => {
+    ...record,
+    assetData: {
+      ...record.assetData,
+      settedAssetData: {
+        ...RecordAssetIMGUIService.getSettedAssetData(record),
+        customImageDataArr:
+          getCustomImageDataArr(record)
+          |> Js.Array.filter(((_, id, _)) => id === imageId),
+      },
+    },
+  };
 };

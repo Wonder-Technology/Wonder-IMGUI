@@ -26,10 +26,14 @@ let hasSettedAssetBitmapData = FontIMGUIService.SetAsset.hasBitmapData;
 
 let setSettedAssetBitmapData = FontIMGUIService.SetAsset.setBitmapData;
 
+let removeSettedAssetBitmapData = FontIMGUIService.SetAsset.removeBitmapData;
+
 let getSettedAssetCustomImageDataArr = CustomImageIMGUIService.SetAsset.getCustomImageDataArr;
 
 let addSettedAssetCustomImageData = CustomImageIMGUIService.SetAsset.addCustomImageData;
 
 let hasSettedAssetCustomImageData = CustomImageIMGUIService.SetAsset.hasCustomImageData;
+
+let removeSettedAssetCustomImageData = CustomImageIMGUIService.SetAsset.removeCustomImageData;
 
 let initSettedAssets = AssetIMGUIService.SetAsset.initAssets;
