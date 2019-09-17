@@ -18,6 +18,8 @@ let hasSettedAssetFntData = FontIMGUIService.SetAsset.hasFntData;
 
 let setSettedAssetFntData = FontIMGUIService.SetAsset.setFntData;
 
+let removeSettedAssetFntData = FontIMGUIService.SetAsset.removeFntData;
+
 let unsafeGetSettedAssetBitmapArrayBuffer = FontIMGUIService.SetAsset.unsafeGetBitmapArrayBuffer;
 
 let unsafeGetSettedAssetBitmapName = FontIMGUIService.SetAsset.unsafeGetBitmapName;

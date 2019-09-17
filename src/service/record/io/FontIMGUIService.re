@@ -138,4 +138,16 @@ module SetAsset = {
       },
     },
   };
+
+  let removeFntData = record => {
+    ...record,
+    assetData: {
+      ...record.assetData,
+      settedAssetData: {
+        ...RecordAssetIMGUIService.getSettedAssetData(record),
+        fntName: None,
+        fntContent: None,
+      },
+    },
+  };
 };
